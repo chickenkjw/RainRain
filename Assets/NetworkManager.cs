@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
-    #region Public Variables
+    #region Public Fields
     public Text StatusText, RoomText;
     public InputField RoomInput, NickNameInput;
     public GameObject UIManager;
@@ -16,6 +16,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public PhotonView Photonview;
     #endregion
 
+    #region MonoBehaviour CallBacks
     void Awake()
     {
         instance = this;
@@ -28,17 +29,42 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         StatusText.text = PhotonNetwork.NetworkClientState.ToString();
     }
+    #endregion
+
+    #region Photon Callbacks
 
     public override void OnConnectedToMaster()
     {
         Debug.Log("서버 접속 완료");
         PhotonNetwork.JoinLobby();
-
     }
 
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        Debug.LogFormat("연결 끊김, 사유 : {0}", cause);
+    }
+
+    public override void OnJoinedLobby()
+    {
+        Debug.Log("로비 접속 완료");
+    }
+    #endregion
+
+    #region Public Methods
     public void Join()
     {
-        PhotonNetwork.JoinOrCreateRoom("Room", new RoomOptions { MaxPlayers = 6 }, null);
+        PhotonNetwork.JoinOrCreateRoom("정우바보", new RoomOptions { MaxPlayers = 6 }, null);
+    }
+
+    //방 만들기 및 참가
+    public void CreateRoom() => PhotonNetwork.CreateRoom(RoomInput.text, new RoomOptions { MaxPlayers = 5 });
+    public void JoinRoom(string RoomName) => PhotonNetwork.JoinRoom(RoomName);
+    public void JoinOrCreateRoom(string RoomName) => PhotonNetwork.JoinOrCreateRoom(RoomName, new RoomOptions { MaxPlayers = 5 }, null);
+    public void JoinRandomRoom() => PhotonNetwork.JoinRandomRoom();
+    public void LeaveRoom() => PhotonNetwork.LeaveRoom();
+    public void LeaveRoom(string RoomName)
+    {
+        PhotonNetwork.LeaveRoom();
     }
 
     //public void GeneratePlayer(string name)
@@ -63,28 +89,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 
     public void DisConnect() => PhotonNetwork.Disconnect();
-    public override void OnDisconnected(DisconnectCause cause)
-    {
-        Debug.LogFormat("연결 끊김, 사유 : {0}", cause);
-    }
+    #endregion
+
 
 
     public void JoinLobby() => PhotonNetwork.JoinLobby();
-    public override void OnJoinedLobby()
-    {
-        Debug.Log("로비 접속 완료");
-    }
 
-    //방 만들기 및 참가
-    public void CreateRoom() => PhotonNetwork.CreateRoom(RoomInput.text, new RoomOptions { MaxPlayers = 5 });
-    public void JoinRoom(string RoomName) => PhotonNetwork.JoinRoom(RoomName);
-    public void JoinOrCreateRoom(string RoomName) => PhotonNetwork.JoinOrCreateRoom(RoomName, new RoomOptions { MaxPlayers = 5 }, null);
-    public void JoinRandomRoom() => PhotonNetwork.JoinRandomRoom();
-    public void LeaveRoom() => PhotonNetwork.LeaveRoom();
-    public void LeaveRoom(string RoomName)
-    {
-        PhotonNetwork.LeaveRoom();
-    }
+
+
 
     public override void OnLeftRoom()
     {
@@ -99,7 +111,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.LogFormat("방 참가 완료 : {0}", PhotonNetwork.CurrentRoom);
-        RoomText.text = PhotonNetwork.CurrentRoom.Name;
+        RoomText.text = PhotonNetwork.CurrentRoom.ToString();
         //UIManager.GetComponent<UIManager>().HideSimplePanel();
         //GeneratePlayer(NickNameInput.text);
 
