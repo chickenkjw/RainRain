@@ -14,6 +14,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public static NetworkManager instance;
     public GameObject LocalPlayerPrefab;
     public PhotonView Photonview;
+
+    public PlayerManager LocalPlayer;
+    #endregion
+
+    #region Private Fields
+
+
     #endregion
 
     #region MonoBehaviour CallBacks
@@ -67,17 +74,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
     }
 
-    //public void GeneratePlayer(string name)
-    //{
-    //    PlayerManager newPlayer;
-
-    //    // newPlayer = GameObject.Instantiate( network player avatar or model, spawn position, spawn rotation)
-    //    newPlayer = PhotonNetwork.Instantiate("Cube",
-    //            new Vector3(0, 5, 0), Quaternion.identity).GetComponent<PlayerManager>();
-    //    newPlayer.SetName(name);
-    //    LocalPlayer = newPlayer;
-    //    InteractManager.instance.player = newPlayer;
-    //}
+    public void GeneratePlayer(string name)
+    {
+        PlayerManager newPlayer;
+        newPlayer = PhotonNetwork.Instantiate("Player",
+                new Vector3(0, 0, 0), Quaternion.identity).GetComponent<PlayerManager>();
+        //newPlayer.SetName(name);
+        LocalPlayer = newPlayer;
+    }
 
     public void Connect() => PhotonNetwork.ConnectUsingSettings();
     //public override void OnConnectedToMaster()
@@ -113,8 +117,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.LogFormat("방 참가 완료 : {0}", PhotonNetwork.CurrentRoom);
         RoomText.text = PhotonNetwork.CurrentRoom.ToString();
         //UIManager.GetComponent<UIManager>().HideSimplePanel();
-        //GeneratePlayer(NickNameInput.text);
-
+        GeneratePlayer("테스트");
     }
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
