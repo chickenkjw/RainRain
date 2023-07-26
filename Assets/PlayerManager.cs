@@ -5,12 +5,15 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 
+using TMPro;
+
 
 public class PlayerManager : MonoBehaviour
 {
     #region Public Fields
 
     public PhotonView PV;
+    public TextMesh PlayerName;
 
     #endregion
 
@@ -52,6 +55,8 @@ public class PlayerManager : MonoBehaviour
         //_groundCheckRadius = cCol ? cCol.radius : 0.1f;
         //animator = GetComponent<Animator>();
     }
+
+
     #region MonoBehaviour CallBacks
 
     public void Awake()
@@ -73,7 +78,7 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
 
-
+    #region Public Methods
     /*player 이동 관련 함수*/
     public void Move()
     {
@@ -81,5 +86,18 @@ public class PlayerManager : MonoBehaviour
         float moveAmount = moveInput * moveSpeed * Time.deltaTime;
         transform.Translate(Vector3.right * moveAmount);
     }
+
+    public void SetName(string name)
+    {
+        PV.RPC("SetNameRPC", RpcTarget.AllBuffered, name);
+    }
+
+    [PunRPC]
+    public void SetNameRPC(string name)
+    {
+        PlayerName.text = name;
+    }
+
+    #endregion
 
 }

@@ -28,7 +28,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         instance = this;
         Screen.SetResolution(960, 540, false);
-        Connect();
+        //Connect();
     }
 
     // Update is called once per frame
@@ -39,11 +39,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region Photon Callbacks
-
     public override void OnConnectedToMaster()
     {
         Debug.Log("서버 접속 완료");
-        PhotonNetwork.JoinLobby();
+        //PhotonNetwork.JoinLobby();
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -54,19 +53,26 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         Debug.Log("로비 접속 완료");
+        UIManager.GetComponent<UIManager>().TogglePanel(EGameState.LOBBY);
+
+
     }
     #endregion
 
     #region Public Methods
     public void Join()
     {
-        PhotonNetwork.JoinOrCreateRoom("정우바보", new RoomOptions { MaxPlayers = 6 }, null);
+        PhotonNetwork.JoinOrCreateRoom("정우바보", new RoomOptions { MaxPlayers = 10 }, null);
     }
 
     //방 만들기 및 참가
-    public void CreateRoom() => PhotonNetwork.CreateRoom(RoomInput.text, new RoomOptions { MaxPlayers = 5 });
-    public void JoinRoom(string RoomName) => PhotonNetwork.JoinRoom(RoomName);
-    public void JoinOrCreateRoom(string RoomName) => PhotonNetwork.JoinOrCreateRoom(RoomName, new RoomOptions { MaxPlayers = 5 }, null);
+    public void CreateRoom() => PhotonNetwork.CreateRoom(RoomInput.text, new RoomOptions { MaxPlayers = 10 });
+    public void JoinRoom() => PhotonNetwork.JoinRoom(RoomInput.text);
+    public void JoinOrCreateRoom()
+    {
+        PhotonNetwork.JoinOrCreateRoom(RoomInput.text, new RoomOptions { MaxPlayers = 10 }, null);
+        UIManager.GetComponent<UIManager>().TogglePanel(EGameState.ROOM);
+    }
     public void JoinRandomRoom() => PhotonNetwork.JoinRandomRoom();
     public void LeaveRoom() => PhotonNetwork.LeaveRoom();
     public void LeaveRoom(string RoomName)
@@ -79,7 +85,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PlayerManager newPlayer;
         newPlayer = PhotonNetwork.Instantiate("Player",
                 new Vector3(0, 0, 0), Quaternion.identity).GetComponent<PlayerManager>();
-        //newPlayer.SetName(name);
+        newPlayer.SetName(name);
         LocalPlayer = newPlayer;
     }
 
@@ -95,17 +101,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void DisConnect() => PhotonNetwork.Disconnect();
     #endregion
 
-
-
     public void JoinLobby() => PhotonNetwork.JoinLobby();
 
+    public void SetUser()
+    {
+        UIManager.GetComponent<UIManager>().SetUserName(PhotonNetwork.PlayerList.Length, PhotonNetwork.LocalPlayer.NickName);
+    }
 
 
 
     public override void OnLeftRoom()
     {
         base.OnLeftRoom();
-        RoomText.text = "Not in the room";
+        //RoomText.text = "Not in the room";
         Debug.Log(PhotonNetwork.NetworkClientState.ToString());
         //PhotonNetwork.JoinOrCreateRoom("Team1", new RoomOptions { MaxPlayers = 5 }, null);
     }
@@ -115,9 +123,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.LogFormat("방 참가 완료 : {0}", PhotonNetwork.CurrentRoom);
+        if(PhotonNetwork.IsMasterClient == true)
+        {
+            
+        }
         RoomText.text = PhotonNetwork.CurrentRoom.ToString();
-        //UIManager.GetComponent<UIManager>().HideSimplePanel();
-        GeneratePlayer("테스트");
+        UIManager.GetComponent<UIManager>().TogglePanel(EGameState.ROOM);
+        PhotonNetwork.LocalPlayer.NickName = NickNameInput.text;
+        //GeneratePlayer(NickNameInput.text);
     }
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
@@ -170,6 +183,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     void Status()
     {
         Debug.Log(PhotonNetwork.NetworkClientState);
+    }
+
+    [ContextMenu("인원 체크")]
+    void HeadCount()
+    {
+        string playerStr = "";
+        print("현재 방 인원수 : " + PhotonNetwork.CurrentRoom.PlayerCount);
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            playerStr += PhotonNetwork.PlayerList[i].NickName + " : ";
+        }
+        print(playerStr);
     }
 
 }
