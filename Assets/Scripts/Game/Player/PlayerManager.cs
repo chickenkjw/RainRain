@@ -38,7 +38,7 @@ namespace Game.Player
         #endregion
 
         /*player 이동 관련 함수*/
-        public void Move()
+        private void Move()
         {
             float moveInput = Input.GetAxis("Horizontal");
             float moveAmount = moveInput * moveSpeed * Time.deltaTime;

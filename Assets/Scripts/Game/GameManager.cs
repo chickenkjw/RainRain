@@ -7,6 +7,14 @@ namespace Game
     {
         private static GameManager _instance;
 
+        [Header("플레이어")]
+        
+        [SerializeField]
+        [Tooltip("플레이어 캐릭터 오브젝트")]
+        private GameObject player;
+
+        [Header("임시 변수")]
+        
         public GameObject environment;
 
         public static GameManager Instance {
@@ -18,7 +26,7 @@ namespace Game
                 return _instance;
             }
         }
-        
+
         void Awake() {
             if (_instance == null) {
                 _instance = this;
@@ -28,10 +36,14 @@ namespace Game
             else {
                 Destroy(this.gameObject);
             }
+            
+            
         }
 
         void Start() {
             MapGenerator.Instance.GenerateMap();
+            Instantiate(player, MapGenerator.Instance.BuildingArray[0][0].Object.transform.position,
+                Quaternion.identity);
         }
 
         public void DestroyMap() {
