@@ -1,48 +1,103 @@
-using Photon.Pun;
+Ôªøusing System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-namespace Game.Player
+using Photon.Pun;
+using Photon.Realtime;
+
+using TMPro;
+
+
+public class PlayerManager : MonoBehaviour
 {
-    public class PlayerManager : MonoBehaviour
+    #region Public Fields
+
+    public PhotonView PV;
+    public TextMesh PlayerName;
+
+    #endregion
+
+    #region Private Fields
+
+    [SerializeField]
+    [Tooltip("ÌîåÎ†àÏù¥Ïñ¥Í∞Ä Î°úÏª¨ ÌîåÎ†àÏù¥Ïñ¥Ïù∏ÏßÄ ÌôïÏù∏")]
+    private bool isLocalPlayer;
+
+    [SerializeField]
+    [Tooltip("ÌîåÎ†àÏù¥Ïñ¥Ïùò Ïù¥Îèô ÏÜçÎèÑ")]
+    private float moveSpeed;
+
+    #endregion
+
+
+    public void Set()
     {
-        #region Public Fields
+        //isLocalPlayer = PV.IsMine;
+        //PlayerCamera.enabled = isLocalPlayer;
 
-        public PhotonView PV;
+        //GetComponentInChildren<Text>().text = name;
 
-        #endregion
+        //tpCamObject = tpCamera.gameObject;
+        //tpRig = tpCamera.transform.parent;
+        //tpRoot = tpRig.parent;
 
-        #region Private Fields
+        //fpCamObject = fpCamera.gameObject;
+        //fpRig = fpCamera.transform.parent;
+        //fpRoot = fpRig.parent;
 
-        [SerializeField]
-        [Tooltip("«ˆ¿Á ø¿∫Í¡ß∆Æ∞° ∑Œƒ√ «√∑π¿ÃæÓ¿Œ¡ˆ ±∏∫–")]
-        private bool isLocalPlayer;
+        //TryGetComponent(out rigid);
+        //if (rigid != null)
+        //{
+        //    rigid.constraints = RigidbodyConstraints.FreezeRotation;
+        //}
 
-        [SerializeField]
-        [Tooltip("«√∑π¿ÃæÓ¿« ¿Ãµøº”µµ")]
-        private float moveSpeed;
-
-        #endregion
-    
-        #region MonoBehaviour CallBacks
-
-        public void Awake()
-        {
-            isLocalPlayer = PV.IsMine;
-        }
-
-        void Update()
-        {
-            if(isLocalPlayer) Move();
-        }
-
-        #endregion
-
-        /*player ¿Ãµø ∞¸∑√ «‘ºˆ*/
-        private void Move()
-        {
-            float moveInput = Input.GetAxis("Horizontal");
-            float moveAmount = moveInput * moveSpeed * Time.deltaTime;
-            transform.Translate(Vector3.right * moveAmount);
-        }
+        //TryGetComponent(out CapsuleCollider cCol);
+        //_groundCheckRadius = cCol ? cCol.radius : 0.1f;
+        //animator = GetComponent<Animator>();
     }
+
+
+    #region MonoBehaviour CallBacks
+
+    public void Awake()
+    {
+        isLocalPlayer = PV.IsMine;
+    }
+
+    void Start()
+    {
+        Set();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (isLocalPlayer) Move();
+    }
+
+    #endregion
+
+
+    #region Public Methods
+    /*player  Ãµ        ‘º */
+    public void Move()
+    {
+        float moveInput = Input.GetAxis("Horizontal");
+        float moveAmount = moveInput * moveSpeed * Time.deltaTime;
+        transform.Translate(Vector3.right * moveAmount);
+    }
+
+    public void SetName(string name)
+    {
+        PV.RPC("SetNameRPC", RpcTarget.AllBuffered, name);
+    }
+
+    [PunRPC]
+    public void SetNameRPC(string name)
+    {
+        PlayerName.text = name;
+    }
+
+    #endregion
+
 }
