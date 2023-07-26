@@ -10,19 +10,14 @@ public class ChattingManager : MonoBehaviourPunCallbacks
 {
     public GameObject ChattingContent;
     public InputField ChattingInput;
-
     PhotonView photonview;
-
-    GameObject m_ContentText;
-
-    string m_strUserName;
+    public GameObject m_ContentText;
 
 
     void Start()
     {
         Screen.SetResolution(960, 600, false);
         PhotonNetwork.ConnectUsingSettings();
-        m_ContentText = ChattingContent.transform.GetChild(0).gameObject;
         photonview = GetComponent<PhotonView>();
     }
 
@@ -30,30 +25,14 @@ public class ChattingManager : MonoBehaviourPunCallbacks
     {
         if (Input.GetKeyDown(KeyCode.Return) && ChattingInput.isFocused == false)
         {
-            Debug.Log("엔터 누름!");
             ChattingInput.ActivateInputField();
         }
-        //if (Input.GetKeyDown(KeyCode.Return) && ChattingInput.isFocused == false)
-        //{
-        //    ChattingInput.ActivateInputField();
-        //}
     }
-    //public override void OnConnectedToMaster()
-    //{
-    //    RoomOptions options = new RoomOptions();
-    //    options.MaxPlayers = 5;
 
-    //    int nRandomKey = Random.Range(0, 100);
-
-    //    m_strUserName = "user" + nRandomKey;
-
-    //    PhotonNetwork.LocalPlayer.NickName = m_strUserName;
-    //    PhotonNetwork.JoinOrCreateRoom("Room1", options, null);
-    //}
 
     public override void OnJoinedRoom()
     {
-        AddChatMessage("connect user : " + PhotonNetwork.LocalPlayer.NickName);
+        photonview.RPC("RPC_Chat", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName + " 님이 접속하셨습니다");
     }
 
     public void OnEndEditEvent()
@@ -62,7 +41,6 @@ public class ChattingManager : MonoBehaviourPunCallbacks
         {
             Debug.Log("Typed");
             string strMessage = PhotonNetwork.LocalPlayer.NickName + " : " + ChattingInput.text;
-
             photonview.RPC("RPC_Chat", RpcTarget.All, strMessage);
             ChattingInput.text = "";
         }

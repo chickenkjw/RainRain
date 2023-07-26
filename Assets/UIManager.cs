@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Photon.Pun;
+using Photon.Realtime;
+
 public enum EGameState
 {
     MAIN,
@@ -20,6 +23,10 @@ public class UIManager : MonoBehaviour
     public GameObject RoomPanel;
 
     public List<GameObject> UserPanelList;
+
+    public GameObject a;
+
+    public PhotonView PV;
 
     #endregion
     #region MonoBehaviour CallBacks
@@ -68,7 +75,13 @@ public class UIManager : MonoBehaviour
 
     public void SetUserName(int userindex, string username)
     {
-        UserPanelList[userindex].GetComponent<Text>().text = username;
+        PV.RPC("SetUserNameRPC", RpcTarget.AllBuffered, userindex, username);
+    } 
+
+    [PunRPC]
+    public void SetUserNameRPC(int userindex, string name)
+    {
+        UserPanelList[userindex].GetComponentInChildren<Text>().text = name;
     }
 
 

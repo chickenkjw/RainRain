@@ -74,7 +74,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         UIManager.GetComponent<UIManager>().TogglePanel(EGameState.ROOM);
     }
     public void JoinRandomRoom() => PhotonNetwork.JoinRandomRoom();
-    public void LeaveRoom() => PhotonNetwork.LeaveRoom();
+    public void LeaveRoom()
+    {
+        UIManager.GetComponent<UIManager>().TogglePanel(EGameState.LOBBY);
+        PhotonNetwork.LeaveRoom();
+        
+    }
     public void LeaveRoom(string RoomName)
     {
         PhotonNetwork.LeaveRoom();
@@ -105,7 +110,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void SetUser()
     {
-        UIManager.GetComponent<UIManager>().SetUserName(PhotonNetwork.PlayerList.Length, PhotonNetwork.LocalPlayer.NickName);
+        UIManager.GetComponent<UIManager>().SetUserName(PhotonNetwork.PlayerList.Length - 1, PhotonNetwork.LocalPlayer.NickName);
     }
 
 
@@ -125,11 +130,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.LogFormat("방 참가 완료 : {0}", PhotonNetwork.CurrentRoom);
         if(PhotonNetwork.IsMasterClient == true)
         {
-            
+            Debug.Log("마스터입니다!");
         }
         RoomText.text = PhotonNetwork.CurrentRoom.ToString();
         UIManager.GetComponent<UIManager>().TogglePanel(EGameState.ROOM);
         PhotonNetwork.LocalPlayer.NickName = NickNameInput.text;
+        SetUser();
         //GeneratePlayer(NickNameInput.text);
     }
     public override void OnCreateRoomFailed(short returnCode, string message)
