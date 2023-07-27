@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.Fields;
+using Network;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -84,8 +85,7 @@ namespace Game
             _playerCount = GameObject.FindGameObjectsWithTag("Player").Length;
             
             MapGenerator.Instance.GenerateMap();
-            Instantiate(player, MapGenerator.Instance.BuildingArray[0][0].Object.transform.position,
-                Quaternion.identity);
+            NetworkManager.instance.GeneratePlayer(MapGenerator.Instance.BuildingArray[0][0].Object.transform.position);
         }
 
         private void Update() {

@@ -465,7 +465,6 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
-  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -480,7 +479,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -539,19 +538,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &519420033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03f6d0ecf0fdaeb41af7db03250a19c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  smoothing: 0.2
 --- !u!1 &563118304 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 679278792128827134, guid: 64f45a9942532b949ae303227329bf20, type: 3}
@@ -1885,7 +1871,7 @@ PrefabInstance:
       objectReference: {fileID: 1122400670}
     - target: {fileID: -8768916304251833304, guid: bf7cb35a73f25d246badad90ea8cc51b, type: 3}
       propertyPath: waterRiseTime
-      value: 30
+      value: 80000
       objectReference: {fileID: 0}
     - target: {fileID: -8768916304251833304, guid: bf7cb35a73f25d246badad90ea8cc51b, type: 3}
       propertyPath: waterLevelAlarmObject

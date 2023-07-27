@@ -15,9 +15,10 @@ namespace Game.Player
         #endregion
 
         #region Private Fields
-        
+
+        [SerializeField]
         [Tooltip("플레이어가 로컬 플레이어인지 확인")]
-        public bool isLocalPlayer;
+        private bool isLocalPlayer;
 
         [SerializeField]
         [Tooltip("플레이어의 이동 속도")]
@@ -30,8 +31,6 @@ namespace Game.Player
         private Vector3 _stairDestination;
         
         public List<Item> Items;
-
-        private GameObject _water;
 
         #endregion
 
@@ -49,12 +48,10 @@ namespace Game.Player
             _isMovingVertically = false;
 
             _stairDestination = Vector3.zero;
-
+            Debug.LogFormat("플레이어 입장 : {0}", PhotonNetwork.LocalPlayer.NickName);
             Items = new();
 
-            _water = GameManager.Instance.water.gameObject;
-            
-            Set();
+            SetName(PhotonNetwork.LocalPlayer.NickName);
         }
 
         // Update is called once per frame
@@ -64,8 +61,6 @@ namespace Game.Player
                 Move();
                 MoveVertical();
             }
-
-            MoveWater();
         }
 
         #endregion
@@ -97,10 +92,6 @@ namespace Game.Player
             //TryGetComponent(out CapsuleCollider cCol);
             //_groundCheckRadius = cCol ? cCol.radius : 0.1f;
             //animator = GetComponent<Animator>();
-        }
-
-        private void MoveWater() {
-            _water.transform.position = new Vector3(this.transform.position.x, _water.transform.position.y, 0);
         }
         
         /// <summary>
@@ -169,7 +160,8 @@ namespace Game.Player
 
         public void SetName(string name)
         {
-            PV.RPC(nameof(SetNameRPC), RpcTarget.AllBuffered, name);
+            Debug.Log(name + "으로 세팅하겠습니다!");
+            PV.RPC("SetNameRPC", RpcTarget.AllBuffered, name);
         }
         [PunRPC]
         public void SetNameRPC(string name)
