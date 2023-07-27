@@ -32,9 +32,11 @@ public class UIManager : MonoBehaviour
     #endregion
     #region MonoBehaviour CallBacks
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        instance = this;
+        Screen.SetResolution(960, 540, false);
+        DontDestroyOnLoad(gameObject);
     }
 
     // Update is called once per frame

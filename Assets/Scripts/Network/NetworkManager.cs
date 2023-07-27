@@ -31,7 +31,7 @@ namespace Network
         {
             instance = this;
             Screen.SetResolution(960, 540, false);
-            //Connect();
+            DontDestroyOnLoad(gameObject);
         }
 
         // Update is called once per frame

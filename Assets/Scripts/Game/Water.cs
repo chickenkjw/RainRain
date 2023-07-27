@@ -1,5 +1,5 @@
 ﻿using Game.Fields;
-using Game.Player;
+//using Game.Player;
 using UnityEngine;
 
 namespace Game
@@ -15,7 +15,7 @@ namespace Game
 
             if (obj.CompareTag("Player")) {
                 Debug.Log("물에 닿았습니다!");
-                obj.GetComponent<PlayerManager>().Drawn();
+                //obj.GetComponent<PlayerManager>().Drawn();
             }
         }
     }
