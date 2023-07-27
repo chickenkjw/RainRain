@@ -6425,16 +6425,16 @@ MonoBehaviour:
   UserPanelList:
   - {fileID: 595734617}
   - {fileID: 850050265}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 888798166}
+  - {fileID: 242048764}
+  - {fileID: 314274047}
+  - {fileID: 829920260}
+  - {fileID: 1204758058}
+  - {fileID: 868821484}
+  - {fileID: 484340501}
+  - {fileID: 2068127296}
+  - {fileID: 25834453}
+  - {fileID: 231764289}
   ReadyButton: {fileID: 1144613957}
   StartGameButton: {fileID: 1200229820}
   PV: {fileID: 1761401863}
