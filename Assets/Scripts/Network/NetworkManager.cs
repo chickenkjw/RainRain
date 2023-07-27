@@ -6,6 +6,8 @@ using Photon.Realtime;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+using Game.Player;
+
 namespace Network
 {
     public class NetworkManager : MonoBehaviourPunCallbacks

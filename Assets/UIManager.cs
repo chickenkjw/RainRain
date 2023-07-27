@@ -29,6 +29,8 @@ public class UIManager : MonoBehaviour
 
     public PhotonView PV;
 
+    public UIManager instance;
+
     #endregion
     #region MonoBehaviour CallBacks
     // Start is called before the first frame update
