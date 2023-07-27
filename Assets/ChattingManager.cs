@@ -39,7 +39,6 @@ public class ChattingManager : MonoBehaviourPunCallbacks
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            Debug.Log("Typed");
             string strMessage = PhotonNetwork.LocalPlayer.NickName + " : " + ChattingInput.text;
             photonview.RPC("RPC_Chat", RpcTarget.All, strMessage);
             ChattingInput.text = "";
@@ -48,7 +47,6 @@ public class ChattingManager : MonoBehaviourPunCallbacks
 
     public void OnClickSendButton()
     {
-        Debug.Log("Typed");
         string strMessage = PhotonNetwork.LocalPlayer.NickName + " : " + ChattingInput.text;
 
         photonview.RPC("RPC_Chat", RpcTarget.All, strMessage);

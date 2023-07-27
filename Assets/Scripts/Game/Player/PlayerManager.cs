@@ -91,7 +91,6 @@ namespace Game.Player
         {
             PV.RPC("SetNameRPC", RpcTarget.AllBuffered, name);
         }
-
         [PunRPC]
         public void SetNameRPC(string name)
         {
