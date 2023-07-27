@@ -161,6 +161,13 @@ namespace Network
 
         public void StartGame()
         {
+            Photonview.RPC("RPC_StartGame", RpcTarget.All);
+        }
+
+        [PunRPC]
+        void RPC_StartGame()
+        {
+            Debug.Log("스타트게임");
             SceneManager.LoadScene("MainScene");
         }
 

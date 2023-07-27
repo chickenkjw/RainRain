@@ -44,6 +44,7 @@ MonoBehaviour:
   - SetUserNameRPC
   - RPC_AddRoom
   - GetReadyRPC
+  - RPC_StartGame
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
