@@ -41,16 +41,12 @@ namespace Game.Fields
 
         [SerializeField] 
         [Tooltip("다리 오브젝트")] 
-        private GameObject bridge;
+        private GameObject brokenBridge;
 
         [SerializeField] 
         [Tooltip("다리 생성 확률. 입력범위: 0~100")]
         private int bridgeCreationRate;
-        
-        [SerializeField] 
-        [Tooltip("계단 생성 확률. 입력범위: 0~100")]
-        private int stairCreationRate;
-        
+
         #endregion
 
         #region Variables
@@ -59,9 +55,9 @@ namespace Game.Fields
         
         public Floor[][] BuildingArray;
 
-        private float _floorHeight;
+        public float floorHeight;
         private float _floorWidth;
-        
+
         #endregion
         
         public static MapGenerator Instance
@@ -87,7 +83,7 @@ namespace Game.Fields
         }
 
         private void Start() {
-            _floorHeight = floorObjects[0].GetComponent<SpriteRenderer>().bounds.size.y;
+            floorHeight = floorObjects[0].GetComponent<SpriteRenderer>().bounds.size.y;
             _floorWidth = floorObjects[0].GetComponent<SpriteRenderer>().bounds.size.x;
         }
 
@@ -126,16 +122,11 @@ namespace Game.Fields
                     var floorObject = Instantiate(floor.Object, buildPoint, Quaternion.identity);
                     floorObject.transform.parent = environmentObject.transform.GetChild(0);
 
-                    buildPoint.y += _floorHeight;
+                    buildPoint.y += floorHeight;
 
-                    // 계단 없애기
-                    if (random.Next(maxValue: 100) > stairCreationRate) {
-                        RemoveStair(floorObject.transform);
-                    }
-                    
                     // 다리 놓기
-                    if (random.Next(maxValue: 100) <= bridgeCreationRate) {
-                        PlaceBridge(w, h);
+                    if (w != 0 && random.Next(maxValue: 100) <= bridgeCreationRate) {
+                        PlaceBrokenBridge(w, h);
                     }
                 }
                 
@@ -146,39 +137,47 @@ namespace Game.Fields
             }
         }
 
-        private void RemoveStair(Transform floor) {
-            floor.GetChild(0).gameObject.SetActive(false);
-            floor.GetChild(3).GetChild(2).gameObject.SetActive(false);
-            floor.GetChild(3).GetChild(3).gameObject.SetActive(false);
-        }
-
-        private void PlaceBridge(int x, int y) {
+        private void PlaceBrokenBridge(int x, int y) {
             // 벽 콜라이더 없애기
-            Floor startFloor = BuildingArray[x][y];
-            Floor endFloor;
-
-            try {
-                endFloor = BuildingArray[x - 1][y];
-            }
-            catch {
-                return;
-            }
-
-            startFloor.Object.transform.GetChild(2).GetChild(0).gameObject.SetActive(false);
-            endFloor.Object.transform.GetChild(2).GetChild(1).gameObject.SetActive(false);
+            GameObject startFloor = environmentObject.transform.GetChild(0).GetChild(GetCurrentBuildingIndex(x, y))
+                .gameObject;
+            GameObject endFloor = environmentObject.transform.GetChild(0).GetChild(GetCurrentBuildingIndex(x - 1, y))
+                .gameObject;
+            
+            startFloor.transform.GetChild(2).GetChild(0).gameObject.SetActive(false);
+            endFloor.transform.GetChild(2).GetChild(1).gameObject.SetActive(false);
             
             // 다리 생성
-            Vector3 startPoint = startFloor.BuildPoint + startFloor.Object.transform.GetChild(3).GetChild(0).position;
-            Vector3 endPoint = endFloor.BuildPoint + endFloor.Object.transform.GetChild(3).GetChild(1).position;
-
-            float distance = Vector2.Distance(startPoint, endPoint) * 0.1f;
-
-            startPoint.x -= _floorWidth * .25f;
-            var placedBridge = Instantiate(bridge, startPoint, Quaternion.identity);
+            Vector3 startPoint = startFloor.transform.position;
+            Vector3 endPoint = endFloor.transform.position;
             
-            placedBridge.transform.localScale = new Vector3(distance, .3f, 1f);
+            float distance = Vector2.Distance(startPoint, endPoint) / 29.5f;
+
+            startPoint.x -= _floorWidth * .75f;
+            startPoint.y -=  floorHeight * .48f;
+            var placedBridge = Instantiate(brokenBridge, startPoint, Quaternion.identity);
+            
+            placedBridge.transform.localScale = new Vector3(distance, .25f, 1f);
 
             placedBridge.transform.parent = environmentObject.transform.GetChild(1);
+        }
+
+        /// <summary>
+        /// EnvironmentObject로부터 GameObject를 가져오기 위해 Child Index를 구하는 함수
+        /// </summary>
+        /// <param name="x">x번(가로)째</param>
+        /// <param name="y">x번째 y층 건물</param>
+        /// <returns>몇 번째 Index인지 반환</returns>
+        private int GetCurrentBuildingIndex(int x, int y) {
+            int sum = 0;
+
+            for (int i = 0; i < x; i++) {
+                sum += BuildingArray[i].Length;
+            }
+
+            sum += y;
+
+            return sum;
         }
     }
 }

@@ -138,7 +138,7 @@ namespace Network
 
         public void SendChatting(string text)
         {
-            //Photonview.RPC("ChatRPC", RpcTarget.All, PhotonNetwork.NickName + " : " + text);
+            //Photonview.RPC("ChatRPC", RpcTarget.All, PhotonNetwork.NickName + " : " + s);
         }
 
 

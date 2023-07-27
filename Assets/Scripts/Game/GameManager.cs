@@ -1,21 +1,13 @@
+using System.Collections.Generic;
 using Game.Fields;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game
 {
     public class GameManager : MonoBehaviour
     {
         private static GameManager _instance;
-
-        [Header("플레이어")]
-        
-        [SerializeField]
-        [Tooltip("플레이어 캐릭터 오브젝트")]
-        private GameObject player;
-
-        [Header("임시 변수")]
-        
-        public GameObject environment;
 
         public static GameManager Instance {
             get {
@@ -26,6 +18,48 @@ namespace Game
                 return _instance;
             }
         }
+        
+        #region EditorVariables
+
+        [Header("플레이어")]
+        
+        [SerializeField]
+        [Tooltip("플레이어 캐릭터 오브젝트")]
+        private GameObject player;
+
+        [Header("오브젝트")] 
+        
+        [SerializeField] 
+        [Tooltip("수위 경보 타이머")]
+        private Image waterLevelAlarmObject;
+
+        [SerializeField] 
+        [Tooltip("게임오버 패널")] 
+        private GameObject gameOverPanel;
+
+        [SerializeField] 
+        [Tooltip("수면(물) 오브젝트")]
+        private Water water;
+
+        [Header("게임 파라미터")] 
+        
+        [Tooltip("물이 증가하는 시간. 초 단위로 입력")]
+        public float waterRiseTime;
+
+        #endregion
+
+        #region Variables
+
+        private int _playerCount;
+
+        private float _waterLevelTime;
+        private float _currentTime;
+
+        private List<Log> _timeLine;
+
+        #endregion
+
+        #region MonoBehaviour CallBacks
 
         void Awake() {
             if (_instance == null) {
@@ -37,27 +71,61 @@ namespace Game
                 Destroy(this.gameObject);
             }
             
-            
+            waterLevelAlarmObject.fillAmount = 0;
+            gameOverPanel.SetActive(false);
         }
 
         void Start() {
+            _currentTime = 0;
+            _timeLine = new();
+            
+            _waterLevelTime = 0;
+            
+            _playerCount = GameObject.FindGameObjectsWithTag("Player").Length;
+            
             MapGenerator.Instance.GenerateMap();
             Instantiate(player, MapGenerator.Instance.BuildingArray[0][0].Object.transform.position,
                 Quaternion.identity);
         }
 
-        public void DestroyMap() {
-            Transform[] children = environment.transform.GetChild(0).GetComponentsInChildren<Transform>();
+        private void Update() {
+            if (_waterLevelTime < waterRiseTime) {
+                _waterLevelTime += Time.deltaTime;
+            }
+            else {
+                _currentTime += waterRiseTime;
+                _waterLevelTime = 0;
+                water.Rise();
+            }
 
-            if (children.Length > 0) {
-                for (int i = 1; i < children.Length; i++) {
-                    Destroy(children[i].gameObject);
-                }
+            waterLevelAlarmObject.fillAmount = _waterLevelTime / waterRiseTime;
+        }
+
+        #endregion
+
+        public void PlayerDie(string playerName) {
+            _timeLine.Add(new Log {
+                Name = playerName,
+                Time = _currentTime + _waterLevelTime
+            });
+
+            _playerCount -= 1;
+
+            if (_playerCount <= 0) {
+                GameOver();
             }
         }
 
-        public void ReGenerateMap() {
-            MapGenerator.Instance.GenerateMap();
+        private void GameOver() {
+            Time.timeScale = 0;
+
+            gameOverPanel.SetActive(true);
+            Text gameInfoText = gameOverPanel.transform.GetChild(1).gameObject.GetComponent<Text>();
+
+            gameInfoText.text = string.Empty;
+            foreach (var log in _timeLine) {
+                gameInfoText.text = $"{log.Name}, {log.Time:F2}\n";
+            }
         }
     }
 }
