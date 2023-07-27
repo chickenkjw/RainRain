@@ -8,6 +8,7 @@ namespace Game.Camera
     {
         [Header("카메라 컨트롤러 파라미터")]
         
+        [SerializeField]
         [Tooltip("카메라 타겟. 플레이어")]
         private Transform target;
         
@@ -22,7 +23,7 @@ namespace Game.Camera
                 .GetComponent<Transform>();
         }
 
-        private void FixedUpdate() {
+        private void LateUpdate() {
             Vector3 targetPos = new Vector3(target.position.x, target.position.y, this.transform.position.z);
             transform.position = Vector3.Lerp(transform.position, targetPos, smoothing);
         }

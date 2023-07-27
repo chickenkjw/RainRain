@@ -14,7 +14,7 @@ namespace Game
             var obj = other.gameObject;
 
             if (obj.CompareTag("Player")) {
-                obj.GetComponent<PlayerManager>().Drawn();
+                obj.GetComponent<PlayerManager>().Drown();
             }
         }
     }
