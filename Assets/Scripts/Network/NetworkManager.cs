@@ -120,6 +120,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.LogFormat("방 참가 완료 : {0}", PhotonNetwork.CurrentRoom);
         if (PhotonNetwork.IsMasterClient == true)
         {
+            UIManager.GetComponent<UIManager>().ToggleMaster();
             Debug.Log("마스터입니다!");
         }
         RoomText.text = PhotonNetwork.CurrentRoom.ToString();

@@ -24,7 +24,8 @@ public class UIManager : MonoBehaviour
 
     public List<GameObject> UserPanelList;
 
-    public GameObject a;
+    public GameObject ReadyButton;
+    public GameObject StartGameButton;
 
     public PhotonView PV;
 
@@ -70,6 +71,8 @@ public class UIManager : MonoBehaviour
 
     public void ToggleMaster()
     {
+        ReadyButton.SetActive(false);
+        StartGameButton.SetActive(true);
         Debug.Log("I'm master");
     }
 
