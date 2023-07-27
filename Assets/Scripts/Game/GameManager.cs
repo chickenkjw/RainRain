@@ -38,9 +38,9 @@ namespace Game
         [Tooltip("게임오버 패널")] 
         private GameObject gameOverPanel;
 
-        [SerializeField] 
+        [HideInInspector]
         [Tooltip("수면(물) 오브젝트")]
-        private Water water;
+        public Water water;
 
         [Header("게임 파라미터")] 
         
