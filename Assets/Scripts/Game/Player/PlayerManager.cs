@@ -18,7 +18,7 @@ namespace Game.Player
 
         [SerializeField]
         [Tooltip("플레이어가 로컬 플레이어인지 확인")]
-        private bool isLocalPlayer;
+        public bool IsLocalPlayer { get; private set; }
 
         [SerializeField]
         [Tooltip("플레이어의 이동 속도")]
@@ -38,7 +38,7 @@ namespace Game.Player
 
         public void Awake()
         {
-            isLocalPlayer = PV.IsMine;
+            IsLocalPlayer = PV.IsMine;
         }
 
         void Start()
@@ -57,7 +57,7 @@ namespace Game.Player
         // Update is called once per frame
         void Update()
         {
-            if (isLocalPlayer) {
+            if (IsLocalPlayer) {
                 Move();
                 MoveVertical();
             }
@@ -125,7 +125,7 @@ namespace Game.Player
         /// </summary>
         public void Drawn() {
             GameManager.Instance.PlayerDie(PlayerName.text);
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         } 
 
         private void OnTriggerEnter2D(Collider2D other) {

@@ -18,7 +18,7 @@ namespace Game.Camera
         private void Start() {
             target = GameObject
                 .FindGameObjectsWithTag("Player")
-                .ToList().First(player => player.GetComponent<PlayerManager>().isLocalPlayer)
+                .ToList().First(player => player.GetComponent<PlayerManager>().IsLocalPlayer)
                 .GetComponent<Transform>();
         }
 
