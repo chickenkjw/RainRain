@@ -55,6 +55,7 @@ namespace Game.Fields
         
         public Floor[][] BuildingArray;
 
+        [HideInInspector]
         public float floorHeight;
         private float _floorWidth;
 
@@ -63,7 +64,7 @@ namespace Game.Fields
         public static MapGenerator Instance
         {
             get {
-                if (null == _instance) {
+                if (_instance == null) {
                     return null;
                 }
                 
@@ -80,9 +81,7 @@ namespace Game.Fields
             else {
                 Destroy(this.gameObject);
             }
-        }
-
-        private void Start() {
+            
             floorHeight = floorObjects[0].GetComponent<SpriteRenderer>().bounds.size.y;
             _floorWidth = floorObjects[0].GetComponent<SpriteRenderer>().bounds.size.x;
         }
@@ -122,7 +121,11 @@ namespace Game.Fields
                     var floorObject = Instantiate(floor.Object, buildPoint, Quaternion.identity);
                     floorObject.transform.parent = environmentObject.transform.GetChild(0);
 
+                    Debug.Log($"{floorHeight}");
+                    
                     buildPoint.y += floorHeight;
+                    
+                    Debug.Log($"current BuildPoint: {buildPoint}");
 
                     // 다리 놓기
                     if (w != 0 && random.Next(maxValue: 100) <= bridgeCreationRate) {

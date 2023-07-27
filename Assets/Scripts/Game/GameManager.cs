@@ -124,7 +124,7 @@ namespace Game
 
             gameInfoText.text = string.Empty;
             foreach (var log in _timeLine) {
-                gameInfoText.text = $"{log.Name}, {log.Time:F2}\n";
+                gameInfoText.text = $"{log.Name}, {log.Time:F2}\n\n";
             }
         }
     }

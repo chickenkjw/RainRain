@@ -1,4 +1,5 @@
-﻿using Game.Fields;
+﻿using System;
+using Game.Fields;
 using Game.Player;
 using UnityEngine;
 
@@ -14,8 +15,7 @@ namespace Game
             var obj = other.gameObject;
 
             if (obj.CompareTag("Player")) {
-                Debug.Log("물에 닿았습니다!");
-                //obj.GetComponent<PlayerManager>().Drawn();
+                obj.GetComponent<PlayerManager>().Drawn();
             }
         }
     }
