@@ -140,6 +140,14 @@ namespace Game.Fields
             // 벽 콜라이더 없애기
             GameObject startFloor = environmentObject.transform.GetChild(0).GetChild(GetCurrentBuildingIndex(x, y))
                 .gameObject;
+
+            try {
+                var temp = BuildingArray[x - 1][y];
+            }
+            catch {
+                return;
+            }
+            
             GameObject endFloor = environmentObject.transform.GetChild(0).GetChild(GetCurrentBuildingIndex(x - 1, y))
                 .gameObject;
             

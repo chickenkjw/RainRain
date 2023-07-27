@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Game.Items;
 using Photon.Pun;
 using UnityEngine;
@@ -32,6 +33,8 @@ namespace Game.Player
         
         public List<Item> Items;
 
+        private GameObject _water;
+
         #endregion
 
         #region MonoBehaviour CallBacks
@@ -47,6 +50,8 @@ namespace Game.Player
             _canMoveUp = false;
             _isMovingVertically = false;
 
+            _water = GameManager.Instance.water.gameObject;
+
             _stairDestination = Vector3.zero;
             Debug.LogFormat("플레이어 입장 : {0}", PhotonNetwork.LocalPlayer.NickName);
             Items = new();
@@ -61,6 +66,7 @@ namespace Game.Player
                 Move();
                 MoveVertical();
             }
+            MoveWater();
         }
 
         #endregion
@@ -103,6 +109,10 @@ namespace Game.Player
             float moveAmount = moveInput * moveSpeed * Time.deltaTime;
             transform.Translate(Vector3.right * moveAmount);
         }
+
+        private void MoveWater() {
+            _water.transform.position = new Vector3(transform.position.x, _water.transform.position.y, 0);
+        }
         
         /// <summary>
         /// Player 층간 이동 함수
@@ -123,7 +133,7 @@ namespace Game.Player
         /// <summary>
         /// 물에 닿았을 시 플레이어가 죽는 것으로 판정
         /// </summary>
-        public void Drawn() {
+        public void Drown() {
             GameManager.Instance.PlayerDie(PlayerName.text);
             Destroy(gameObject);
         } 
