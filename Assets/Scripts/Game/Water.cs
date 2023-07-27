@@ -1,5 +1,4 @@
-﻿using System;
-using Game.Fields;
+﻿using Game.Fields;
 using Game.Player;
 using UnityEngine;
 

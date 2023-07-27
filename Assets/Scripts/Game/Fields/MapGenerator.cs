@@ -120,13 +120,9 @@ namespace Game.Fields
                     
                     var floorObject = Instantiate(floor.Object, buildPoint, Quaternion.identity);
                     floorObject.transform.parent = environmentObject.transform.GetChild(0);
-
-                    Debug.Log($"{floorHeight}");
                     
                     buildPoint.y += floorHeight;
                     
-                    Debug.Log($"current BuildPoint: {buildPoint}");
-
                     // 다리 놓기
                     if (w != 0 && random.Next(maxValue: 100) <= bridgeCreationRate) {
                         PlaceBrokenBridge(w, h);

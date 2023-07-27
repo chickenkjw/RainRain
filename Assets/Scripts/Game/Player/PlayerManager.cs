@@ -15,10 +15,9 @@ namespace Game.Player
         #endregion
 
         #region Private Fields
-
-        [SerializeField]
+        
         [Tooltip("플레이어가 로컬 플레이어인지 확인")]
-        private bool isLocalPlayer;
+        public bool isLocalPlayer;
 
         [SerializeField]
         [Tooltip("플레이어의 이동 속도")]
@@ -32,6 +31,8 @@ namespace Game.Player
         
         public List<Item> Items;
 
+        private GameObject _water;
+
         #endregion
 
         #region MonoBehaviour CallBacks
@@ -39,7 +40,6 @@ namespace Game.Player
         public void Awake()
         {
             isLocalPlayer = PV.IsMine;
-            isLocalPlayer = true;
         }
 
         void Start()
@@ -51,6 +51,8 @@ namespace Game.Player
             _stairDestination = Vector3.zero;
 
             Items = new();
+
+            _water = GameManager.Instance.water.gameObject;
             
             Set();
         }
@@ -62,6 +64,8 @@ namespace Game.Player
                 Move();
                 MoveVertical();
             }
+
+            MoveWater();
         }
 
         #endregion
@@ -93,6 +97,10 @@ namespace Game.Player
             //TryGetComponent(out CapsuleCollider cCol);
             //_groundCheckRadius = cCol ? cCol.radius : 0.1f;
             //animator = GetComponent<Animator>();
+        }
+
+        private void MoveWater() {
+            _water.transform.position = new Vector3(this.transform.position.x, _water.transform.position.y, 0);
         }
         
         /// <summary>
