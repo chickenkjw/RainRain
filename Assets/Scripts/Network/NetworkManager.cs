@@ -87,12 +87,11 @@ namespace Network
             PhotonNetwork.LeaveRoom();
         }
 
-        public void GeneratePlayer(string name)
+        public void GeneratePlayer(Vector3 position)
         {
             PlayerManager newPlayer;
             newPlayer = PhotonNetwork.Instantiate("Player",
-                    new Vector3(0, 0, 0), Quaternion.identity).GetComponent<PlayerManager>();
-            newPlayer.SetName(name);
+                    position, Quaternion.identity).GetComponent<PlayerManager>();
             LocalPlayer = newPlayer;
         }
 

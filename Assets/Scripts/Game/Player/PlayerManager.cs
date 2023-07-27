@@ -39,7 +39,6 @@ namespace Game.Player
         public void Awake()
         {
             isLocalPlayer = PV.IsMine;
-            isLocalPlayer = true;
         }
 
         void Start()
@@ -49,10 +48,10 @@ namespace Game.Player
             _isMovingVertically = false;
 
             _stairDestination = Vector3.zero;
-
+            Debug.LogFormat("플레이어 입장 : {0}", PhotonNetwork.LocalPlayer.NickName);
             Items = new();
-            
-            Set();
+
+            SetName(PhotonNetwork.LocalPlayer.NickName);
         }
 
         // Update is called once per frame
@@ -161,7 +160,8 @@ namespace Game.Player
 
         public void SetName(string name)
         {
-            PV.RPC(nameof(SetNameRPC), RpcTarget.AllBuffered, name);
+            Debug.Log(name + "으로 세팅하겠습니다!");
+            PV.RPC("SetNameRPC", RpcTarget.AllBuffered, name);
         }
         [PunRPC]
         public void SetNameRPC(string name)

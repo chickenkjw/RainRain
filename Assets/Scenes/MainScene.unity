@@ -1217,10 +1217,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StatusText: {fileID: 692748255}
-  RoomText: {fileID: 253940249}
   RoomInput: {fileID: 0}
   NickNameInput: {fileID: 0}
   UIManager: {fileID: 0}
+  RoomManager: {fileID: 0}
   LocalPlayerPrefab: {fileID: 0}
   Photonview: {fileID: 0}
   LocalPlayer: {fileID: 0}
@@ -1871,7 +1871,7 @@ PrefabInstance:
       objectReference: {fileID: 1122400670}
     - target: {fileID: -8768916304251833304, guid: bf7cb35a73f25d246badad90ea8cc51b, type: 3}
       propertyPath: waterRiseTime
-      value: 10
+      value: 80000
       objectReference: {fileID: 0}
     - target: {fileID: -8768916304251833304, guid: bf7cb35a73f25d246badad90ea8cc51b, type: 3}
       propertyPath: waterLevelAlarmObject
