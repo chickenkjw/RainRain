@@ -13,9 +13,10 @@ namespace Network
     public class NetworkManager : MonoBehaviourPunCallbacks
     {
         #region Public Fields
-        public Text StatusText, RoomText;
+        public Text StatusText;
         public InputField RoomInput, NickNameInput;
         public GameObject UIManager;
+        public GameObject RoomManager;
         public static NetworkManager instance;
         public GameObject LocalPlayerPrefab;
         public PhotonView Photonview;
@@ -72,7 +73,7 @@ namespace Network
         public void JoinOrCreateRoom()
         {
             PhotonNetwork.JoinOrCreateRoom(RoomInput.text, new RoomOptions { MaxPlayers = 10 }, null);
-            UIManager.GetComponent<UIManager>().TogglePanel(EGameState.ROOM);
+            //UIManager.GetComponent<UIManager>().TogglePanel(EGameState.ROOM);
         }
         public void JoinRandomRoom() => PhotonNetwork.JoinRandomRoom();
         public void LeaveRoom()
@@ -118,7 +119,12 @@ namespace Network
         }
 
 
-        public override void OnCreatedRoom() => print("방 만들기 완료");
+        public override void OnCreatedRoom()
+        {
+            print("방 만들기 완료");
+            RoomManager.GetComponent<RoomManager>().AddRoom(PhotonNetwork.CurrentRoom.ToString());
+        }
+            
         public override void OnJoinedRoom()
         {
             Debug.LogFormat("방 참가 완료 : {0}", PhotonNetwork.CurrentRoom);
@@ -127,7 +133,6 @@ namespace Network
                 UIManager.GetComponent<UIManager>().ToggleMaster();
                 Debug.Log("마스터입니다!");
             }
-            RoomText.text = PhotonNetwork.CurrentRoom.ToString();
             UIManager.GetComponent<UIManager>().TogglePanel(EGameState.ROOM);
             PhotonNetwork.LocalPlayer.NickName = NickNameInput.text;
             SetUser();
