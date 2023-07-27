@@ -41,13 +41,20 @@ public class UIManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        
+        ClearOutline();
     }
     #endregion
     #region Public Methods
+
+    public void ClearOutline()
+    {
+        foreach(GameObject userPanel in UserPanelList)
+        {
+            userPanel.GetComponentInChildren<Outline>().enabled = false;
+        }
+    }
 
     public void ClearPanel()
     {
@@ -89,6 +96,17 @@ public class UIManager : MonoBehaviour
     public void SetUserNameRPC(int userindex, string name)
     {
         UserPanelList[userindex].GetComponentInChildren<Text>().text = name;
+    }
+
+    public void GetReady(int userIndex)
+    {
+        PV.RPC("GetReadyRPC", RpcTarget.AllBuffered, userIndex);
+    }
+
+    [PunRPC]
+    public void GetReadyRPC(int userIndex)
+    {
+        UserPanelList[userIndex].GetComponentInChildren<Outline>().enabled = true;
     }
 
 

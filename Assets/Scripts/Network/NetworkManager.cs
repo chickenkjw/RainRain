@@ -22,6 +22,8 @@ namespace Network
         public PhotonView Photonview;
 
         public PlayerManager LocalPlayer;
+        public int PlayerIndex { get; private set; }
+        public bool isReady;
         #endregion
 
         #region Private Fields
@@ -105,7 +107,8 @@ namespace Network
 
         public void SetUser()
         {
-            UIManager.GetComponent<UIManager>().SetUserName(PhotonNetwork.PlayerList.Length - 1, PhotonNetwork.LocalPlayer.NickName);
+            PlayerIndex = PhotonNetwork.PlayerList.Length - 1;
+            UIManager.GetComponent<UIManager>().SetUserName(PlayerIndex, PhotonNetwork.LocalPlayer.NickName);
         }
 
 
@@ -159,6 +162,11 @@ namespace Network
         public void StartGame()
         {
             SceneManager.LoadScene("MainScene");
+        }
+
+        public void Ready()
+        {
+            if (!isReady) UIManager.GetComponent<UIManager>().GetReady(PlayerIndex);
         }
 
 

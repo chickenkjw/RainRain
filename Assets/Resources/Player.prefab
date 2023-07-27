@@ -137,7 +137,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PV: {fileID: 4884596661021595291}
   PlayerName: {fileID: 6944014800751251939}
-  isLocalPlayer: 1
   moveSpeed: 5
 --- !u!114 &4252054073525045154
 MonoBehaviour:
@@ -489,7 +488,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03f6d0ecf0fdaeb41af7db03250a19c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 936622937727789155}
   smoothing: 0.2
 --- !u!1 &8612738452546797951
 GameObject:
