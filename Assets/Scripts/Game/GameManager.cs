@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Fields;
 using Network;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,12 +23,6 @@ namespace Game
         
         #region EditorVariables
 
-        [Header("플레이어")]
-        
-        [SerializeField]
-        [Tooltip("플레이어 캐릭터 오브젝트")]
-        private GameObject player;
-
         [Header("오브젝트")] 
         
         [SerializeField] 
@@ -38,9 +33,9 @@ namespace Game
         [Tooltip("게임오버 패널")] 
         private GameObject gameOverPanel;
 
-        [HideInInspector]
+        [SerializeField]
         [Tooltip("수면(물) 오브젝트")]
-        public Water water;
+        private Water water;
 
         [Header("게임 파라미터")] 
         
@@ -82,7 +77,7 @@ namespace Game
             
             _waterLevelTime = 0;
             
-            _playerCount = GameObject.FindGameObjectsWithTag("Player").Length;
+            _playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
             
             MapGenerator.Instance.GenerateMap();
             NetworkManager.instance.GeneratePlayer(MapGenerator.Instance.BuildingArray[0][0].Object.transform.position);
@@ -124,7 +119,7 @@ namespace Game
 
             gameInfoText.text = string.Empty;
             foreach (var log in _timeLine) {
-                gameInfoText.text = $"{log.Name}, {log.Time:F2}\n\n";
+                gameInfoText.text = $"{log.Name}님은 {log.Time:F2}초 동안 생존하였습니다\n\n";
             }
         }
     }

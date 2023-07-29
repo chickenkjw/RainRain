@@ -14,7 +14,8 @@ namespace Game.Camera
         
         [SerializeField] 
         [Tooltip("카메라 이동의 부드러운 정도")]
-        private float smoothing = 0.2f;
+        [Range(1.0f, 8.0f)]
+        private float smoothing;
 
         private void Start() {
             target = GameObject
@@ -24,8 +25,12 @@ namespace Game.Camera
         }
 
         private void LateUpdate() {
-            Vector3 targetPos = new Vector3(target.position.x, target.position.y, this.transform.position.z);
-            transform.position = Vector3.Lerp(transform.position, targetPos, smoothing);
+            if (target == null) {
+                return;
+            }
+            
+            Vector3 targetPos = new Vector3(target.position.x, target.position.y, transform.position.z);
+            transform.position = Vector3.Lerp(transform.position, targetPos, smoothing * Time.deltaTime);
         }
     }
 }

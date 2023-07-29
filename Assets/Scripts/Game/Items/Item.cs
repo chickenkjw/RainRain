@@ -1,8 +1,13 @@
-﻿namespace Game.Items
+﻿using UnityEngine;
+
+namespace Game.Items
 {
-    public class Item
+    [System.Serializable]
+    public class Item : MonoBehaviour
     {
-        public ItemType Type { get; set; }
-        public int Count { get; set; }
+        public GameObject itemObject;
+        public int count;
+        public int carryLimit;
+        public ItemType type;
     }
 }
