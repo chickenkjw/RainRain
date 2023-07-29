@@ -58,6 +58,7 @@ namespace Game
         #region MonoBehaviour CallBacks
 
         void Awake() {
+            Screen.SetResolution(960, 540, false);
             if (_instance == null) {
                 _instance = this;
                 
@@ -80,7 +81,7 @@ namespace Game
             _playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
             
             MapGenerator.Instance.GenerateMap();
-            NetworkManager.instance.GeneratePlayer(MapGenerator.Instance.BuildingArray[0][0].Object.transform.position);
+            //NetworkManager.instance.GeneratePlayer(MapGenerator.Instance.BuildingArray[0][0].Object.transform.position);
         }
 
         private void Update() {

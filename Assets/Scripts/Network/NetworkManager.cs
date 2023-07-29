@@ -34,8 +34,14 @@ namespace Network
         #region MonoBehaviour CallBacks
         void Awake()
         {
-            instance = this;
-            Screen.SetResolution(960, 540, false);
+            // SoundManager 인스턴스가 이미 있는지 확인, 이 상태로 설정
+            if (instance == null)
+                instance = this;
+
+            // 인스턴스가 이미 있는 경우 오브젝트 제거
+            else if (instance != this)
+                Destroy(gameObject);
+            
             DontDestroyOnLoad(gameObject);
         }
 
@@ -96,6 +102,7 @@ namespace Network
 
         public void GeneratePlayer(Vector3 position)
         {
+            Debug.Log("Generate");
             PlayerManager newPlayer;
             newPlayer = PhotonNetwork.Instantiate("Player",
                     position, Quaternion.identity).GetComponent<PlayerManager>();
@@ -143,7 +150,7 @@ namespace Network
             PhotonNetwork.LocalPlayer.NickName = NickNameInput.text;
             ChattingManager.instance.AddChatMessage(PhotonNetwork.LocalPlayer.NickName + " 님이 접속하셨습니다");
             SetUser();
-            //GeneratePlayer(NickNameInput.text);
+            GeneratePlayer(new Vector3(0,0,0));
         }
         public override void OnCreateRoomFailed(short returnCode, string message)
         {
