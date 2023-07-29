@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Game.Fields;
 using Game.Items;
 using Photon.Pun;
@@ -52,10 +53,14 @@ namespace Game.Player
         private Item[] _playerItems;
         private Item[] _boxItems;
 
+        [SerializeField]
         private GameObject[] _inventoryItemDrawPoint;
+        [SerializeField]
         private Transform[] _boxItemDrawPoint;
 
+        [SerializeField]
         private Transform _inventoryObjectsParent;
+        [SerializeField]
         private Transform _itemObjectsParent;
 
         private bool _canInteractWithBox;
@@ -156,8 +161,8 @@ namespace Game.Player
             _boxItemDrawPoint[0] = boxContentsUI.transform.GetChild(0);
             _boxItemDrawPoint[1] = boxContentsUI.transform.GetChild(1);
 
-            _inventoryObjectsParent = playerUI.transform.GetChild(4);
-            _itemObjectsParent = boxContentsUI.transform.GetChild(2);
+            _inventoryObjectsParent = MapGenerator.Instance.drawObjectParents[0];
+            _itemObjectsParent = MapGenerator.Instance.drawObjectParents[1];
         }
         
         /// <summary>
@@ -213,15 +218,15 @@ namespace Game.Player
                 // 박스와 인벤토리 동시 열기
                 if (_canInteractWithBox) {
                     rectTransform.anchoredPosition += Vector2.left * 105;
-                    DrawItemsOnInventory(true);
                     inventoryUI.SetActive(true);
                     boxContentsUI.SetActive(true);
+                    DrawItemsOnInventory(true);
                 }
                 // 개인 인벤토리 열기
                 else {
                     rectTransform.anchoredPosition = Vector2.zero;
-                    DrawItemsOnInventory();
                     inventoryUI.SetActive(true);
+                    DrawItemsOnInventory();
                 }
             }
             else {
@@ -229,11 +234,11 @@ namespace Game.Player
                 
                 _isOpeningInventory = false;
                 
+                EraseItemsOnInventory(_canInteractWithBox);
+
                 uiBackground.SetActive(false);
                 inventoryUI.SetActive(false);
                 boxContentsUI.SetActive(false);
-                
-                EraseItemsOnInventory(_canInteractWithBox);
             }
         }
 
@@ -243,16 +248,16 @@ namespace Game.Player
         /// <param name="isBoxInteraction"></param>
         private void DrawItemsOnInventory(bool isBoxInteraction = false) {
             for (int i = 0; i < 4; i++) {
-                if(_items[i] != null)
-                    Instantiate(_items[i].itemObject, _inventoryItemDrawPoint[i].transform.position, 
-                        Quaternion.identity, _inventoryObjectsParent);
+                if(_playerItems[i] != null)
+                    Instantiate(_items.First(x => x.Equals(_playerItems[i])).gameObject, 
+                        _inventoryItemDrawPoint[i].transform.position, Quaternion.identity, _inventoryObjectsParent);
             }
             
             if (isBoxInteraction) {
                 for (int i = 0; i < 2; i++) {
                     if (_boxItems[i]  != null) {
-                        Instantiate(_boxItems[i].itemObject, _boxItemDrawPoint[i].transform.position, Quaternion.identity,
-                            _itemObjectsParent);
+                        Instantiate(_items.First(x => x.Equals(_boxItems[i])).gameObject,
+                            _boxItemDrawPoint[i].transform.position, Quaternion.identity, _itemObjectsParent);
                     }
                 }
             }
@@ -265,15 +270,15 @@ namespace Game.Player
         private void EraseItemsOnInventory(bool isInteractWithBox = false) {
             var drawItems = _inventoryObjectsParent.GetComponentsInChildren<Transform>();
 
-            foreach (var drawItem in drawItems) {
-                Destroy(drawItem.gameObject);
+            for (int i = 1; i < drawItems.Length; i++) {
+                Destroy(drawItems[i].gameObject);
             }
 
             if (isInteractWithBox) {
                 var boxItems = _itemObjectsParent.GetComponentsInChildren<Transform>();
 
-                foreach (var boxItem in boxItems) {
-                    Destroy(boxItem.gameObject);
+                for (int i = 1; i < boxItems.Length; i++) {
+                    Destroy(boxItems[i].gameObject);
                 }
             }
         }
@@ -297,8 +302,8 @@ namespace Game.Player
             else if (obj.CompareTag("Box")) {
                 _canInteractWithBox = true;
                 var item = obj.GetComponent<BoxContents>();
-                _boxItems[0] = item.Item1;
-                _boxItems[1] = item.Item2;
+                _boxItems[0] = item.item1;
+                _boxItems[1] = item.item2;
             }
         }
 

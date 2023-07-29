@@ -45,6 +45,9 @@ namespace Game.Fields
         [Tooltip("Environment 오브젝트. 건물의 부모 오브젝트")]
         private GameObject environmentObject;
 
+        [Tooltip("UI 그릴 것들의 부모 오브젝트")]
+        public Transform[] drawObjectParents;
+
         [SerializeField] 
         [Tooltip("다리 오브젝트")] 
         private GameObject brokenBridge;
@@ -239,22 +242,22 @@ namespace Game.Fields
             int secondBox = random.Next(maxValue: 100);
 
             if (firstBox <= itemCreationRate) {
-                box1.Item1 = items[firstBox % _itemTypeCount];
+                box1.item1 = items[firstBox % _itemTypeCount];
 
                 int nextItem = random.Next(maxValue: 100);
 
                 if (nextItem <= itemCreationRate * secondItemCreationRate) {
-                    box1.Item2 = items[nextItem % _itemTypeCount];
+                    box1.item2 = items[nextItem % _itemTypeCount];
                 }
             }
             
             if (secondBox <= itemCreationRate) {
-                box2.Item1 = items[secondBox % _itemTypeCount];
+                box2.item1 = items[secondBox % _itemTypeCount];
                 
                 int nextItem = random.Next(maxValue: 100);
 
                 if (nextItem <= itemCreationRate * secondItemCreationRate) {
-                    box2.Item2 = items[nextItem % _itemTypeCount];
+                    box2.item2 = items[nextItem % _itemTypeCount];
                 }
             }
         }

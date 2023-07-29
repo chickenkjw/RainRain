@@ -3,7 +3,8 @@
     public class Board : Item
     {
         public Board() {
-            //Type = ItemType.Board;
+            type = ItemType.Board;
+            carryLimit = 10;
         }
     }
 }
