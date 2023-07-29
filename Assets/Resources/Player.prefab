@@ -236,6 +236,11 @@ MonoBehaviour:
   PV: {fileID: 586632759760707}
   PlayerName: {fileID: 6944014800751251939}
   moveSpeed: 5
+  inventory: {fileID: 0}
+  boxContents: {fileID: 0}
+  uiBackground: {fileID: 0}
+  _canInteractWithBox: 0
+  _isOpeningInventory: 0
 --- !u!114 &3871045031832372487
 MonoBehaviour:
   m_ObjectHideFlags: 0

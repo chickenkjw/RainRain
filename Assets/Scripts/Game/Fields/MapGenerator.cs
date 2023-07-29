@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Items;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = System.Random;
@@ -19,8 +20,13 @@ namespace Game.Fields
         [Tooltip("건물 한 층 오브젝트")]
         private List<GameObject> floorObjects;
 
+        [Tooltip("아이템 컨테이너")] 
+        public List<Item> items;
+
         [Header("생성 파라미터")] 
-        [SerializeField] [Tooltip("건물 개수")]
+        
+        [SerializeField] 
+        [Tooltip("건물 개수")]
         private int buildingCount;
         
         [SerializeField] 
@@ -44,8 +50,19 @@ namespace Game.Fields
         private GameObject brokenBridge;
 
         [SerializeField] 
+        [Range(0, 100)]
         [Tooltip("다리 생성 확률. 입력범위: 0~100")]
         private int bridgeCreationRate;
+
+        [SerializeField] 
+        [Range(0, 100)]
+        [Tooltip("상자에 아이템이 있을 확률. 입력범위: 0~100")]
+        private int itemCreationRate;
+
+        [SerializeField] 
+        [Range(0, 1)]
+        [Tooltip("itemCreationRate에 이 값을 곱한 값이 두번째 아이템 확률임. 입력범위: 0~0.5")]
+        private float secondItemCreationRate;
 
         #endregion
 
@@ -55,9 +72,12 @@ namespace Game.Fields
         
         public Floor[][] BuildingArray;
 
+        private int _itemTypeCount;
+
         [HideInInspector]
         public float floorHeight;
-        private float _floorWidth;
+        [HideInInspector]
+        public float floorWidth;
 
         #endregion
         
@@ -83,7 +103,9 @@ namespace Game.Fields
             }
             
             floorHeight = floorObjects[0].GetComponent<SpriteRenderer>().bounds.size.y;
-            _floorWidth = floorObjects[0].GetComponent<SpriteRenderer>().bounds.size.x;
+            floorWidth = floorObjects[0].GetComponent<SpriteRenderer>().bounds.size.x;
+
+            _itemTypeCount = items.Count;
         }
 
         /// <summary>   
@@ -91,12 +113,21 @@ namespace Game.Fields
         /// </summary>
         public void GenerateMap() {
             BuildingArray = new Floor[buildingCount][];
-            Vector2 buildPoint = Vector2.zero;
+            Vector2 buildPoint = Vector2.zero - Vector2.up * floorHeight;
             
             Random random = new();
             int randomHeight = (int)(maxHeight * 0.6f);
             int currentHeight = randomHeight;
             int prevHeight = currentHeight;
+
+            for (int i = 0; i < buildingCount; i++) {
+                var randomType = random.Next(maxValue: floorObjects.Count);
+                var createObj = Instantiate(floorObjects[randomType], buildPoint, Quaternion.identity);
+                createObj.transform.parent = environmentObject.transform;
+                buildPoint.x += floorWidth * 1.5f;
+            }
+            
+            buildPoint = Vector2.zero;
 
             for (int w = 0; w < buildingCount; w++) {
                 int randomHeightInterval = random.Next(minValue: -heightInterval, maxValue: heightInterval + 1);
@@ -121,6 +152,8 @@ namespace Game.Fields
                     var floorObject = Instantiate(floor.Object, buildPoint, Quaternion.identity);
                     floorObject.transform.parent = environmentObject.transform.GetChild(0);
                     
+                    SetBoxContents(floorObject, random);
+                    
                     buildPoint.y += floorHeight;
                     
                     // 다리 놓기
@@ -130,26 +163,31 @@ namespace Game.Fields
                 }
                 
                 buildPoint.y = 0;
-                buildPoint.x += _floorWidth * 1.5f;
+                buildPoint.x += floorWidth * 1.5f;
 
                 prevHeight = currentHeight + (currentHeight == minHeight ? 3 : currentHeight == maxHeight ? -3 : 0);
             }
         }
 
+        /// <summary>
+        /// 부서진 다리 생성하기
+        /// </summary>
+        /// <param name="x">가로 인덱스</param>
+        /// <param name="y">세로 인덱스(층)</param>
         private void PlaceBrokenBridge(int x, int y) {
             // 벽 콜라이더 없애기
             GameObject startFloor = environmentObject.transform.GetChild(0).GetChild(GetCurrentBuildingIndex(x, y))
                 .gameObject;
 
             try {
-                var temp = BuildingArray[x - 1][y];
+                if(BuildingArray[x - 1][y] == null) return;
             }
             catch {
                 return;
             }
             
-            GameObject endFloor = environmentObject.transform.GetChild(0).GetChild(GetCurrentBuildingIndex(x - 1, y))
-                .gameObject;
+            GameObject endFloor = environmentObject.transform.GetChild(0)
+                .GetChild(GetCurrentBuildingIndex(x - 1, y)).gameObject;
             
             startFloor.transform.GetChild(2).GetChild(0).gameObject.SetActive(false);
             endFloor.transform.GetChild(2).GetChild(1).gameObject.SetActive(false);
@@ -160,8 +198,8 @@ namespace Game.Fields
             
             float distance = Vector2.Distance(startPoint, endPoint) / 29.5f;
 
-            startPoint.x -= _floorWidth * .75f;
-            startPoint.y -=  floorHeight * .48f;
+            startPoint.x -= floorWidth * .75f;
+            startPoint.y -=  floorHeight * .46f;
             var placedBridge = Instantiate(brokenBridge, startPoint, Quaternion.identity);
             
             placedBridge.transform.localScale = new Vector3(distance, .25f, 1f);
@@ -185,6 +223,40 @@ namespace Game.Fields
             sum += y;
 
             return sum;
+        }
+
+        /// <summary>
+        /// floor object 안의 box 아이템 세팅
+        /// </summary>
+        /// <param name="floorObj">box object</param>
+        /// <param name="random">random engine</param>
+        private void SetBoxContents(GameObject floorObj, Random random) {
+            var boxes = floorObj.transform.GetChild(1);
+            var box1 = boxes.GetChild(0).GetComponent<BoxContents>();
+            var box2 = boxes.GetChild(1).GetComponent<BoxContents>();
+
+            int firstBox = random.Next(maxValue: 100);
+            int secondBox = random.Next(maxValue: 100);
+
+            if (firstBox <= itemCreationRate) {
+                box1.Item1 = items[firstBox % _itemTypeCount];
+
+                int nextItem = random.Next(maxValue: 100);
+
+                if (nextItem <= itemCreationRate * secondItemCreationRate) {
+                    box1.Item2 = items[nextItem % _itemTypeCount];
+                }
+            }
+            
+            if (secondBox <= itemCreationRate) {
+                box2.Item1 = items[secondBox % _itemTypeCount];
+                
+                int nextItem = random.Next(maxValue: 100);
+
+                if (nextItem <= itemCreationRate * secondItemCreationRate) {
+                    box2.Item2 = items[nextItem % _itemTypeCount];
+                }
+            }
         }
     }
 }

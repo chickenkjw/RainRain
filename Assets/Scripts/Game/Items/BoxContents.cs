@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using UnityEngine;
 
 namespace Game.Items
 {
-    public class BoxContents
+    public class BoxContents : MonoBehaviour
     {
-        public List<Item> items;
+        public Item Item1;
+        public Item Item2;
     }
 }
