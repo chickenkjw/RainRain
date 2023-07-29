@@ -50,17 +50,15 @@ namespace Game.Player
         private bool _isMovingVertically;
         private Vector3 _stairDestination;
         
+        [SerializeField]
         private Item[] _playerItems;
+        [SerializeField]
         private Item[] _boxItems;
 
-        [SerializeField]
         private GameObject[] _inventoryItemDrawPoint;
-        [SerializeField]
         private Transform[] _boxItemDrawPoint;
 
-        [SerializeField]
         private Transform _inventoryObjectsParent;
-        [SerializeField]
         private Transform _itemObjectsParent;
 
         private bool _canInteractWithBox;
