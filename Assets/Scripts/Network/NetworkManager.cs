@@ -104,8 +104,9 @@ namespace Network
         {
             Debug.Log("Generate");
             PlayerManager newPlayer;
-            newPlayer = PhotonNetwork.Instantiate("Player",
+            newPlayer = PhotonNetwork.Instantiate("TestPlayer",
                     position, Quaternion.identity).GetComponent<PlayerManager>();
+
             LocalPlayer = newPlayer;
         }
 
