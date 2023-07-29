@@ -39,6 +39,11 @@ namespace Network
             DontDestroyOnLoad(gameObject);
         }
 
+        void Start()
+        {
+            Connect();       
+        }
+
         // Update is called once per frame
         void Update()
         {
@@ -116,8 +121,7 @@ namespace Network
         public override void OnLeftRoom()
         {
             base.OnLeftRoom();
-            //RoomText.text = "Not in the room";
-            Debug.Log(PhotonNetwork.NetworkClientState.ToString());
+            ChattingManager.instance.AddChatMessage(PhotonNetwork.LocalPlayer.NickName + " ¥‘¿Ã πÊ¿ª ≥™∞°ºÃΩ¿¥œ¥Ÿ.");
         }
 
 
@@ -137,6 +141,7 @@ namespace Network
             }
             UIManager.GetComponent<UIManager>().TogglePanel(EGameState.ROOM);
             PhotonNetwork.LocalPlayer.NickName = NickNameInput.text;
+            ChattingManager.instance.AddChatMessage(PhotonNetwork.LocalPlayer.NickName + " ¥‘¿Ã ¡¢º”«œºÃΩ¿¥œ¥Ÿ");
             SetUser();
             //GeneratePlayer(NickNameInput.text);
         }
