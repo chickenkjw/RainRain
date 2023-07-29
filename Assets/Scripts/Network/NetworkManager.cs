@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 using Game.Player;
+using Game.Fields;
 
 namespace Network
 {
@@ -184,6 +185,7 @@ namespace Network
 
         public void StartGame()
         {
+            MapGenerator.Instance.GenerateMap();
             Photonview.RPC("RPC_StartGame", RpcTarget.All);
         }
 
