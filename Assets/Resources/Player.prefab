@@ -239,10 +239,8 @@ MonoBehaviour:
   inventoryUI: {fileID: 0}
   boxContentsUI: {fileID: 0}
   uiBackground: {fileID: 0}
-  _inventoryItemDrawPoint: []
-  _boxItemDrawPoint: []
-  _inventoryObjectsParent: {fileID: 0}
-  _itemObjectsParent: {fileID: 0}
+  _playerItems: []
+  _boxItems: []
 --- !u!114 &3871045031832372487
 MonoBehaviour:
   m_ObjectHideFlags: 0

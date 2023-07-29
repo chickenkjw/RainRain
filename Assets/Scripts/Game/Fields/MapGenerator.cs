@@ -30,21 +30,22 @@ namespace Game.Fields
         private int buildingCount;
         
         [SerializeField] 
-        [Tooltip("건물의 최대 높이 설정")]
+        [Tooltip("건물의 최대 층수 설정")]
         private int maxHeight;
 
         [SerializeField] 
-        [Tooltip("건물의 최소 높이 설정")]
+        [Tooltip("건물의 최소 층수 설정")]
         private int minHeight;
 
         [SerializeField] 
-        [Tooltip("이전 건물과의 높이 차이")]
+        [Tooltip("이전 건물과의 층수 차이")]
         private int heightInterval;
 
         [SerializeField] 
         [Tooltip("Environment 오브젝트. 건물의 부모 오브젝트")]
         private GameObject environmentObject;
 
+        
         [Tooltip("UI 그릴 것들의 부모 오브젝트")]
         public Transform[] drawObjectParents;
 
@@ -72,8 +73,8 @@ namespace Game.Fields
         #region Variables
 
         private static MapGenerator _instance;
-        
-        public Floor[][] BuildingArray;
+
+        private Floor[][] _buildingArray;
 
         private int _itemTypeCount;
 
@@ -115,7 +116,7 @@ namespace Game.Fields
         /// 맵 생성 함수
         /// </summary>
         public void GenerateMap() {
-            BuildingArray = new Floor[buildingCount][];
+            _buildingArray = new Floor[buildingCount][];
             Vector2 buildPoint = Vector2.zero - Vector2.up * floorHeight;
             
             Random random = new();
@@ -140,9 +141,9 @@ namespace Game.Fields
                 currentHeight = Mathf.Max(minHeight, currentHeight);
                 currentHeight = Mathf.Min(maxHeight, currentHeight);
 
-                BuildingArray[w] = new Floor[currentHeight];
+                _buildingArray[w] = new Floor[currentHeight];
                 
-                for (int h = 0; h < BuildingArray[w].Length; h++) {
+                for (int h = 0; h < _buildingArray[w].Length; h++) {
                     int randomType = random.Next(maxValue: floorObjects.Count);
 
                     var floor = new Floor {
@@ -150,7 +151,7 @@ namespace Game.Fields
                         BuildPoint = buildPoint,
                         Location = new Location{ X = w, Y = h }
                     };
-                    BuildingArray[w][h] = floor;
+                    _buildingArray[w][h] = floor;
                     
                     var floorObject = Instantiate(floor.Object, buildPoint, Quaternion.identity);
                     floorObject.transform.parent = environmentObject.transform.GetChild(0);
@@ -183,7 +184,7 @@ namespace Game.Fields
                 .gameObject;
 
             try {
-                if(BuildingArray[x - 1][y] == null) return;
+                if(_buildingArray[x - 1][y] == null) return;
             }
             catch {
                 return;
@@ -220,7 +221,7 @@ namespace Game.Fields
             int sum = 0;
 
             for (int i = 0; i < x; i++) {
-                sum += BuildingArray[i].Length;
+                sum += _buildingArray[i].Length;
             }
 
             sum += y;
