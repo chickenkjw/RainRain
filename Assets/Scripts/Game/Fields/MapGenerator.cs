@@ -74,7 +74,8 @@ namespace Game.Fields
 
         private static MapGenerator _instance;
 
-        private Floor[][] _buildingArray;
+        [HideInInspector]
+        public Floor[][] BuildingArray;
 
         private int _itemTypeCount;
 
@@ -116,7 +117,7 @@ namespace Game.Fields
         /// 맵 생성 함수
         /// </summary>
         public void GenerateMap() {
-            _buildingArray = new Floor[buildingCount][];
+            BuildingArray = new Floor[buildingCount][];
             Vector2 buildPoint = Vector2.zero - Vector2.up * floorHeight;
             
             Random random = new();
@@ -141,9 +142,9 @@ namespace Game.Fields
                 currentHeight = Mathf.Max(minHeight, currentHeight);
                 currentHeight = Mathf.Min(maxHeight, currentHeight);
 
-                _buildingArray[w] = new Floor[currentHeight];
+                BuildingArray[w] = new Floor[currentHeight];
                 
-                for (int h = 0; h < _buildingArray[w].Length; h++) {
+                for (int h = 0; h < BuildingArray[w].Length; h++) {
                     int randomType = random.Next(maxValue: floorObjects.Count);
 
                     var floor = new Floor {
@@ -151,7 +152,7 @@ namespace Game.Fields
                         BuildPoint = buildPoint,
                         Location = new Location{ X = w, Y = h }
                     };
-                    _buildingArray[w][h] = floor;
+                    BuildingArray[w][h] = floor;
                     
                     var floorObject = Instantiate(floor.Object, buildPoint, Quaternion.identity);
                     floorObject.transform.parent = environmentObject.transform.GetChild(0);
@@ -184,7 +185,7 @@ namespace Game.Fields
                 .gameObject;
 
             try {
-                if(_buildingArray[x - 1][y] == null) return;
+                if(BuildingArray[x - 1][y] == null) return;
             }
             catch {
                 return;
@@ -221,7 +222,7 @@ namespace Game.Fields
             int sum = 0;
 
             for (int i = 0; i < x; i++) {
-                sum += _buildingArray[i].Length;
+                sum += BuildingArray[i].Length;
             }
 
             sum += y;
