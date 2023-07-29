@@ -20,6 +20,7 @@ namespace Network
         public static NetworkManager instance;
         public GameObject LocalPlayerPrefab;
         public PhotonView Photonview;
+        public GameObject TestGround;
 
         public PlayerManager LocalPlayer;
         public int PlayerIndex { get; private set; }
@@ -102,12 +103,21 @@ namespace Network
 
         public void GeneratePlayer(Vector3 position)
         {
-            Debug.Log("Generate");
             PlayerManager newPlayer;
-            newPlayer = PhotonNetwork.Instantiate("TestPlayer",
+            newPlayer = PhotonNetwork.Instantiate("Player",
                     position, Quaternion.identity).GetComponent<PlayerManager>();
 
             LocalPlayer = newPlayer;
+        }
+
+        public void GenerateTestPlayer()
+        {
+            Debug.Log("테스트 플레이어 생성!");
+            PlayerManager newTestPlayer;
+            newTestPlayer = PhotonNetwork.Instantiate("TestPlayer",
+                    new Vector3 (0,0,0), Quaternion.identity).GetComponent<PlayerManager>();
+
+            TestGround.SetActive(true);
         }
 
         public void Connect() => PhotonNetwork.ConnectUsingSettings();
@@ -151,7 +161,7 @@ namespace Network
             PhotonNetwork.LocalPlayer.NickName = NickNameInput.text;
             ChattingManager.instance.AddChatMessage(PhotonNetwork.LocalPlayer.NickName + " 님이 접속하셨습니다");
             SetUser();
-            GeneratePlayer(new Vector3(0,0,0));
+            GenerateTestPlayer();
         }
         public override void OnCreateRoomFailed(short returnCode, string message)
         {

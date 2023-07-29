@@ -2175,6 +2175,7 @@ MonoBehaviour:
   RoomManager: {fileID: 182009366}
   LocalPlayerPrefab: {fileID: 0}
   Photonview: {fileID: 498203772}
+  TestGround: {fileID: 5521706751428063256}
   LocalPlayer: {fileID: 0}
   isReady: 0
 --- !u!4 &498203771
@@ -8189,7 +8190,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &5521706751428063259
 SpriteRenderer:
   m_ObjectHideFlags: 0

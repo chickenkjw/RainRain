@@ -230,8 +230,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PV: {fileID: 5438560948201431500}
-  PlayerName: {fileID: 0}
-  moveSpeed: 0
+  PlayerName: {fileID: 3109079682172888940}
+  moveSpeed: 5
 --- !u!1 &5664041545281188000
 GameObject:
   m_ObjectHideFlags: 0
