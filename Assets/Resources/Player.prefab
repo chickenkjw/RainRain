@@ -236,8 +236,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PV: {fileID: 586632759760707}
   PlayerName: {fileID: 6944014800751251939}
+  IsLocalPlayer: 0
   moveSpeed: 5
-  _playerUIManager: {fileID: 6445079900554557855}
+  itemUIManager: {fileID: 6445079900554557855}
   _isOpeningInventory: 0
 --- !u!114 &6445079900554557855
 MonoBehaviour:
@@ -254,8 +255,6 @@ MonoBehaviour:
   inventoryUI: {fileID: 3201771907907067762, guid: feaf5eb7d83819f42a98693abe417736, type: 3}
   boxContentsUI: {fileID: 4446302669144048634, guid: d43c0de411822e042b49cdbda99b2c2b, type: 3}
   uiBackground: {fileID: 4919164083518486226, guid: 2b5e64d6f1ca043479250f1829f950e8, type: 3}
-  _inventoryObjectsParent: {fileID: 0}
-  _itemObjectsParent: {fileID: 0}
 --- !u!114 &3871045031832372487
 MonoBehaviour:
   m_ObjectHideFlags: 0

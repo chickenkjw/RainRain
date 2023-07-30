@@ -66,16 +66,6 @@ namespace Game.Player
             uiBackground = playerUI.transform.GetChild(0).gameObject;
             inventoryUI = playerUI.transform.GetChild(1).gameObject;
             boxContentsUI = playerUI.transform.GetChild(2).gameObject;
-            
-            /*for (int i = 0; i < 4; i++) {
-                var drawPanel = inventoryUI.transform.GetChild(i);
-                _inventoryItemDrawPoint[i] = drawPanel.GetChild(2).gameObject;
-            }
-
-            for (int i = 0; i < 2; i++) {
-                var drawPanel = boxContentsUI.transform.GetChild(i);
-                _boxItemDrawPoint[i] = drawPanel.GetChild(2);
-            }*/
         }
         
         public bool OpenInventory(bool canInteractWithBox, ref Item[] pItems, ref Item[] bItems) {

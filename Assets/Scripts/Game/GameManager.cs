@@ -83,9 +83,9 @@ namespace Game
             
             MapGenerator.Instance.GenerateMap();
             //NetworkManager.instance.GeneratePlayer(MapGenerator.Instance.BuildingArray[0][0].Object.transform.position);
-            
-            Instantiate(player, MapGenerator.Instance.BuildingArray[0][0].Object.transform.position,
-                Quaternion.identity);
+            NetworkManager.instance.GeneratePlayer(MapGenerator.Instance.BuildingArray[0][0].Object.transform.position);
+            //Instantiate(player, MapGenerator.Instance.BuildingArray[0][0].Object.transform.position,
+            //    Quaternion.identity);
         }
 
         private void Update() {

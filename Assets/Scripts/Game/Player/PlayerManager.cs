@@ -16,9 +16,9 @@ namespace Game.Player
         
         [HideInInspector]
         public TextMesh PlayerName;
-        
+
         [Tooltip("플레이어가 로컬 플레이어인지 확인")]
-        public bool IsLocalPlayer { get; private set; }
+        public bool IsLocalPlayer;
         
         [SerializeField]
         [Tooltip("플레이어의 이동 속도")]

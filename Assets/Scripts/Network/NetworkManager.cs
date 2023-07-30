@@ -2,6 +2,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
+using Game;
 using Game.Player;
 using Game.Fields;
 using UnityEngine.SceneManagement;
@@ -182,7 +183,7 @@ namespace Network
 
         public void StartGame()
         {
-            MapGenerator.Instance.GenerateMap();
+            //MapGenerator.Instance.GenerateMap();
             Photonview.RPC("RPC_StartGame", RpcTarget.All);
         }
 
@@ -190,7 +191,8 @@ namespace Network
         void RPC_StartGame()
         {
             Debug.Log("스타트게임");
-            // SceneManager.LoadScene("MainScene");
+            //DeleteObjectsWithTag("TestPlayer");
+            SceneManager.LoadScene("MainScene");
         }
 
         public void Ready()
@@ -242,6 +244,16 @@ namespace Network
                 playerStr += PhotonNetwork.PlayerList[i].NickName + " : ";
             }
             print(playerStr);
+        }
+
+        private void DeleteObjectsWithTag(string tag)
+        {
+            GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag(tag);
+
+            foreach (GameObject obj in objectsWithTag)
+            {
+                Destroy(obj);
+            }
         }
 
     }

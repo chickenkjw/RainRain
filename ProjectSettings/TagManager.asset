@@ -11,6 +11,7 @@ TagManager:
   - StairPoint
   - PlayerUI
   - DrawObjectContainer
+  - TestPlayer
   layers:
   - Default
   - TransparentFX

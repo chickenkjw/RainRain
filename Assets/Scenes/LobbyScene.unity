@@ -2024,6 +2024,10 @@ PrefabInstance:
       value: DrawObjectsParent
       objectReference: {fileID: 0}
     - target: {fileID: 1000348668286179864, guid: 9b247818ef977c84f8a138a1967e9835, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000348668286179864, guid: 9b247818ef977c84f8a138a1967e9835, type: 3}
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
@@ -2555,6 +2559,10 @@ PrefabInstance:
     - target: {fileID: 3227516396080039588, guid: 6abcde9b13e23a743b82626f75e6b3ed, type: 3}
       propertyPath: m_Name
       value: MapManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 3227516396080039588, guid: 6abcde9b13e23a743b82626f75e6b3ed, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8919122742454519230, guid: 6abcde9b13e23a743b82626f75e6b3ed, type: 3}
       propertyPath: m_RootOrder
@@ -4161,6 +4169,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Environment
       objectReference: {fileID: 0}
+    - target: {fileID: 404465287059345746, guid: 039d67f180ee40043a55145cd4563ff3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 039d67f180ee40043a55145cd4563ff3, type: 3}
 --- !u!1 &1034306952
@@ -5648,6 +5660,10 @@ PrefabInstance:
     - target: {fileID: 5956089211629265543, guid: 51cb671260b69b2439f9005f062fa5fa, type: 3}
       propertyPath: m_Name
       value: ItemManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5956089211629265543, guid: 51cb671260b69b2439f9005f062fa5fa, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51cb671260b69b2439f9005f062fa5fa, type: 3}
