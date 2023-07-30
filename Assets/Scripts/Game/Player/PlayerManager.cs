@@ -1,6 +1,7 @@
 ﻿using Game.Items;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Game.Player
 {
@@ -23,9 +24,10 @@ namespace Game.Player
         [Tooltip("플레이어의 이동 속도")]
         private float moveSpeed;
 
+        [FormerlySerializedAs("_playerUIManager")]
         [SerializeField] 
         [Tooltip("PlayerUIManager")]
-        private PlayerUIManager _playerUIManager;
+        private ItemUIManager itemUIManager;
 
         #endregion
 
@@ -45,6 +47,7 @@ namespace Game.Player
         
         // 인벤토리 열 수 있는 지에 대한 변수
         private bool _canInteractWithBox;
+        [SerializeField]
         private bool _isOpeningInventory;
 
         #endregion
@@ -53,7 +56,8 @@ namespace Game.Player
 
         public void Awake()
         {
-            IsLocalPlayer = PV.IsMine;
+            // IsLocalPlayer = PV.IsMine;
+            IsLocalPlayer = true;
         }
 
         void Start()
@@ -162,10 +166,8 @@ namespace Game.Player
                 return;
             }
             
-            _playerUIManager
-                .OpenInventory(_isOpeningInventory, _canInteractWithBox, ref _playerItems, ref _boxItems);
-
-            _isOpeningInventory = !_isOpeningInventory;
+            _isOpeningInventory = itemUIManager
+                .OpenInventory(_canInteractWithBox, ref _playerItems, ref _boxItems);
         }
 
         private void OnTriggerEnter2D(Collider2D other) {

@@ -1,15 +1,13 @@
 ﻿using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Game.Items
 {
-    [System.Serializable]
-    public class Item : MonoBehaviour
+    [CreateAssetMenu(fileName = "Item", menuName = "Scriptable Object Assets/Item")]
+    public class Item : ScriptableObject
     {
-        public int count;
         public ItemType type;
-        
-        [SerializeField]
-        protected int carryLimit;
+        public bool stackable;
+        public Sprite image;
+        public int carryLimit;
     }
 }

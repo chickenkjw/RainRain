@@ -53,6 +53,8 @@ namespace Game
 
         private List<Log> _timeLine;
 
+        public GameObject player;
+        
         #endregion
 
         #region MonoBehaviour CallBacks
@@ -77,11 +79,13 @@ namespace Game
             _timeLine = new();
             
             _waterLevelTime = 0;
+            _playerCount = 1; // PhotonNetwork.CurrentRoom.PlayerCount;
             
-            _playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+            MapGenerator.Instance.GenerateMap();
+            //NetworkManager.instance.GeneratePlayer(MapGenerator.Instance.BuildingArray[0][0].Object.transform.position);
             
-            //MapGenerator.Instance.GenerateMap();
-            NetworkManager.instance.GeneratePlayer(MapGenerator.Instance.BuildingArray[0][0].Object.transform.position);
+            Instantiate(player, MapGenerator.Instance.BuildingArray[0][0].Object.transform.position,
+                Quaternion.identity);
         }
 
         private void Update() {

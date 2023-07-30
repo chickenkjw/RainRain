@@ -190,7 +190,7 @@ namespace Network
         void RPC_StartGame()
         {
             Debug.Log("스타트게임");
-            SceneManager.LoadScene("MainScene");
+            // SceneManager.LoadScene("MainScene");
         }
 
         public void Ready()

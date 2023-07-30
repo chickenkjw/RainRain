@@ -241,22 +241,26 @@ namespace Game.Fields
             int secondBox = random.Next(maxValue: 100);
 
             if (firstBox <= itemCreationRate) {
-                box1.item1 = _items[firstBox % _itemTypeCount];
+                var item1 = _items[firstBox % _itemTypeCount];
+                box1.item1 = item1;
 
                 int nextItem = random.Next(maxValue: 100);
 
                 if (nextItem <= itemCreationRate * secondItemCreationRate) {
-                    box1.item2 = _items[nextItem % _itemTypeCount];
+                    var item2 = _items[nextItem % _itemTypeCount];
+                    box1.item2 = item2;
                 }
             }
             
             if (secondBox <= itemCreationRate) {
-                box2.item1 = _items[secondBox % _itemTypeCount];
+                var item1 = _items[secondBox % _itemTypeCount];
+                box2.item1 = item1;
                 
                 int nextItem = random.Next(maxValue: 100);
 
                 if (nextItem <= itemCreationRate * secondItemCreationRate) {
-                    box2.item2 = _items[nextItem % _itemTypeCount];
+                    var item2 = _items[nextItem % _itemTypeCount];
+                    box2.item2 = item2;
                 }
             }
         }

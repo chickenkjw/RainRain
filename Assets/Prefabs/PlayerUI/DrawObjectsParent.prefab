@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1000348667099848162}
   m_Layer: 5
   m_Name: BoxDrawObjectParent
-  m_TagString: Untagged
+  m_TagString: DrawObjectContainer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 1000348667834863336}
   m_Layer: 5
   m_Name: PlayerDrawObjectParent
-  m_TagString: Untagged
+  m_TagString: DrawObjectContainer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
