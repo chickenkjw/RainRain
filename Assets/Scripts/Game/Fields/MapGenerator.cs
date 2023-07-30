@@ -5,7 +5,41 @@ using UnityEngine.Serialization;
 using Random = System.Random;
 
 namespace Game.Fields
-{
+{    /// <summary>
+     /// 건물과 다리를 생성하는 데 필요한 시드 객체
+     /// </summary>
+    public class Building
+    {
+        public Floor[][] BuildingArray;
+        public Vector2 BuildPoint;
+        public int BuildingCount;
+        public float FloorWidth;
+        public float FloorHeight;
+        public float MaxHeight;
+        public float MinHeight;
+        public List<GameObject> FloorObjects;
+        public GameObject EnvironmentObject;
+        public int HeightInterval;
+        public int BridgeCreationRate;
+
+        public Building(int buildingCount, float floorWidth, float floorHeight, float maxHeight, float minHeight, List<GameObject> floorObjects, GameObject environmentObject, int heightInterval, int bridgeCreationRate)
+        {
+            BuildingCount = buildingCount;
+            FloorWidth = floorWidth;
+            FloorHeight = floorHeight;
+            MaxHeight = maxHeight;
+            MinHeight = minHeight;
+            FloorObjects = floorObjects;
+            EnvironmentObject = environmentObject;
+            HeightInterval = heightInterval;
+            BridgeCreationRate = bridgeCreationRate;
+            BuildingArray = new Floor[buildingCount][];
+            BuildPoint = Vector2.zero - Vector2.up * floorHeight;
+        }
+
+    }
+
+
     /// <summary>
     /// Game의 맵을 생성하는 클래스
     /// </summary>
@@ -133,6 +167,7 @@ namespace Game.Fields
 
             for (int w = 0; w < buildingCount; w++) {
                 int randomHeightInterval = random.Next(minValue: -heightInterval, maxValue: heightInterval + 1);
+                Debug.LogFormat("randomHeight Interval : {0}", randomHeightInterval);
 
                 currentHeight = prevHeight + randomHeightInterval;
 
