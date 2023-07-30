@@ -150,7 +150,7 @@ namespace Game.Fields
         public void GenerateMap(int seed) {
             BuildingArray = new Floor[buildingCount][];
             Vector2 buildPoint = Vector2.zero - Vector2.up * floorHeight;
-            
+
             Random random = new Random(seed);
             int randomHeight = (int)(maxHeight * 0.6f);
             int currentHeight = randomHeight;
