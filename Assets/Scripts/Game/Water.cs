@@ -7,7 +7,7 @@ namespace Game
 {
     public class Water : MonoBehaviour
     {
-        private void Awake() {
+        private void Start() {
             this.transform.localScale =
                 new Vector3(MapGenerator.Instance.floorWidth * 15, MapGenerator.Instance.floorHeight * 7, 1);
 

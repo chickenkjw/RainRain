@@ -57,7 +57,7 @@ namespace Game.Player
         public void Awake()
         {
             // IsLocalPlayer = PV.IsMine;
-            IsLocalPlayer = true;
+            IsLocalPlayer = PV.IsMine;
         }
 
         void Start()

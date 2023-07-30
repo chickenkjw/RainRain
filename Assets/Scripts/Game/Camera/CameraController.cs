@@ -1,6 +1,7 @@
 using System.Linq;
 using Game.Player;
 using UnityEngine;
+using Network;
 
 namespace Game.Camera
 {
@@ -18,14 +19,16 @@ namespace Game.Camera
         private float smoothing;
 
         private void Start() {
-            target = GameObject
-                .FindGameObjectsWithTag("Player")
-                .ToList().First(player => player.GetComponent<PlayerManager>().IsLocalPlayer)
-                .GetComponent<Transform>();
+            //target = NetworkManager.instance.LocalPlayer.transform;
+            //target = GameObject
+            //    .FindGameObjectsWithTag("Player")
+            //    .ToList().First(player => player.GetComponent<PlayerManager>().IsLocalPlayer)
+            //    .GetComponent<Transform>();
         }
 
         private void LateUpdate() {
             if (target == null) {
+                target = NetworkManager.instance.LocalPlayer.transform;
                 return;
             }
             
