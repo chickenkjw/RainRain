@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Game.Fields;
-using Game.Items;
+﻿using Game.Items;
 using Photon.Pun;
 using UnityEngine;
 
@@ -26,46 +23,30 @@ namespace Game.Player
         [Tooltip("플레이어의 이동 속도")]
         private float moveSpeed;
 
-        [Header("UI 오브젝트")]
-        
         [SerializeField] 
-        [Tooltip("플레이어의 인벤토리 UI")]
-        private GameObject inventoryUI;
+        [Tooltip("PlayerUIManager")]
+        private PlayerUIManager _playerUIManager;
 
-        [SerializeField] 
-        [Tooltip("상자의 내용물 UI")]
-        private GameObject boxContentsUI;
-
-        [SerializeField] 
-        [Tooltip("인벤토리가 켜질 때 주위 어두워지는거")]
-        private GameObject uiBackground;
-        
         #endregion
 
         #region Private Fields
 
         // 하단의 변수들은 에디터 상에 노출되지 않습니다
+        
+        // 플레이어의 이동과 관련된 변수
         private bool _canMoveVertical;
         private bool _canMoveUp;
         private bool _isMovingVertically;
         private Vector3 _stairDestination;
         
-        [SerializeField]
+        // 플레이어의 아이템을 담는 변수
         private Item[] _playerItems;
-        [SerializeField]
         private Item[] _boxItems;
-
-        private GameObject[] _inventoryItemDrawPoint;
-        private Transform[] _boxItemDrawPoint;
-
-        private Transform _inventoryObjectsParent;
-        private Transform _itemObjectsParent;
-
+        
+        // 인벤토리 열 수 있는 지에 대한 변수
         private bool _canInteractWithBox;
         private bool _isOpeningInventory;
 
-        private List<Item> _items;
-        
         #endregion
 
         #region MonoBehaviour CallBacks
@@ -78,11 +59,7 @@ namespace Game.Player
         void Start()
         {
             SetVariables();
-
-            inventoryUI.SetActive(false);
-            boxContentsUI.SetActive(false);
-            uiBackground.SetActive(false);
-
+            
             SetName(PhotonNetwork.LocalPlayer.NickName);
         }
         
@@ -140,27 +117,6 @@ namespace Game.Player
             
             _playerItems = new Item[4];
             _boxItems = new Item[2];
-
-            _inventoryItemDrawPoint = new GameObject[4];
-            _boxItemDrawPoint = new Transform[2];
-
-            _items = MapGenerator.Instance.items;
-            
-            var playerUI = GameObject.FindGameObjectWithTag("PlayerUI");
-
-            uiBackground = playerUI.transform.GetChild(0).gameObject;
-            inventoryUI = playerUI.transform.GetChild(1).gameObject;
-            boxContentsUI = playerUI.transform.GetChild(2).gameObject;
-
-            for (int i = 0; i < 4; i++) {
-                _inventoryItemDrawPoint[i] = inventoryUI.transform.GetChild(i).gameObject;
-            }
-
-            _boxItemDrawPoint[0] = boxContentsUI.transform.GetChild(0);
-            _boxItemDrawPoint[1] = boxContentsUI.transform.GetChild(1);
-
-            _inventoryObjectsParent = MapGenerator.Instance.drawObjectParents[0];
-            _itemObjectsParent = MapGenerator.Instance.drawObjectParents[1];
         }
         
         /// <summary>
@@ -206,79 +162,10 @@ namespace Game.Player
                 return;
             }
             
-            var rectTransform = inventoryUI.GetComponent<RectTransform>();
-            
-            if (!_isOpeningInventory) {
-                _isOpeningInventory = true;
-                
-                uiBackground.SetActive(true);
+            _playerUIManager
+                .OpenInventory(_isOpeningInventory, _canInteractWithBox, ref _playerItems, ref _boxItems);
 
-                // 박스와 인벤토리 동시 열기
-                if (_canInteractWithBox) {
-                    rectTransform.anchoredPosition += Vector2.left * 105;
-                    inventoryUI.SetActive(true);
-                    boxContentsUI.SetActive(true);
-                    DrawItemsOnInventory(true);
-                }
-                // 개인 인벤토리 열기
-                else {
-                    rectTransform.anchoredPosition = Vector2.zero;
-                    inventoryUI.SetActive(true);
-                    DrawItemsOnInventory();
-                }
-            }
-            else {
-                rectTransform.anchoredPosition = Vector2.zero;
-                
-                _isOpeningInventory = false;
-                
-                EraseItemsOnInventory(_canInteractWithBox);
-
-                uiBackground.SetActive(false);
-                inventoryUI.SetActive(false);
-                boxContentsUI.SetActive(false);
-            }
-        }
-
-        /// <summary>
-        /// inventory UI를 활성화할 때, 아이템을 그림
-        /// </summary>
-        /// <param name="isBoxInteraction"></param>
-        private void DrawItemsOnInventory(bool isBoxInteraction = false) {
-            for (int i = 0; i < 4; i++) {
-                if(_playerItems[i] != null)
-                    Instantiate(_items.First(x => x.Equals(_playerItems[i])).gameObject, 
-                        _inventoryItemDrawPoint[i].transform.position, Quaternion.identity, _inventoryObjectsParent);
-            }
-            
-            if (isBoxInteraction) {
-                for (int i = 0; i < 2; i++) {
-                    if (_boxItems[i]  != null) {
-                        Instantiate(_items.First(x => x.Equals(_boxItems[i])).gameObject,
-                            _boxItemDrawPoint[i].transform.position, Quaternion.identity, _itemObjectsParent);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// inventory UI를 비활성화 시킬 때, 표시된 아이템을 지움
-        /// </summary>
-        /// <param name="isInteractWithBox"></param>
-        private void EraseItemsOnInventory(bool isInteractWithBox = false) {
-            var drawItems = _inventoryObjectsParent.GetComponentsInChildren<Transform>();
-
-            for (int i = 1; i < drawItems.Length; i++) {
-                Destroy(drawItems[i].gameObject);
-            }
-
-            if (isInteractWithBox) {
-                var boxItems = _itemObjectsParent.GetComponentsInChildren<Transform>();
-
-                for (int i = 1; i < boxItems.Length; i++) {
-                    Destroy(boxItems[i].gameObject);
-                }
-            }
+            _isOpeningInventory = !_isOpeningInventory;
         }
 
         private void OnTriggerEnter2D(Collider2D other) {

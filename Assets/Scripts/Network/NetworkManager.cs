@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-
 using Game.Player;
 using Game.Fields;
+using UnityEngine.SceneManagement;
 
 namespace Network
 {
@@ -193,7 +190,7 @@ namespace Network
         void RPC_StartGame()
         {
             Debug.Log("스타트게임");
-            //SceneManager.LoadScene("MainScene");
+            SceneManager.LoadScene("MainScene");
         }
 
         public void Ready()

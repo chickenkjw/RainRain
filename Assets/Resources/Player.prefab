@@ -139,6 +139,7 @@ GameObject:
   - component: {fileID: 8814879713991722570}
   - component: {fileID: 4788564670229318348}
   - component: {fileID: 2848887043205832542}
+  - component: {fileID: 6445079900554557855}
   - component: {fileID: 3871045031832372487}
   - component: {fileID: 586632759760707}
   - component: {fileID: 7946291649977618021}
@@ -236,11 +237,22 @@ MonoBehaviour:
   PV: {fileID: 586632759760707}
   PlayerName: {fileID: 6944014800751251939}
   moveSpeed: 5
-  inventoryUI: {fileID: 0}
-  boxContentsUI: {fileID: 0}
-  uiBackground: {fileID: 0}
-  _playerItems: []
-  _boxItems: []
+  _playerUIManager: {fileID: 6445079900554557855}
+--- !u!114 &6445079900554557855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8612738452546797951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6ae41f28ffb485cbe6e02dd9a87a474, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryUI: {fileID: 3201771907907067762, guid: feaf5eb7d83819f42a98693abe417736, type: 3}
+  boxContentsUI: {fileID: 4446302669144048634, guid: d43c0de411822e042b49cdbda99b2c2b, type: 3}
+  uiBackground: {fileID: 4919164083518486226, guid: 2b5e64d6f1ca043479250f1829f950e8, type: 3}
 --- !u!114 &3871045031832372487
 MonoBehaviour:
   m_ObjectHideFlags: 0

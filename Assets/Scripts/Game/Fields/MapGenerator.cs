@@ -20,9 +20,6 @@ namespace Game.Fields
         [Tooltip("건물 한 층 오브젝트")]
         private List<GameObject> floorObjects;
 
-        [Tooltip("아이템 컨테이너")] 
-        public List<Item> items;
-
         [Header("생성 파라미터")] 
         
         [SerializeField] 
@@ -44,10 +41,6 @@ namespace Game.Fields
         [SerializeField] 
         [Tooltip("Environment 오브젝트. 건물의 부모 오브젝트")]
         private GameObject environmentObject;
-
-        
-        [Tooltip("UI 그릴 것들의 부모 오브젝트")]
-        public Transform[] drawObjectParents;
 
         [SerializeField] 
         [Tooltip("다리 오브젝트")] 
@@ -73,6 +66,8 @@ namespace Game.Fields
         #region Variables
 
         private static MapGenerator _instance;
+
+        private List<Item> _items;
 
         [HideInInspector]
         public Floor[][] BuildingArray;
@@ -110,7 +105,9 @@ namespace Game.Fields
             floorHeight = floorObjects[0].GetComponent<SpriteRenderer>().bounds.size.y;
             floorWidth = floorObjects[0].GetComponent<SpriteRenderer>().bounds.size.x;
 
-            _itemTypeCount = items.Count;
+            _items = GameObject.Find("ItemManager").GetComponent<ItemManager>().items;
+
+            _itemTypeCount = _items.Count;
         }
 
         /// <summary>   
@@ -244,22 +241,22 @@ namespace Game.Fields
             int secondBox = random.Next(maxValue: 100);
 
             if (firstBox <= itemCreationRate) {
-                box1.item1 = items[firstBox % _itemTypeCount];
+                box1.item1 = _items[firstBox % _itemTypeCount];
 
                 int nextItem = random.Next(maxValue: 100);
 
                 if (nextItem <= itemCreationRate * secondItemCreationRate) {
-                    box1.item2 = items[nextItem % _itemTypeCount];
+                    box1.item2 = _items[nextItem % _itemTypeCount];
                 }
             }
             
             if (secondBox <= itemCreationRate) {
-                box2.item1 = items[secondBox % _itemTypeCount];
+                box2.item1 = _items[secondBox % _itemTypeCount];
                 
                 int nextItem = random.Next(maxValue: 100);
 
                 if (nextItem <= itemCreationRate * secondItemCreationRate) {
-                    box2.item2 = items[nextItem % _itemTypeCount];
+                    box2.item2 = _items[nextItem % _itemTypeCount];
                 }
             }
         }

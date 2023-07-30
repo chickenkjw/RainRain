@@ -1,10 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 using Photon.Pun;
-using Photon.Realtime;
 
 public enum EGameState
 {
@@ -32,20 +30,31 @@ public class UIManager : MonoBehaviour
     public UIManager instance;
 
     #endregion
+    
     #region MonoBehaviour CallBacks
-    // Start is called before the first frame update
+   
     void Awake()
     {
-        instance = this;
+        if (instance == null) {
+            instance = this;
+            
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else {
+            Destroy(this.gameObject);
+        }
+        
         Screen.SetResolution(960, 540, false);
-        DontDestroyOnLoad(gameObject);
+        
     }
 
     void Start()
     {
         ClearOutline();
     }
+    
     #endregion
+    
     #region Public Methods
 
     public void ClearOutline()
@@ -109,6 +118,7 @@ public class UIManager : MonoBehaviour
         UserPanelList[userIndex].GetComponentInChildren<Outline>().enabled = true;
     }
 
-
     #endregion
+    
+    
 }
