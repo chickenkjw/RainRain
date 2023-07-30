@@ -231,6 +231,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PV: {fileID: 5438560948201431500}
   PlayerName: {fileID: 3109079682172888940}
+  IsLocalPlayer: 0
   moveSpeed: 5
 --- !u!1 &5664041545281188000
 GameObject:

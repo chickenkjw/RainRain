@@ -20,7 +20,8 @@ namespace Game.Player
         public TextMesh PlayerName;
 
         [Tooltip("플레이어가 로컬 플레이어인지 확인")]
-        public bool IsLocalPlayer { get; private set; }
+        //public bool IsLocalPlayer { get; private set; }
+        public bool IsLocalPlayer;
 
         [SerializeField]
         [Tooltip("플레이어의 이동 속도")]
@@ -38,12 +39,13 @@ namespace Game.Player
 
         public void Awake()
         {
+            Debug.LogFormat("{0}의 isLocal 세팅 : {1}", PhotonNetwork.LocalPlayer.NickName, PV.IsMine);
             IsLocalPlayer = PV.IsMine;
         }
 
         void Start()
         {
-            SetName(PhotonNetwork.LocalPlayer.NickName);
+            
         }
 
         void Update()
@@ -75,9 +77,8 @@ namespace Game.Player
         }
 
 
-        private void SetName(string name)
+        public void SetName(string name)
         {
-            Debug.Log(name + "으로 세팅하겠습니다!");
             PV.RPC(nameof(SetNameRPC), RpcTarget.AllBuffered, name);
         }
 

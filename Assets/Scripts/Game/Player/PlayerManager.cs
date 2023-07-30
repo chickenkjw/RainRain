@@ -72,6 +72,7 @@ namespace Game.Player
 
         public void Awake()
         {
+            Debug.LogFormat("로컬인지 파악할게요! : {0}", PV.IsMine);
             IsLocalPlayer = PV.IsMine;
         }
 
@@ -82,8 +83,6 @@ namespace Game.Player
             inventoryUI.SetActive(false);
             boxContentsUI.SetActive(false);
             uiBackground.SetActive(false);
-
-            SetName(PhotonNetwork.LocalPlayer.NickName);
         }
         
         void Update()
@@ -98,35 +97,7 @@ namespace Game.Player
         #endregion
 
         #region Public Methods
-        
-        /// <summary>
-        /// 나중에 쓸지 모르니 일단 만든 함수
-        /// </summary>
-        public void Set()
-        {
-            //isLocalPlayer = PV.IsMine;
-            //PlayerCamera.enabled = isLocalPlayer;
-
-            //GetComponentInChildren<Text>().text = name;
-
-            //tpCamObject = tpCamera.gameObject;
-            //tpRig = tpCamera.transform.parent;
-            //tpRoot = tpRig.parent;
-
-            //fpCamObject = fpCamera.gameObject;
-            //fpRig = fpCamera.transform.parent;
-            //fpRoot = fpRig.parent;
-
-            //TryGetComponent(out rigid);
-            //if (rigid != null)
-            //{
-            //    rigid.constraints = RigidbodyConstraints.FreezeRotation;
-            //}
-
-            //TryGetComponent(out CapsuleCollider cCol);
-            //_groundCheckRadius = cCol ? cCol.radius : 0.1f;
-            //animator = GetComponent<Animator>();
-        }
+       
 
         private void SetVariables() {
             _canMoveVertical = false;
@@ -322,7 +293,7 @@ namespace Game.Player
             }
         }
 
-        private void SetName(string name)
+        public void SetName(string name)
         {
             Debug.Log(name + "으로 세팅하겠습니다!");
             PV.RPC(nameof(SetNameRPC), RpcTarget.AllBuffered, name);

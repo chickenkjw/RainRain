@@ -13,7 +13,7 @@ public class RoomManager : MonoBehaviour
     public void AddRoom (string roomInfo)
     {
         Debug.Log(roomInfo);
-        PV.RPC("RPC_AddRoom", RpcTarget.AllBuffered, roomInfo);
+        //PV.RPC("RPC_AddRoom", RpcTarget.AllBuffered, roomInfo);
     }
 
     void OnAddRoom(string roomInfo)

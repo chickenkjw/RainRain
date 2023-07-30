@@ -68,8 +68,9 @@ namespace Game
                 Destroy(this.gameObject);
             }
             
-            waterLevelAlarmObject.fillAmount = 0;
-            gameOverPanel.SetActive(false);
+            //테스트 용으로 잠깐 주석처리
+            //waterLevelAlarmObject.fillAmount = 0;
+            //gameOverPanel.SetActive(false);
         }
 
         void Start() {

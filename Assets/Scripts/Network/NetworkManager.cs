@@ -107,17 +107,16 @@ namespace Network
             PlayerManager newPlayer;
             newPlayer = PhotonNetwork.Instantiate("Player",
                     position, Quaternion.identity).GetComponent<PlayerManager>();
-
+            newPlayer.SetName(PhotonNetwork.LocalPlayer.NickName);
             LocalPlayer = newPlayer;
         }
 
         public void GenerateTestPlayer()
         {
             Debug.Log("테스트 플레이어 생성!");
-            PlayerManager newTestPlayer;
-            newTestPlayer = PhotonNetwork.Instantiate("TestPlayer",
-                    new Vector3 (0,0,0), Quaternion.identity).GetComponent<PlayerManager>();
-
+            TestPlayerManager newTestPlayer = PhotonNetwork.Instantiate("TestPlayer",
+                new Vector3(0, 0, 0), Quaternion.identity).GetComponentInChildren<TestPlayerManager>();
+            newTestPlayer.SetName(PhotonNetwork.LocalPlayer.NickName);
             TestGround.SetActive(true);
         }
 
@@ -193,7 +192,7 @@ namespace Network
         void RPC_StartGame()
         {
             Debug.Log("스타트게임");
-            //SceneManager.LoadScene("MainScene");
+            SceneManager.LoadScene("TestPlayScene");
         }
 
         public void Ready()
