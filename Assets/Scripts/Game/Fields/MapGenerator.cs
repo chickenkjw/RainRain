@@ -147,11 +147,11 @@ namespace Game.Fields
         /// <summary>   
         /// 맵 생성 함수
         /// </summary>
-        public void GenerateMap() {
+        public void GenerateMap(int seed) {
             BuildingArray = new Floor[buildingCount][];
             Vector2 buildPoint = Vector2.zero - Vector2.up * floorHeight;
             
-            Random random = new();
+            Random random = new Random(seed);
             int randomHeight = (int)(maxHeight * 0.6f);
             int currentHeight = randomHeight;
             int prevHeight = currentHeight;

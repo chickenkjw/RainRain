@@ -80,8 +80,9 @@ namespace Game
             
             _waterLevelTime = 0;
             _playerCount = 1; // PhotonNetwork.CurrentRoom.PlayerCount;
-            if(PhotonNetwork.IsMasterClient)
-                MapGenerator.Instance.GenerateMap();
+            //if(PhotonNetwork.IsMasterClient)
+            //    MapGenerator.Instance.GenerateMap(1);
+            MapGenerator.Instance.GenerateMap(1);
             //NetworkManager.instance.GeneratePlayer(MapGenerator.Instance.BuildingArray[0][0].Object.transform.position);
             NetworkManager.instance.GeneratePlayer(new Vector3 (0, 0, 0));
             //Instantiate(player, MapGenerator.Instance.BuildingArray[0][0].Object.transform.position,
