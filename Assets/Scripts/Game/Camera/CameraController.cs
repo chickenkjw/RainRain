@@ -19,16 +19,16 @@ namespace Game.Camera
         private float smoothing;
 
         private void Start() {
-            //target = NetworkManager.instance.LocalPlayer.transform;
-            //target = GameObject
-            //    .FindGameObjectsWithTag("Player")
-            //    .ToList().First(player => player.GetComponent<PlayerManager>().IsLocalPlayer)
-            //    .GetComponent<Transform>();
+            target = NetworkManager.instance.LocalPlayer.transform;
+            /*target = GameObject
+                .FindGameObjectsWithTag("Player")
+                .ToList().First(player => player.GetComponent<PlayerManager>().IsLocalPlayer)
+                .GetComponent<Transform>();*/
         }
 
         private void LateUpdate() {
+            // 플레이어가 죽었을 경우, playerObject를 찾지 못해 null error가 나는 경우를 방지
             if (target == null) {
-                target = NetworkManager.instance.LocalPlayer.transform;
                 return;
             }
             

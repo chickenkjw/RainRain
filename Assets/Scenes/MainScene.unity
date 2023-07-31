@@ -2320,7 +2320,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8046186625778123001, guid: 64f45a9942532b949ae303227329bf20, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8046186625778123001, guid: 64f45a9942532b949ae303227329bf20, type: 3}
       propertyPath: m_Offset.y
@@ -2454,7 +2454,7 @@ PrefabInstance:
       objectReference: {fileID: 1122400670}
     - target: {fileID: -8768916304251833304, guid: bf7cb35a73f25d246badad90ea8cc51b, type: 3}
       propertyPath: waterRiseTime
-      value: 180
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: -8768916304251833304, guid: bf7cb35a73f25d246badad90ea8cc51b, type: 3}
       propertyPath: waterLevelAlarmObject

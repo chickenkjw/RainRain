@@ -133,7 +133,6 @@ namespace Game.Fields
 
             for (int w = 0; w < buildingCount; w++) {
                 int randomHeightInterval = random.Next(minValue: -heightInterval, maxValue: heightInterval + 1);
-                Debug.LogFormat("randomHeight Interval : {0}", randomHeightInterval);
 
                 currentHeight = prevHeight + randomHeightInterval;
 

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Game.Fields;
 using Network;
-using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -53,8 +52,6 @@ namespace Game
 
         private List<Log> _timeLine;
 
-        public GameObject player;
-        
         #endregion
 
         #region MonoBehaviour CallBacks
