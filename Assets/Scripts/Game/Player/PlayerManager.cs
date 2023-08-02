@@ -42,12 +42,13 @@ namespace Game.Player
         private Vector3 _stairDestination;
         
         // 플레이어의 아이템을 담는 변수
-        private Item[] _playerItems;
-        private Item[] _boxItems;
+        [SerializeField]
+        public Item[] _playerItems;
+        [SerializeField]
+        public Item[] _boxItems;
         
         // 인벤토리 열 수 있는 지에 대한 변수
         private bool _canInteractWithBox;
-        [SerializeField]
         private bool _isOpeningInventory;
 
         #endregion
@@ -56,7 +57,6 @@ namespace Game.Player
 
         public void Awake()
         {
-            // IsLocalPlayer = PV.IsMine;
             IsLocalPlayer = PV.IsMine;
         }
 
@@ -79,35 +79,6 @@ namespace Game.Player
         #endregion
 
         #region Public Methods
-        
-        /// <summary>
-        /// 나중에 쓸지 모르니 일단 만든 함수
-        /// </summary>
-        public void Set()
-        {
-            //isLocalPlayer = PV.IsMine;
-            //PlayerCamera.enabled = isLocalPlayer;
-
-            //GetComponentInChildren<Text>().text = name;
-
-            //tpCamObject = tpCamera.gameObject;
-            //tpRig = tpCamera.transform.parent;
-            //tpRoot = tpRig.parent;
-
-            //fpCamObject = fpCamera.gameObject;
-            //fpRig = fpCamera.transform.parent;
-            //fpRoot = fpRig.parent;
-
-            //TryGetComponent(out rigid);
-            //if (rigid != null)
-            //{
-            //    rigid.constraints = RigidbodyConstraints.FreezeRotation;
-            //}
-
-            //TryGetComponent(out CapsuleCollider cCol);
-            //_groundCheckRadius = cCol ? cCol.radius : 0.1f;
-            //animator = GetComponent<Animator>();
-        }
 
         private void SetVariables() {
             _canMoveVertical = false;
@@ -167,7 +138,7 @@ namespace Game.Player
             }
             
             _isOpeningInventory = itemUIManager
-                .OpenInventory(_canInteractWithBox, ref _playerItems, ref _boxItems);
+                .OpenInventory(_canInteractWithBox, _playerItems, _boxItems);
         }
 
         private void OnTriggerEnter2D(Collider2D other) {
@@ -189,8 +160,12 @@ namespace Game.Player
             else if (obj.CompareTag("Box")) {
                 _canInteractWithBox = true;
                 var item = obj.GetComponent<BoxContents>();
+                _boxItems = new Item[2];
                 _boxItems[0] = item.item1;
                 _boxItems[1] = item.item2;
+
+                BoxContentsManager.Instance.BoxLocation = item.Location;
+                BoxContentsManager.Instance.boxDirection = item.boxDirection;
             }
         }
 
@@ -206,8 +181,10 @@ namespace Game.Player
             }
             else if (obj.CompareTag("Box")) {
                 _canInteractWithBox = false;
-                _boxItems[0] = null;
-                _boxItems[1] = null;
+                _boxItems = null;
+
+                BoxContentsManager.Instance.BoxLocation = null;
+                BoxContentsManager.Instance.boxDirection = BoxDirection.None;
             }
         }
 

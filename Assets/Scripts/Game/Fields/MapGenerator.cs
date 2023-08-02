@@ -24,7 +24,7 @@ namespace Game.Fields
         
         [SerializeField] 
         [Tooltip("건물 개수")]
-        private int buildingCount;
+        public int buildingCount;
         
         [SerializeField] 
         [Tooltip("건물의 최대 층수 설정")]
@@ -149,12 +149,14 @@ namespace Game.Fields
                         BuildPoint = buildPoint,
                         Location = new Location{ X = w, Y = h }
                     };
-                    BuildingArray[w][h] = floor;
-                    
+
                     var floorObject = Instantiate(floor.Object, buildPoint, Quaternion.identity);
                     floorObject.transform.parent = environmentObject.transform.GetChild(0);
+                    floor.Object = floorObject;
                     
-                    SetBoxContents(floorObject, random);
+                    BuildingArray[w][h] = floor;
+
+                    SetBoxContents(floorObject, random, floor.Location);
                     
                     buildPoint.y += floorHeight;
                     
@@ -232,34 +234,43 @@ namespace Game.Fields
         /// </summary>
         /// <param name="floorObj">box object</param>
         /// <param name="random">random engine</param>
-        private void SetBoxContents(GameObject floorObj, Random random) {
+        /// <param name="location">x, y좌표</param>
+        private void SetBoxContents(GameObject floorObj, Random random, Location location) {
             var boxes = floorObj.transform.GetChild(1);
             var box1 = boxes.GetChild(0).GetComponent<BoxContents>();
             var box2 = boxes.GetChild(1).GetComponent<BoxContents>();
+            box1.Location = location;
+            box2.Location = location;
+            box1.boxDirection = BoxDirection.Left;
+            box2.boxDirection = BoxDirection.Right;
 
             int firstBox = random.Next(maxValue: 100);
             int secondBox = random.Next(maxValue: 100);
 
             if (firstBox <= itemCreationRate) {
                 var item1 = _items[firstBox % _itemTypeCount];
+                item1.count = 1;
                 box1.item1 = item1;
 
                 int nextItem = random.Next(maxValue: 100);
 
                 if (nextItem <= itemCreationRate * secondItemCreationRate) {
                     var item2 = _items[nextItem % _itemTypeCount];
+                    item2.count = 1;
                     box1.item2 = item2;
                 }
             }
             
             if (secondBox <= itemCreationRate) {
                 var item1 = _items[secondBox % _itemTypeCount];
+                item1.count = 1;
                 box2.item1 = item1;
                 
                 int nextItem = random.Next(maxValue: 100);
 
                 if (nextItem <= itemCreationRate * secondItemCreationRate) {
                     var item2 = _items[nextItem % _itemTypeCount];
+                    item2.count = 1;
                     box2.item2 = item2;
                 }
             }

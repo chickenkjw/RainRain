@@ -1,5 +1,8 @@
-﻿namespace Game.Fields
+﻿using System;
+
+namespace Game.Fields
 {
+    [Serializable]
     public class Location
     {
         public int X { get; set; }

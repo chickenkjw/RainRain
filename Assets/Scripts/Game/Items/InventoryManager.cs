@@ -31,8 +31,8 @@ namespace Game.Items
                     break;
                 }
                 
-                if (itemSlot != null && itemSlot.item.type == item.type && itemSlot.count < item.carryLimit && item.stackable) {
-                    itemSlot.count++;
+                if (itemSlot != null && itemSlot.item.type == item.type && itemSlot.item.count < item.carryLimit && item.stackable) {
+                    itemSlot.item.count++;
                     itemSlot.UpdateCountText();
                     return true;
                 }

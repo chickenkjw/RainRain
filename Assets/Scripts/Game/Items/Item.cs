@@ -16,5 +16,7 @@ namespace Game.Items
         public Sprite image;
         // 아이템을 한 슬롯에 최대로 담을 수 있는 개수
         public int carryLimit;
+        // 아이템의 개수
+        public int count;
     }
 }

@@ -8,6 +8,9 @@ namespace Game.Player
     {
         #region EditorFields
 
+        [SerializeField] 
+        private PlayerManager player;
+
         [Header("UI 오브젝트")]
         
         [SerializeField] 
@@ -27,13 +30,6 @@ namespace Game.Player
         #endregion
         
         #region Variables
-
-        // 아이템을 그릴 때의 위치 변수 배열
-        private GameObject[] _inventoryItemDrawPoint;
-        private Transform[] _boxItemDrawPoint;
-
-        // 아이템 매니저로부터 아이템을 가져옴
-        private List<Item> _items;
 
         // UI가 열려있는가
         private bool _isOpeningInventory;
@@ -56,11 +52,6 @@ namespace Game.Player
         private void SetVariables() {
             _isOpeningInventory = false;
             
-            _inventoryItemDrawPoint = new GameObject[4];
-            _boxItemDrawPoint = new Transform[2];
-
-            _items = GameObject.Find("ItemManager").GetComponent<ItemManager>().items;
-            
             var playerUI = GameObject.FindGameObjectWithTag("PlayerUI");
 
             uiBackground = playerUI.transform.GetChild(0).gameObject;
@@ -68,7 +59,7 @@ namespace Game.Player
             boxContentsUI = playerUI.transform.GetChild(2).gameObject;
         }
         
-        public bool OpenInventory(bool canInteractWithBox, ref Item[] pItems, ref Item[] bItems) {
+        public bool OpenInventory(bool canInteractWithBox, Item[] pItems, Item[] bItems) {
             if (!_isOpeningInventory) {
                 _isOpeningInventory = true;
                 
@@ -119,63 +110,44 @@ namespace Game.Player
             else {
                 _isOpeningInventory = false;
                 
+                // 인벤토리를 닫으면 그린 아이템을 모두 지우기
+                var inventorySlots = inventoryUI.GetComponentsInChildren<Transform>();
+                var boxSlots = boxContentsUI.GetComponentsInChildren<Transform>();
+                List<Item> items = new List<Item>();
+                List<Item> box = new List<Item>();
+                
+                for (int i = 1; i < inventorySlots.Length; i++) {
+                    if (inventorySlots[i].transform.childCount > 0) {
+                        var inventory = inventorySlots[i].transform.GetChild(0).GetComponent<InventoryItem>();
+                        if (inventory == null) {
+                            continue;
+                        }
+                        items.Add(inventory.item);
+                        Destroy(inventorySlots[i].transform.GetChild(0).gameObject);
+                    }
+                }
+                
+                player._playerItems = items.ToArray();
+
+                for (int i = 1; i < boxSlots.Length; i++) {
+                    if (boxSlots[i].transform.childCount > 0) {
+                        var inventory = boxSlots[i].transform.GetChild(0).GetComponent<InventoryItem>();
+                        if (inventory == null) {
+                            continue;
+                        }
+                        box.Add(inventory.item);
+                        Destroy(boxSlots[i].transform.GetChild(0).gameObject);
+                    }
+                }
+
+                player._boxItems = box.ToArray();
+                
                 uiBackground.SetActive(false);
                 inventoryUI.SetActive(false);
                 boxContentsUI.SetActive(false);
             }
 
             return _isOpeningInventory;
-        }
-
-        /// <summary>
-        /// 사용하지 않음
-        /// </summary>
-        /// <param name="playerItems">playerInventory에 그려질 아이템</param>
-        /// <param name="boxItems">boxContents에 그려질 아이템</param>
-        /// <param name="isBoxInteraction">박스와 상호작용 중인가?</param>
-        private void DrawItemsOnInventory(ref Item[] playerItems, ref Item[] boxItems, bool isBoxInteraction = false) {
-            for (int i = 0; i < 4; i++) {
-                if(playerItems[i] != null) {
-                    var items = playerItems;
-                    
-                }
-            }
-            
-            if (isBoxInteraction) {
-                for (int i = 0; i < 2; i++) {
-                    if (boxItems[i] != null) {
-                        var items = boxItems;
-                        
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// 사용하지 않음
-        /// </summary>
-        /// <param name="isInteractWithBox"></param>
-        private void EraseItemsOnInventory(bool isInteractWithBox = false) {
-            var drawItems = inventoryUI.GetComponentsInChildren<Transform>();
-
-            foreach (var drawItem in drawItems) {
-                if (drawItem.Equals(drawItems[0])) {
-                    continue;
-                }
-                if (drawItem.childCount >= 4) {
-                    Destroy(drawItem.GetChild(3).gameObject);
-                }
-            }
-
-            if (isInteractWithBox) {
-                var boxItems = boxContentsUI.GetComponentsInChildren<Transform>();
-
-                foreach (var boxItem in boxItems) {
-                    if(boxItem.childCount >= 4) {
-                        Destroy(boxItem.GetChild(3).gameObject);
-                    }
-                }
-            }
         }
     }
 }

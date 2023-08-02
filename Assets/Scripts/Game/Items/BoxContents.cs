@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.Serialization;
+﻿using Game.Fields;
+using UnityEngine;
 
 namespace Game.Items
 {
@@ -7,5 +7,8 @@ namespace Game.Items
     {
         public Item item1;
         public Item item2;
+
+        public Location Location;
+        public BoxDirection boxDirection;
     }
 }
