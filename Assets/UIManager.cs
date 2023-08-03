@@ -20,14 +20,14 @@ public class UIManager : MonoBehaviour
     public GameObject LobbyPanel;
     public GameObject RoomPanel;
 
-    public List<GameObject> UserPanelList;
+    public List<PanelManager> UserPanelList;
 
     public GameObject ReadyButton;
     public GameObject StartGameButton;
 
     public PhotonView PV;
 
-    public UIManager instance;
+    public static UIManager instance;
 
     #endregion
     
@@ -50,20 +50,12 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        ClearOutline();
+
     }
     
     #endregion
     
     #region Public Methods
-
-    public void ClearOutline()
-    {
-        foreach(GameObject userPanel in UserPanelList)
-        {
-            userPanel.GetComponentInChildren<Outline>().enabled = false;
-        }
-    }
 
     public void ClearPanel()
     {
@@ -104,7 +96,7 @@ public class UIManager : MonoBehaviour
     [PunRPC]
     public void SetUserNameRPC(int userindex, string name)
     {
-        UserPanelList[userindex].GetComponentInChildren<Text>().text = name;
+        UserPanelList[userindex].GetComponent<PanelManager>().SetUsername(name);
     }
 
     public void GetReady(int userIndex)
@@ -115,7 +107,7 @@ public class UIManager : MonoBehaviour
     [PunRPC]
     public void GetReadyRPC(int userIndex)
     {
-        UserPanelList[userIndex].GetComponentInChildren<Outline>().enabled = true;
+        UserPanelList[userIndex].SetIcon(UserStatus.Ready);
     }
 
     #endregion

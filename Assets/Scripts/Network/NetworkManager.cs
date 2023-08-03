@@ -14,7 +14,7 @@ namespace Network
         #region Public Fields
         public Text StatusText;
         public InputField RoomInput, NickNameInput;
-        public GameObject UIManager;
+        //public GameObject UIManager;
         public GameObject RoomManager;
         public static NetworkManager instance;
         public GameObject LocalPlayerPrefab;
@@ -72,9 +72,7 @@ namespace Network
         public override void OnJoinedLobby()
         {
             Debug.Log("로비 접속 완료");
-            UIManager.GetComponent<UIManager>().TogglePanel(EGameState.LOBBY);
-
-
+            UIManager.instance.TogglePanel(EGameState.LOBBY);
         }
         #endregion
 
@@ -91,7 +89,8 @@ namespace Network
         public void JoinRandomRoom() => PhotonNetwork.JoinRandomRoom();
         public void LeaveRoom()
         {
-            UIManager.GetComponent<UIManager>().TogglePanel(EGameState.LOBBY);
+            UIManager.instance.TogglePanel(EGameState.LOBBY);
+
             PhotonNetwork.LeaveRoom();
 
         }
@@ -134,7 +133,7 @@ namespace Network
         public void SetUser()
         {
             PlayerIndex = PhotonNetwork.PlayerList.Length - 1;
-            UIManager.GetComponent<UIManager>().SetUserName(PlayerIndex, PhotonNetwork.LocalPlayer.NickName);
+            UIManager.instance.SetUserName(PlayerIndex, PhotonNetwork.LocalPlayer.NickName);
         }
 
 
@@ -157,10 +156,10 @@ namespace Network
             Debug.LogFormat("방 참가 완료 : {0}", PhotonNetwork.CurrentRoom);
             if (PhotonNetwork.IsMasterClient == true)
             {
-                UIManager.GetComponent<UIManager>().ToggleMaster();
-                Debug.Log("마스터입니다!");
+                UIManager.instance.ToggleMaster();
+                //UIManager.instance.UserPanelList[PlayerIndex].SetIcon(UserStatus.Master);
             }
-            UIManager.GetComponent<UIManager>().TogglePanel(EGameState.ROOM);
+            UIManager.instance.TogglePanel(EGameState.ROOM);
             PhotonNetwork.LocalPlayer.NickName = NickNameInput.text;
             ChattingManager.instance.AddChatMessage(PhotonNetwork.LocalPlayer.NickName + " 님이 접속하셨습니다");
             SetUser();
@@ -201,7 +200,12 @@ namespace Network
 
         public void Ready()
         {
-            if (!isReady) UIManager.GetComponent<UIManager>().GetReady(PlayerIndex);
+            Debug.Log("레디");
+            //실제로 포톤상 기능도 추가할 것
+            if (!isReady)
+            {
+                UIManager.instance.GetReady(PlayerIndex);
+            }
         }
 
 
