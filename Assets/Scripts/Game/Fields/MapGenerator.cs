@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Game.Items;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -67,7 +68,7 @@ namespace Game.Fields
 
         private static MapGenerator _instance;
 
-        private List<Item> _items;
+        private List<GameObject> _items;
 
         [HideInInspector]
         public Floor[][] BuildingArray;
@@ -104,8 +105,8 @@ namespace Game.Fields
             
             floorHeight = floorObjects[0].GetComponent<SpriteRenderer>().bounds.size.y;
             floorWidth = floorObjects[0].GetComponent<SpriteRenderer>().bounds.size.x;
-
-            _items = GameObject.Find("ItemManager").GetComponent<ItemManager>().items;
+            
+            _items = GameObject.Find("ItemManager").GetComponent<ItemManager>().items.ToList();
 
             _itemTypeCount = _items.Count;
         }
@@ -247,30 +248,36 @@ namespace Game.Fields
             int firstBox = random.Next(maxValue: 100);
             int secondBox = random.Next(maxValue: 100);
 
+            var boxParent = environmentObject.transform.GetChild(2);
+
             if (firstBox <= itemCreationRate) {
-                var item1 = _items[firstBox % _itemTypeCount];
-                item1.count = 1;
+                var item1 = Instantiate(_items[firstBox % _itemTypeCount], box1.transform.position, Quaternion.identity);
+                item1.transform.parent = boxParent;
+                item1.GetComponent<Item>().count = 1;
                 box1.item1 = item1;
 
                 int nextItem = random.Next(maxValue: 100);
 
                 if (nextItem <= itemCreationRate * secondItemCreationRate) {
-                    var item2 = _items[nextItem % _itemTypeCount];
-                    item2.count = 1;
+                    var item2 = Instantiate(_items[nextItem % _itemTypeCount], box1.transform.position, Quaternion.identity);
+                    item2.transform.parent = boxParent;
+                    item2.GetComponent<Item>().count = 1;
                     box1.item2 = item2;
                 }
             }
             
             if (secondBox <= itemCreationRate) {
-                var item1 = _items[secondBox % _itemTypeCount];
-                item1.count = 1;
+                var item1 = Instantiate(_items[secondBox % _itemTypeCount], box2.transform.position, Quaternion.identity);
+                item1.transform.parent = boxParent;
+                item1.GetComponent<Item>().count = 1;
                 box2.item1 = item1;
                 
                 int nextItem = random.Next(maxValue: 100);
 
                 if (nextItem <= itemCreationRate * secondItemCreationRate) {
-                    var item2 = _items[nextItem % _itemTypeCount];
-                    item2.count = 1;
+                    var item2 =  Instantiate(_items[nextItem % _itemTypeCount], box2.transform.position, Quaternion.identity);
+                    item2.transform.parent = boxParent;
+                    item2.GetComponent<Item>().count = 1;
                     box2.item2 = item2;
                 }
             }

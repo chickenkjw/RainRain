@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Game.Items;
+﻿using Game.Items;
 using UnityEngine;
 
 namespace Game.Player
@@ -59,7 +58,7 @@ namespace Game.Player
             boxContentsUI = playerUI.transform.GetChild(2).gameObject;
         }
         
-        public bool OpenInventory(bool canInteractWithBox, Item[] pItems, Item[] bItems) {
+        public bool OpenInventory(bool canInteractWithBox, GameObject[] pItems, GameObject[] bItems) {
             if (!_isOpeningInventory) {
                 _isOpeningInventory = true;
                 
@@ -75,18 +74,18 @@ namespace Game.Player
                     
                     for(int i = 0; i < pItems.Length; i++){
                         if (pItems[i] != null) {
-                            bool result = _inventoryManager.AddItem(pItems[i]);
+                            bool result = _inventoryManager.AddItem(pItems[i].GetComponent<Item>(), i);
                             if (result) {
-                                pItems[i] = null;
+                                pItems[i] = player.noneItem;
                             }
                         }
                     }
-
+                    
                     for(int i = 0; i < bItems.Length; i++) {
                         if (bItems[i] != null) {
-                            bool result = _inventoryManager.AddItem(bItems[i], true);
+                            bool result = _inventoryManager.AddItem(bItems[i].GetComponent<Item>(), i, true, false);
                             if (result) {
-                                bItems[i] = null;
+                                bItems[i] = player.noneItem;
                             }
                         }
                     }
@@ -98,10 +97,10 @@ namespace Game.Player
                     
                     for (int i = 0; i < pItems.Length; i++) {
                         if (pItems[i] != null) {
-                            bool result = _inventoryManager.AddItem(pItems[i]);
+                            bool result = _inventoryManager.AddItem(pItems[i].GetComponent<Item>(), i);
                             if (result) {
-                                pItems[i] = null;
-                                pItems[i] = null;
+                                pItems[i] = player.noneItem;
+                                pItems[i] = player.noneItem;
                             }
                         }
                     }
@@ -113,8 +112,11 @@ namespace Game.Player
                 // 인벤토리를 닫으면 그린 아이템을 모두 지우기
                 var inventorySlots = inventoryUI.GetComponentsInChildren<Transform>();
                 var boxSlots = boxContentsUI.GetComponentsInChildren<Transform>();
-                List<Item> items = new List<Item>();
-                List<Item> box = new List<Item>();
+                var none = player.noneItem;
+                GameObject[] items = { none, none, none, none };
+                GameObject[] box = { none, none };
+                int itemIndex = 0;
+                int boxIndex = 0;
                 
                 for (int i = 1; i < inventorySlots.Length; i++) {
                     if (inventorySlots[i].transform.childCount > 0) {
@@ -122,12 +124,15 @@ namespace Game.Player
                         if (inventory == null) {
                             continue;
                         }
-                        items.Add(inventory.item);
+
+                        items[itemIndex] = inventory.item.gameObject;
+                        itemIndex++;
+
                         Destroy(inventorySlots[i].transform.GetChild(0).gameObject);
                     }
                 }
                 
-                player._playerItems = items.ToArray();
+                player._playerItems = items;
 
                 for (int i = 1; i < boxSlots.Length; i++) {
                     if (boxSlots[i].transform.childCount > 0) {
@@ -135,12 +140,15 @@ namespace Game.Player
                         if (inventory == null) {
                             continue;
                         }
-                        box.Add(inventory.item);
+
+                        box[boxIndex] = inventory.item.gameObject;
+                        boxIndex++;
+
                         Destroy(boxSlots[i].transform.GetChild(0).gameObject);
                     }
                 }
 
-                player._boxItems = box.ToArray();
+                player._boxItems = box;
                 
                 uiBackground.SetActive(false);
                 inventoryUI.SetActive(false);

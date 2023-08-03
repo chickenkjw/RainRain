@@ -39,7 +39,7 @@ namespace Game.Items
                     // 한 아이템을 들 수 있는 최대치까지 들었을 때
                     var limit = slotItem.item.carryLimit;
                     if (slotItem.item.count > limit) {
-                        inventoryItem.item.count -= limit;
+                        inventoryItem.item.count = slotItem.item.count - limit;
                         slotItem.item.count = limit;
                         
                         isTakeAll = false;
@@ -47,7 +47,6 @@ namespace Game.Items
                         inventoryItem.UpdateCountText();
                     }
                     else {
-                        print("옮긴 아이템 삭제");
                         Destroy(inventoryItem.gameObject);
                     }
                     
@@ -59,7 +58,12 @@ namespace Game.Items
             }
 
             var manager = BoxContentsManager.Instance;
-            bool result = manager.TakeItem((manager.boxDirection, manager.currentBoxItemIndex, isTakeAll));
+            try {
+                bool result = manager.TakeItem((manager.boxDirection, manager.currentBoxItemIndex, isTakeAll));
+            }
+            catch {
+                // ignored
+            }
         }        
     }
 }

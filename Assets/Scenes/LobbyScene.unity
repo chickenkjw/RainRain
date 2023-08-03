@@ -6164,6 +6164,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4779140080204105272, guid: 51cb671260b69b2439f9005f062fa5fa, type: 3}
+      propertyPath: inventoryItemPrefab
+      value: 
+      objectReference: {fileID: 1003222213952644243, guid: 324b799fa898d424498f0ffcf71baf00, type: 3}
+    - target: {fileID: 5956089211629265540, guid: 51cb671260b69b2439f9005f062fa5fa, type: 3}
+      propertyPath: items.Array.data[0]
+      value: 
+      objectReference: {fileID: 5169890267128995552, guid: 7b6b69c3f4d8d8f47a1f2babfee84fbf, type: 3}
     - target: {fileID: 5956089211629265541, guid: 51cb671260b69b2439f9005f062fa5fa, type: 3}
       propertyPath: m_RootOrder
       value: 11

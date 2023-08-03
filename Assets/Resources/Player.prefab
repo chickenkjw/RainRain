@@ -241,6 +241,7 @@ MonoBehaviour:
   itemUIManager: {fileID: 6445079900554557855}
   _playerItems: []
   _boxItems: []
+  noneItem: {fileID: 5491780315017775554, guid: 95d15726d5ec330469a7bcc888ee37c1, type: 3}
 --- !u!114 &6445079900554557855
 MonoBehaviour:
   m_ObjectHideFlags: 0

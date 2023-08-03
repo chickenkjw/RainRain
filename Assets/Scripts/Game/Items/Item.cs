@@ -5,8 +5,8 @@ namespace Game.Items
     /// <summary>
     /// 아이템의 Scriptable Object
     /// </summary>
-    [CreateAssetMenu(fileName = "Item", menuName = "Scriptable Object Assets/Item")]
-    public class Item : ScriptableObject
+    // [CreateAssetMenu(fileName = "Item", menuName = "Scriptable Object Assets/Item")]
+    public class Item : MonoBehaviour
     {
         // 아이템의 타입
         public ItemType type;
