@@ -80,29 +80,29 @@ namespace Game.Items
         /// <param name="movedItem">상자의 xy좌표, 박스 방향(왼쪽, 오른쪽), 박스아이템위치(위, 아래), 다 옮기는지 여부</param>
         /// <returns>성공적으로 옮겼을 때 true 반환</returns>
         public bool TakeItem((BoxDirection, BoxItemIndex, bool) movedItem) {
-            print("아이템을 옮깁니다!");
-            print($"시작점 x:{BoxLocation.X} y:{BoxLocation.Y} dir:{movedItem.Item2 == BoxItemIndex.Up}");
-            GameObject floorObj = _mapGenerator.BuildingArray[BoxLocation.X][BoxLocation.Y].Object;
-            BoxContents boxContents = floorObj.transform.GetChild(1).GetChild((int)movedItem.Item1)
-                .GetComponent<BoxContents>();
+            if (BoxLocation.X != null && BoxLocation.Y != null) {
+                GameObject floorObj = _mapGenerator.BuildingArray[BoxLocation.X][BoxLocation.Y].Object;
+                BoxContents boxContents = floorObj.transform.GetChild(1).GetChild((int)movedItem.Item1)
+                    .GetComponent<BoxContents>();
 
-            if (movedItem.Item3) {
-                if (movedItem.Item2 == BoxItemIndex.Up) {
-                    boxContents.item1 = null;
+                if (movedItem.Item3) {
+                    if (movedItem.Item2 == BoxItemIndex.Up) {
+                        boxContents.item1 = null;
+                    }
+                    else {
+                        boxContents.item2 = null;
+                    }
                 }
                 else {
-                    boxContents.item2 = null;
+                    if (movedItem.Item2 == BoxItemIndex.Up) {
+                        boxContents.item1.GetComponent<Item>().count = 1;
+                    }
+                    else {
+                        boxContents.item2.GetComponent<Item>().count = 1;
+                    }
                 }
             }
-            else {
-                if (movedItem.Item2 == BoxItemIndex.Up) {
-                    boxContents.item1.count = 1;
-                }
-                else {
-                    boxContents.item2.count = 1;
-                }
-            }
-            
+
             return true;
         }
     }

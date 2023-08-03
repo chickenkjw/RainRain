@@ -1,4 +1,5 @@
-﻿using Game.Items;
+﻿using System.Linq;
+using Game.Items;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -43,9 +44,11 @@ namespace Game.Player
         
         // 플레이어의 아이템을 담는 변수
         [SerializeField]
-        public Item[] _playerItems;
+        public GameObject[] _playerItems;
         [SerializeField]
-        public Item[] _boxItems;
+        public GameObject[] _boxItems;
+
+        public GameObject noneItem;
         
         // 인벤토리 열 수 있는 지에 대한 변수
         private bool _canInteractWithBox;
@@ -90,8 +93,8 @@ namespace Game.Player
             
             _stairDestination = Vector3.zero;
             
-            _playerItems = new Item[4];
-            _boxItems = new Item[2];
+            _playerItems = new[] { noneItem, noneItem, noneItem, noneItem};
+            _boxItems = new[] { noneItem, noneItem };
         }
         
         /// <summary>
@@ -138,7 +141,9 @@ namespace Game.Player
             }
             
             _isOpeningInventory = itemUIManager
-                .OpenInventory(_canInteractWithBox, _playerItems, _boxItems);
+                .OpenInventory(_canInteractWithBox, 
+                    _playerItems.ToArray(), 
+                    _boxItems.ToArray());
         }
 
         private void OnTriggerEnter2D(Collider2D other) {
@@ -160,7 +165,7 @@ namespace Game.Player
             else if (obj.CompareTag("Box")) {
                 _canInteractWithBox = true;
                 var item = obj.GetComponent<BoxContents>();
-                _boxItems = new Item[2];
+                _boxItems = new GameObject[2];
                 _boxItems[0] = item.item1;
                 _boxItems[1] = item.item2;
 
@@ -181,7 +186,11 @@ namespace Game.Player
             }
             else if (obj.CompareTag("Box")) {
                 _canInteractWithBox = false;
-                _boxItems = null;
+                var contents = obj.GetComponent<BoxContents>();
+                contents.item1 = _boxItems[0];
+                contents.item2 = _boxItems[1];
+
+                _boxItems = new[] { noneItem, noneItem };
 
                 BoxContentsManager.Instance.BoxLocation = null;
                 BoxContentsManager.Instance.boxDirection = BoxDirection.None;

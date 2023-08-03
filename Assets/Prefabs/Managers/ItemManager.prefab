@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items:
-  - {fileID: 4594277159588037923, guid: 9ddd22ea414c67a46b1a4f89bcbf79e8, type: 3}
+  - {fileID: 5169890267128995552, guid: 7b6b69c3f4d8d8f47a1f2babfee84fbf, type: 3}
 --- !u!114 &-4779140080204105272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,4 +59,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e84283e4546a4e17a648de8dbd04bd81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemSlots: []
+  itemSlots: []
+  boxSlots: []
+  inventoryItemPrefab: {fileID: 1003222213952644243, guid: 324b799fa898d424498f0ffcf71baf00, type: 3}

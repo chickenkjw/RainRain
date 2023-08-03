@@ -19,32 +19,38 @@ namespace Game.Items
         /// </summary>
         /// <param name="item">그릴 아이템</param>
         /// <param name="isBoxInteract">박스를 연 상태인가</param>
+        /// <param name="isSameIndex">같은 아이템이더라도 다르게 배치할 수 있도록 하는 장치</param>
         /// <returns></returns>
-        public bool AddItem(Item item, bool isBoxInteract = false) {
+        public bool AddItem(Item item, int index, bool isBoxInteract = false, bool isSameIndex = true) {
+            if (item.type == ItemType.None) {
+                return false;
+            }
+            
+            var itemArray = isBoxInteract ? boxSlots : itemSlots;
+            
             // 아이템 슬롯이 차있는데, 만약 같은 타입의 아이템이라면 쌓기
-            foreach (var slot in isBoxInteract ? boxSlots : itemSlots) {
-                InventoryItem itemSlot;
-                if (slot.transform.childCount == 1) {
-                    itemSlot = slot.transform.GetChild(0).GetComponent<InventoryItem>();
-                }
-                else {
-                    break;
-                }
-                
-                if (itemSlot != null && itemSlot.item.type == item.type && itemSlot.item.count < item.carryLimit && item.stackable) {
+            if (isSameIndex) {
+                InventoryItem itemSlot = itemArray[index].transform.childCount == 1 ? 
+                    itemArray[index].transform.GetChild(0).GetComponent<InventoryItem>() 
+                    : null;
+
+                if (itemSlot != null && itemSlot.item.type == item.type && itemSlot.item.count < item.carryLimit &&
+                    item.stackable) {
                     itemSlot.item.count++;
                     itemSlot.UpdateCountText();
                     return true;
                 }
             }
-            
+
             // 아이템 슬롯이 비어있다면 아이템을 그리기
-            foreach (var slot in isBoxInteract ? boxSlots : itemSlots) {
-                InventoryItem itemSlot = slot.GetComponent<InventoryItem>();
-                if (itemSlot == null) {
-                    SpawnNewItem(item, slot);
-                    return true;
-                }
+            var slot = (isBoxInteract ? boxSlots : itemSlots)[index];
+            InventoryItem itemSlot2 = slot.transform.childCount > 0 ?
+                    slot.transform.GetChild(0).GetComponent<InventoryItem>()
+                    : null;
+
+            if (itemSlot2 == null) {
+                SpawnNewItem(item, slot);
+                return true;
             }
 
             // 만약 아이템을 슬롯에 추가할 수 없는 경우, false 반환
@@ -55,7 +61,7 @@ namespace Game.Items
         private void SpawnNewItem(Item item, ItemSlot slot) {
             GameObject newItem = Instantiate(inventoryItemPrefab, slot.transform);
             InventoryItem inventoryItem = newItem.GetComponent<InventoryItem>();
-            inventoryItem.InitializeItem(item);
+            inventoryItem.InitializeItem(item, 1);
         }
     }
 }

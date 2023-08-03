@@ -724,7 +724,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 838039220548721485, guid: 6abcde9b13e23a743b82626f75e6b3ed, type: 3}
       propertyPath: itemCreationRate
-      value: 50
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 838039220548721485, guid: 6abcde9b13e23a743b82626f75e6b3ed, type: 3}
       propertyPath: items.Array.size
@@ -736,7 +736,7 @@ PrefabInstance:
       objectReference: {fileID: 2116151861}
     - target: {fileID: 838039220548721485, guid: 6abcde9b13e23a743b82626f75e6b3ed, type: 3}
       propertyPath: bridgeCreationRate
-      value: 35
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 838039220548721485, guid: 6abcde9b13e23a743b82626f75e6b3ed, type: 3}
       propertyPath: items.Array.data[0]
@@ -744,7 +744,7 @@ PrefabInstance:
       objectReference: {fileID: 4594277159588037923, guid: 9ddd22ea414c67a46b1a4f89bcbf79e8, type: 3}
     - target: {fileID: 838039220548721485, guid: 6abcde9b13e23a743b82626f75e6b3ed, type: 3}
       propertyPath: secondItemCreationRate
-      value: 0.5
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 838039220548721485, guid: 6abcde9b13e23a743b82626f75e6b3ed, type: 3}
       propertyPath: floorObjects.Array.data[0]
@@ -1063,7 +1063,7 @@ PrefabInstance:
     - target: {fileID: 5956089211629265540, guid: 51cb671260b69b2439f9005f062fa5fa, type: 3}
       propertyPath: items.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 36ca837b9d429e84fb87fb3a08342a55, type: 2}
+      objectReference: {fileID: 6011282229445908478, guid: 7b6b69c3f4d8d8f47a1f2babfee84fbf, type: 3}
     - target: {fileID: 5956089211629265541, guid: 51cb671260b69b2439f9005f062fa5fa, type: 3}
       propertyPath: m_RootOrder
       value: 8

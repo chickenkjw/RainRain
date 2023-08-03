@@ -19,6 +19,8 @@ namespace Game.Items
         // 아이템 출발지
         private BoxItemIndex _boxItemIndex;
 
+        public int count;
+
         // 슬롯에 들어갈 아이템
         [HideInInspector] public Item item;
         // 아이템 위치 배정을 위한 부모 오브젝트 위치
@@ -28,9 +30,11 @@ namespace Game.Items
         /// 아이템 그리기
         /// </summary>
         /// <param name="newItem">배정할 아이템</param>
-        public void InitializeItem(Item newItem) {
+        /// <param name="count"></param>
+        public void InitializeItem(Item newItem, int count) {
             item = newItem;
             image.sprite = newItem.image;
+            this.count = count;
             UpdateCountText();
 
             if (transform.parent.name.Equals("Item1")) {
@@ -57,7 +61,6 @@ namespace Game.Items
             transform.SetParent(transform.root);
             
             BoxContentsManager.Instance.currentBoxItemIndex = _boxItemIndex;
-            print("출발 itemIndex: " + _boxItemIndex);
         }
 
         // 드래그 중, 아이템이 커서를 따라오도록 위치 변경

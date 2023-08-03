@@ -5,8 +5,8 @@ namespace Game.Items
 {
     public class BoxContents : MonoBehaviour
     {
-        public Item item1;
-        public Item item2;
+        public GameObject item1;
+        public GameObject item2;
 
         public Location Location;
         public BoxDirection boxDirection;
