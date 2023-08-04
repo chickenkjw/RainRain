@@ -24,7 +24,7 @@ namespace Game.Player
         [Tooltip("인벤토리가 켜질 때 주위 어두워지는거")]
         private GameObject uiBackground;
 
-        private InventoryManager _inventoryManager;
+        //private InventoryManager _inventoryManager;
 
         #endregion
         
@@ -36,7 +36,7 @@ namespace Game.Player
         #endregion
 
         private void Start() {
-            _inventoryManager = GameObject.Find("ItemManager").GetComponent<InventoryManager>();
+            //_inventoryManager = GameObject.Find("ItemManager").GetComponent<InventoryManager>();
             
             SetVariables();
             
@@ -74,7 +74,8 @@ namespace Game.Player
                     
                     for(int i = 0; i < pItems.Length; i++){
                         if (pItems[i] != null) {
-                            bool result = _inventoryManager.AddItem(pItems[i].GetComponent<Item>(), i);
+                            //bool result = _inventoryManager.AddItem(pItems[i].GetComponent<Item>(), i);
+                            bool result = InventoryManager.instance.AddItem(pItems[i].GetComponent<Item>(), i);
                             if (result) {
                                 pItems[i] = player.noneItem;
                             }
@@ -83,7 +84,7 @@ namespace Game.Player
                     
                     for(int i = 0; i < bItems.Length; i++) {
                         if (bItems[i] != null) {
-                            bool result = _inventoryManager.AddItem(bItems[i].GetComponent<Item>(), i, true, false);
+                            bool result = InventoryManager.instance.AddItem(bItems[i].GetComponent<Item>(), i, true, false);
                             if (result) {
                                 bItems[i] = player.noneItem;
                             }
@@ -97,7 +98,7 @@ namespace Game.Player
                     
                     for (int i = 0; i < pItems.Length; i++) {
                         if (pItems[i] != null) {
-                            bool result = _inventoryManager.AddItem(pItems[i].GetComponent<Item>(), i);
+                            bool result = InventoryManager.instance.AddItem(pItems[i].GetComponent<Item>(), i);
                             if (result) {
                                 pItems[i] = player.noneItem;
                                 pItems[i] = player.noneItem;

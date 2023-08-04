@@ -19,7 +19,7 @@ namespace Game.Camera
         private float smoothing;
 
         private void Start() {
-            target = NetworkManager.instance.LocalPlayer.transform;
+            //target = NetworkManager.instance.LocalPlayer.transform;
             /*target = GameObject
                 .FindGameObjectsWithTag("Player")
                 .ToList().First(player => player.GetComponent<PlayerManager>().IsLocalPlayer)
@@ -29,6 +29,14 @@ namespace Game.Camera
         private void LateUpdate() {
             // 플레이어가 죽었을 경우, playerObject를 찾지 못해 null error가 나는 경우를 방지
             if (target == null) {
+                try
+                {
+                    target = NetworkManager.instance.LocalPlayer.transform;
+                }
+                catch
+                {
+                    Debug.LogError("카메라가 타겟을 못찾겠대요");
+                }
                 return;
             }
             

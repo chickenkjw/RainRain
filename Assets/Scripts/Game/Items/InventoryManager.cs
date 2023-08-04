@@ -14,6 +14,21 @@ namespace Game.Items
         [Tooltip("인벤토리 슬롯 프리팹(InventoryItem이 달린 오브젝트)")] 
         public GameObject inventoryItemPrefab;
 
+        public static InventoryManager instance;
+
+        void Awake()
+        {
+            // SoundManager 인스턴스가 이미 있는지 확인, 이 상태로 설정
+            if (instance == null)
+                instance = this;
+
+            // 인스턴스가 이미 있는 경우 오브젝트 제거
+            else if (instance != this)
+                Destroy(gameObject);
+
+            DontDestroyOnLoad(gameObject);
+        }
+
         /// <summary>
         /// 아이템 배열을 받아와 그리는 함수
         /// </summary>

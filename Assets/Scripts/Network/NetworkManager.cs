@@ -93,6 +93,7 @@ namespace Network
 
             PhotonNetwork.LeaveRoom();
 
+
         }
         public void LeaveRoom(string RoomName)
         {
@@ -115,11 +116,8 @@ namespace Network
         public void GenerateTestPlayer()
         {
             Debug.Log("테스트 플레이어 생성!");
-            PlayerManager newTestPlayer;
-            newTestPlayer = PhotonNetwork.Instantiate("TestPlayer",
-                    new Vector3 (0,0,0), Quaternion.identity).GetComponent<PlayerManager>();
-
-            TestGround.SetActive(true);
+            PhotonNetwork.Instantiate("TestPlayer",
+                    new Vector3 (0,0,0), Quaternion.identity);
         }
 
         public void Connect() => PhotonNetwork.ConnectUsingSettings();
