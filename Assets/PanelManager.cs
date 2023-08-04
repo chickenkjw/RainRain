@@ -42,6 +42,7 @@ public class PanelManager : MonoBehaviour
 
     public void SetUsername(string username)
     {
+        this.gameObject.SetActive(true);
         PlayerName.text = username;
     }
     

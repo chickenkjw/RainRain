@@ -154,12 +154,16 @@ namespace Network
         public override void OnJoinedRoom()
         {
             Debug.LogFormat("방 참가 완료 : {0}", PhotonNetwork.CurrentRoom);
+            Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount);
+            UIManager.instance.SetRoomInfo(PhotonNetwork.CurrentRoom.Name, PhotonNetwork.CurrentRoom.PlayerCount);
+            
+
             if (PhotonNetwork.IsMasterClient == true)
             {
                 UIManager.instance.ToggleMaster();
-                //UIManager.instance.UserPanelList[PlayerIndex].SetIcon(UserStatus.Master);
             }
             UIManager.instance.TogglePanel(EGameState.ROOM);
+
             PhotonNetwork.LocalPlayer.NickName = NickNameInput.text;
             ChattingManager.instance.AddChatMessage(PhotonNetwork.LocalPlayer.NickName + " 님이 접속하셨습니다");
             SetUser();

@@ -21,6 +21,10 @@ public class UIManager : MonoBehaviour
     public GameObject RoomPanel;
 
     public List<PanelManager> UserPanelList;
+    public List<ColorSelectManager> ColorSelectorList;
+
+    public Text RoomNameText;
+    public Text UserCountText;
 
     public GameObject ReadyButton;
     public GameObject StartGameButton;
@@ -28,6 +32,8 @@ public class UIManager : MonoBehaviour
     public PhotonView PV;
 
     public static UIManager instance;
+
+    
 
     #endregion
     
@@ -86,6 +92,26 @@ public class UIManager : MonoBehaviour
         ReadyButton.SetActive(false);
         StartGameButton.SetActive(true);
         Debug.Log("I'm master");
+    }
+
+    public void ClearColorSelector()
+    {
+        foreach(ColorSelectManager selector in ColorSelectorList)
+        {
+            selector.UnSelect();
+        }
+    }
+
+    public void SetRoomInfo(string roomname, int playercount)
+    {
+        RoomNameText.text = roomname;
+        PV.RPC("SetUsercountRPC", RpcTarget.All, playercount);
+    }
+
+    [PunRPC]
+    public void SetUsercountRPC(int playercount)
+    {
+        UserCountText.text = playercount + "/4";
     }
 
     public void SetUserName(int userindex, string username)
