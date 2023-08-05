@@ -13,14 +13,10 @@ namespace Network
     public class NetworkManager : MonoBehaviourPunCallbacks
     {
         #region Public Fields
-        public Text StatusText;
         public InputField RoomInput, NickNameInput;
-        //public GameObject UIManager;
         public GameObject RoomManager;
         public static NetworkManager instance;
-        public GameObject LocalPlayerPrefab;
         public PhotonView Photonview;
-        public GameObject TestGround;
 
         public GameObject LocalPlayer;
         public int PlayerIndex { get; private set; }
@@ -54,7 +50,7 @@ namespace Network
         // Update is called once per frame
         void Update()
         {
-            StatusText.text = PhotonNetwork.NetworkClientState.ToString();
+            UIManager.instance.SetStatus(PhotonNetwork.NetworkClientState.ToString());
         }
         #endregion
 
@@ -72,7 +68,9 @@ namespace Network
 
         public override void OnJoinedLobby()
         {
+            PhotonNetwork.LocalPlayer.NickName = NickNameInput.text;
             Debug.Log("로비 접속 완료");
+            UIManager.instance.SetNickname(PhotonNetwork.LocalPlayer.NickName);
             UIManager.instance.TogglePanel(EGameState.LOBBY);
         }
         #endregion
@@ -118,8 +116,6 @@ namespace Network
             PlayerManager newTestPlayer;
             newTestPlayer = PhotonNetwork.Instantiate("TestPlayer",
                     new Vector3 (0,0,0), Quaternion.identity).GetComponent<PlayerManager>();
-
-            TestGround.SetActive(true);
         }
 
         public void Connect() => PhotonNetwork.ConnectUsingSettings();
@@ -164,10 +160,11 @@ namespace Network
             }
             UIManager.instance.TogglePanel(EGameState.ROOM);
 
-            PhotonNetwork.LocalPlayer.NickName = NickNameInput.text;
+            
             ChattingManager.instance.AddChatMessage(PhotonNetwork.LocalPlayer.NickName + " 님이 접속하셨습니다");
             SetUser();
             GenerateTestPlayer();
+            
         }
         public override void OnCreateRoomFailed(short returnCode, string message)
         {

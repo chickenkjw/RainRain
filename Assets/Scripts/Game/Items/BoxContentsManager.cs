@@ -1,5 +1,6 @@
 using Game.Fields;
 using UnityEngine;
+using Photon.Pun;
 
 namespace Game.Items
 {
@@ -29,6 +30,8 @@ namespace Game.Items
         public BoxDirection boxDirection;
         // 박스 슬롯이 위, 아래 중 어디에 있는 슬롯인지 저장
         public BoxItemIndex currentBoxItemIndex;
+
+        public PhotonView PV;
 
         #endregion
 
@@ -75,31 +78,75 @@ namespace Game.Items
         /// </summary>
         /// <param name="movedItem">상자의 xy좌표, 박스 방향(왼쪽, 오른쪽), 박스아이템위치(위, 아래), 다 옮기는지 여부</param>
         /// <returns>성공적으로 옮겼을 때 true 반환</returns>
-        public bool TakeItem((BoxDirection, BoxItemIndex, bool) movedItem) {
-            if (BoxLocation.X != null && BoxLocation.Y != null) {
+        public bool TakeItem((BoxDirection, BoxItemIndex, bool) movedItem)
+        {
+            Debug.Log("TakeITem 실행");
+            //if (BoxLocation != null)
+            //{
+            //    GameObject floorObj = _mapGenerator.BuildingArray[BoxLocation.X][BoxLocation.Y].Object;
+            //    BoxContents boxContents = floorObj.transform.GetChild(1).GetChild((int)movedItem.Item1)
+            //        .GetComponent<BoxContents>();
+
+            //    if (movedItem.Item3)
+            //    {
+            //        if (movedItem.Item2 == BoxItemIndex.Up)
+            //        {
+            //            boxContents.item1 = null;
+            //        }
+            //        else
+            //        {
+            //            boxContents.item2 = null;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (movedItem.Item2 == BoxItemIndex.Up)
+            //        {
+            //            boxContents.item1.GetComponent<Item>().count = 1;
+            //        }
+            //        else
+            //        {
+            //            boxContents.item2.GetComponent<Item>().count = 1;
+            //        }
+            //    }
+            //}
+            PV.RPC("TakeItemRPC", RpcTarget.All, movedItem.Item1, movedItem.Item2, true);
+            return true;
+        }
+
+        [PunRPC]
+        public void TakeItemRPC(BoxDirection direction, BoxItemIndex index, bool isFullItem)
+        {
+            Debug.Log("TakeITemRPC 실행");
+            if (BoxLocation != null)
+            {
                 GameObject floorObj = _mapGenerator.BuildingArray[BoxLocation.X][BoxLocation.Y].Object;
-                BoxContents boxContents = floorObj.transform.GetChild(1).GetChild((int)movedItem.Item1)
+                BoxContents boxContents = floorObj.transform.GetChild(1).GetChild((int)direction)
                     .GetComponent<BoxContents>();
 
-                if (movedItem.Item3) {
-                    if (movedItem.Item2 == BoxItemIndex.Up) {
+                if (isFullItem)
+                {
+                    if (index == BoxItemIndex.Up)
+                    {
                         boxContents.item1 = null;
                     }
-                    else {
+                    else
+                    {
                         boxContents.item2 = null;
                     }
                 }
-                else {
-                    if (movedItem.Item2 == BoxItemIndex.Up) {
+                else
+                {
+                    if (index == BoxItemIndex.Up)
+                    {
                         boxContents.item1.GetComponent<Item>().count = 1;
                     }
-                    else {
+                    else
+                    {
                         boxContents.item2.GetComponent<Item>().count = 1;
                     }
                 }
             }
-
-            return true;
         }
     }
 
