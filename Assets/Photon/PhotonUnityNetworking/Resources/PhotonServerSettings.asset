@@ -46,6 +46,7 @@ MonoBehaviour:
   - GetReadyRPC
   - RPC_StartGame
   - SetUsercountRPC
+  - TakeItemRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

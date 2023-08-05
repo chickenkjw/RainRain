@@ -26,8 +26,10 @@ namespace Game.Player
 
         private InventoryManager _inventoryManager;
 
+        public GameObject playerUI;
+
         #endregion
-        
+
         #region Variables
 
         // UI가 열려있는가
@@ -36,7 +38,7 @@ namespace Game.Player
         #endregion
 
         private void Start() {
-            _inventoryManager = GameObject.Find("ItemManager").GetComponent<InventoryManager>();
+            _inventoryManager = InventoryManager.instance;
             
             SetVariables();
             
@@ -51,7 +53,7 @@ namespace Game.Player
         private void SetVariables() {
             _isOpeningInventory = false;
             
-            var playerUI = GameObject.FindGameObjectWithTag("PlayerUI");
+            playerUI = GameObject.FindGameObjectWithTag("PlayerUI");
 
             uiBackground = playerUI.transform.GetChild(0).gameObject;
             inventoryUI = playerUI.transform.GetChild(1).gameObject;
