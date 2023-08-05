@@ -40,7 +40,6 @@ namespace Game.Fields
         [Tooltip("이전 건물과의 층수 차이")]
         private int heightInterval;
 
-        [HideInInspector] 
         [Tooltip("Environment 오브젝트. 건물의 부모 오브젝트")]
         public GameObject environmentObject;
 
@@ -104,8 +103,6 @@ namespace Game.Fields
                 Destroy(this.gameObject);
             }
 
-            NetworkManager.instance.GenerateEnvironment();
-
             floorHeight = floorObjects[0].GetComponent<SpriteRenderer>().bounds.size.y;
             floorWidth = floorObjects[0].GetComponent<SpriteRenderer>().bounds.size.x;
             
@@ -120,6 +117,8 @@ namespace Game.Fields
         /// 맵 생성 함수
         /// </summary>
         public void GenerateMap(int seed) {
+            environmentObject = NetworkManager.instance.GenerateEnvironment();
+
             BuildingArray = new Floor[buildingCount][];
             Vector2 buildPoint = Vector2.zero - Vector2.up * floorHeight;
 

@@ -67,7 +67,7 @@ namespace Game.Player
         {
             SetVariables();
             
-            //SetName(PhotonNetwork.LocalPlayer.NickName);
+            SetName(PhotonNetwork.LocalPlayer.NickName);
         }
         
         void Update()

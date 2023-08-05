@@ -121,10 +121,11 @@ namespace Network
             TestGround.SetActive(true);
         }
 
-        public void GenerateEnvironment()
+        public GameObject GenerateEnvironment()
         {
-            PhotonNetwork.Instantiate("Environment",
+            GameObject environment = PhotonNetwork.Instantiate("Environment",
                     new Vector3(0, 0, 0), Quaternion.identity);
+            return environment;
         }
 
         public void Connect() => PhotonNetwork.ConnectUsingSettings();

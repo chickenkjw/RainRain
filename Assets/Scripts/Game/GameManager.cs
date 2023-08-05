@@ -3,6 +3,7 @@ using Game.Fields;
 using Network;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 namespace Game
 {
@@ -77,7 +78,10 @@ namespace Game
             
             _waterLevelTime = 0;
             _playerCount = 1; // PhotonNetwork.CurrentRoom.PlayerCount;
-            MapGenerator.Instance.GenerateMap(1);
+            if (PhotonNetwork.IsMasterClient == true)
+            {
+                MapGenerator.Instance.GenerateMap(1);
+            }
             NetworkManager.instance.GeneratePlayer(new Vector3 (0, 0, 0));
         }
 
