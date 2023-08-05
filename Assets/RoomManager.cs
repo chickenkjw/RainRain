@@ -7,28 +7,22 @@ using Photon.Realtime;
 
 public class RoomManager : MonoBehaviour
 {
-    public PhotonView PV;
     public GameObject RoomContent;
-    public GameObject RoomPanel;
-    public void AddRoom (string roomInfo)
+    public Transform RoomPanel;
+
+    public static RoomManager instance;
+
+    public void Awake()
     {
-        Debug.Log(roomInfo);
-        PV.RPC("RPC_AddRoom", RpcTarget.AllBuffered, roomInfo);
+        instance = this;
     }
 
-    void OnAddRoom(string roomInfo)
+    [ContextMenu("방 추가")]
+    public void AddRoom (int playerCount, string roomName, string roomHost)
     {
-        GameObject newRoomPanel = Instantiate(RoomPanel, RoomContent.transform);
+        GameObject newRoom = Instantiate(RoomContent, Vector3.zero, Quaternion.identity);
+        newRoom.transform.SetParent(RoomPanel, false);
 
-        newRoomPanel.GetComponentInChildren<Text>().text = roomInfo; 
-        RoomContent.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-
-    }
-
-    [PunRPC]
-    void RPC_AddRoom(string roomInfo)
-    {
-        Debug.Log("여기까지 옴");
-        //OnAddRoom(roomInfo);
+        newRoom.GetComponent<RoomPanelManager>().setInfo(playerCount, roomName, roomHost);
     }
 }
