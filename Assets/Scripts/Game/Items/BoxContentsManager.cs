@@ -1,5 +1,6 @@
 using Game.Fields;
 using UnityEngine;
+using Photon.Pun;
 
 namespace Game.Items
 {
@@ -29,6 +30,9 @@ namespace Game.Items
         public BoxDirection boxDirection;
         // 박스 슬롯이 위, 아래 중 어디에 있는 슬롯인지 저장
         public BoxItemIndex currentBoxItemIndex;
+
+        [Tooltip("자신의 Photon View 파일")]
+        public PhotonView PV;
 
         #endregion
 
@@ -70,13 +74,16 @@ namespace Game.Items
             }
         }
 
+
+
+
         /// <summary>
         /// 아이템을 옮기는 함수
         /// </summary>
-        /// <param name="movedItem">상자의 xy좌표, 박스 방향(왼쪽, 오른쪽), 박스아이템위치(위, 아래), 다 옮기는지 여부</param>
+        /// <param name="movedItem">박스 방향(왼쪽, 오른쪽), 박스아이템위치(위, 아래), 다 옮기는지 여부</param>
         /// <returns>성공적으로 옮겼을 때 true 반환</returns>
         public bool TakeItem((BoxDirection, BoxItemIndex, bool) movedItem) {
-            if (BoxLocation.X != null && BoxLocation.Y != null) {
+            if (BoxLocation != null) {
                 GameObject floorObj = _mapGenerator.BuildingArray[BoxLocation.X][BoxLocation.Y].Object;
                 BoxContents boxContents = floorObj.transform.GetChild(1).GetChild((int)movedItem.Item1)
                     .GetComponent<BoxContents>();
@@ -99,9 +106,18 @@ namespace Game.Items
                 }
             }
 
+            PV.RPC(nameof(TakeItemRPC), RpcTarget.AllBuffered, movedItem);
+
             return true;
         }
+
+        [PunRPC]
+        public void TakeItemRPC((BoxDirection, BoxItemIndex, bool) movedItem)
+        {
+            Debug.Log($"아이템을 가져갔습니다! {movedItem.Item1}, {movedItem.Item2}");
+        }
     }
+
 
     #region enums
 
