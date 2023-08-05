@@ -19,12 +19,16 @@ public class UIManager : MonoBehaviour
     public GameObject MainPanel;
     public GameObject LobbyPanel;
     public GameObject RoomPanel;
+    public GameObject StatusPanel;
+    public GameObject CreateRoomPanel;
 
     public List<PanelManager> UserPanelList;
     public List<ColorSelectManager> ColorSelectorList;
 
+    public Text statusText;
     public Text RoomNameText;
     public Text UserCountText;
+    public Text NicknameText;
 
     public GameObject ReadyButton;
     public GameObject StartGameButton;
@@ -63,11 +67,28 @@ public class UIManager : MonoBehaviour
     
     #region Public Methods
 
+    public void SetStatus(string status)
+    {
+        statusText.text = status;
+    }
+
     public void ClearPanel()
     {
         MainPanel.SetActive(false);
         LobbyPanel.SetActive(false);
         RoomPanel.SetActive(false);
+        StatusPanel.SetActive(false);
+        CreateRoomPanel.SetActive(false);
+    }
+
+    public void OpenCreateRoomPanel()
+    {
+        CreateRoomPanel.SetActive(true);
+    }
+
+    public void CloseCreateRoomPanel()
+    {
+        CreateRoomPanel.SetActive(false);
     }
 
     public void TogglePanel(EGameState toggle)
@@ -100,6 +121,11 @@ public class UIManager : MonoBehaviour
         {
             selector.UnSelect();
         }
+    }
+
+    public void SetNickname(string nickname)
+    {
+        NicknameText.text = nickname;
     }
 
     public void SetRoomInfo(string roomname, int playercount)

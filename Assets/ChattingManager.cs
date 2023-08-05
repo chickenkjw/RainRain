@@ -31,6 +31,14 @@ public class ChattingManager : MonoBehaviourPunCallbacks
         {
             ChattingInput.ActivateInputField();
         }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            Debug.Log("Ã¤ÆÃ");
+            string strMessage = PhotonNetwork.LocalPlayer.NickName + " : " + ChattingInput.text;
+            photonview.RPC("RPC_Chat", RpcTarget.All, strMessage);
+            ChattingInput.text = "";
+        }
     }
 
 
@@ -41,12 +49,7 @@ public class ChattingManager : MonoBehaviourPunCallbacks
 
     public void OnEndEditEvent()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            string strMessage = PhotonNetwork.LocalPlayer.NickName + " : " + ChattingInput.text;
-            photonview.RPC("RPC_Chat", RpcTarget.All, strMessage);
-            ChattingInput.text = "";
-        }
+
     }
 
     public void OnClickSendButton()
