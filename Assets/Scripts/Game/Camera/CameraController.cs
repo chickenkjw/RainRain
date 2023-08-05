@@ -1,5 +1,3 @@
-using System.Linq;
-using Game.Player;
 using UnityEngine;
 using Network;
 
@@ -9,21 +7,21 @@ namespace Game.Camera
     {
         [Header("카메라 컨트롤러 파라미터")]
         
-        [SerializeField]
         [Tooltip("카메라 타겟. 플레이어")]
-        private Transform target;
+        public Transform target;
         
         [SerializeField] 
         [Tooltip("카메라 이동의 부드러운 정도")]
         [Range(1.0f, 8.0f)]
         private float smoothing;
 
+        [HideInInspector]
+        public bool followMouse;
+        public Vector3 imaginaryObject;
+
         private void Start() {
+            followMouse = false;
             target = NetworkManager.instance.LocalPlayer.transform;
-            /*target = GameObject
-                .FindGameObjectsWithTag("Player")
-                .ToList().First(player => player.GetComponent<PlayerManager>().IsLocalPlayer)
-                .GetComponent<Transform>();*/
         }
 
         private void LateUpdate() {
@@ -31,9 +29,12 @@ namespace Game.Camera
             if (target == null) {
                 return;
             }
+
+            Vector3 targetPos = followMouse ? 
+                new Vector3(imaginaryObject.x, imaginaryObject.y, transform.position.z) : 
+                new Vector3(target.position.x, target.position.y, transform.position.z);
             
-            Vector3 targetPos = new Vector3(target.position.x, target.position.y, transform.position.z);
-            transform.position = Vector3.Lerp(transform.position, targetPos, smoothing * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, targetPos, smoothing * Time.deltaTime); 
         }
     }
 }

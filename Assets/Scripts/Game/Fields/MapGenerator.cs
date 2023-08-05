@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Items;
+using Game.Player;
+using Network;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = System.Random;
@@ -39,12 +41,12 @@ namespace Game.Fields
         [Tooltip("이전 건물과의 층수 차이")]
         private int heightInterval;
 
-        [SerializeField] 
+        [HideInInspector] 
         [Tooltip("Environment 오브젝트. 건물의 부모 오브젝트")]
-        private GameObject environmentObject;
+        public GameObject environmentObject;
 
         [SerializeField] 
-        [Tooltip("다리 오브젝트")] 
+        [Tooltip("부서진 다리 오브젝트")] 
         private GameObject brokenBridge;
 
         [SerializeField] 
@@ -153,6 +155,15 @@ namespace Game.Fields
 
                     var floorObject = Instantiate(floor.Object, buildPoint, Quaternion.identity);
                     floorObject.transform.parent = environmentObject.transform.GetChild(0);
+                    
+                    var linkPoints = floorObject.transform.GetChild(3);
+                    var leftBridgePoint = linkPoints.GetChild(0).GetComponent<Bridge>();
+                    leftBridgePoint.player = NetworkManager.instance.LocalPlayer;
+                    leftBridgePoint.BuildingArray = BuildingArray;
+                    var rightBridgePoint = linkPoints.GetChild(1).GetComponent<Bridge>();
+                    rightBridgePoint.player = NetworkManager.instance.LocalPlayer;
+                    rightBridgePoint.BuildingArray = BuildingArray;
+                    
                     floor.Object = floorObject;
                     
                     BuildingArray[w][h] = floor;
@@ -281,6 +292,10 @@ namespace Game.Fields
                     box2.item2 = item2;
                 }
             }
+        }
+
+        public void BuildBridge() {
+            
         }
     }
 }

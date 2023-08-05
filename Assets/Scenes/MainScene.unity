@@ -474,7 +474,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -547,6 +547,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   smoothing: 4
+  followMouse: 0
+  imaginaryObject: {x: 0, y: 0, z: 0}
 --- !u!1 &530218752
 GameObject:
   m_ObjectHideFlags: 0
@@ -1064,6 +1066,18 @@ PrefabInstance:
       propertyPath: items.Array.data[0]
       value: 
       objectReference: {fileID: 6011282229445908478, guid: 7b6b69c3f4d8d8f47a1f2babfee84fbf, type: 3}
+    - target: {fileID: 5956089211629265540, guid: 51cb671260b69b2439f9005f062fa5fa, type: 3}
+      propertyPath: bridgeObject.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5956089211629265540, guid: 51cb671260b69b2439f9005f062fa5fa, type: 3}
+      propertyPath: bridgeObject.Array.data[0]
+      value: 
+      objectReference: {fileID: 7845826079550718245, guid: a7041dd580a77a344b49221619b2cc13, type: 3}
+    - target: {fileID: 5956089211629265540, guid: 51cb671260b69b2439f9005f062fa5fa, type: 3}
+      propertyPath: bridgeObject.Array.data[1]
+      value: 
+      objectReference: {fileID: 8042965190960150144, guid: 753327e1e5444014f95029d8db68690c, type: 3}
     - target: {fileID: 5956089211629265541, guid: 51cb671260b69b2439f9005f062fa5fa, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -1773,7 +1787,6 @@ MonoBehaviour:
   StatusText: {fileID: 692748255}
   RoomInput: {fileID: 0}
   NickNameInput: {fileID: 0}
-  UIManager: {fileID: 0}
   RoomManager: {fileID: 0}
   LocalPlayerPrefab: {fileID: 0}
   Photonview: {fileID: 0}

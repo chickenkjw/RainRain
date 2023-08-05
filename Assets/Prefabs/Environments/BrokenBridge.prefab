@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 3134993164963130432}
   - component: {fileID: 2328436746820434386}
   - component: {fileID: 8067812841033587208}
-  m_Layer: 6
-  m_Name: Bridge
+  m_Layer: 0
+  m_Name: BrokenBridge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 2a02875716fb59e40a863c67aafbed2e, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9811321, g: 0.9811321, b: 0.9811321, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
