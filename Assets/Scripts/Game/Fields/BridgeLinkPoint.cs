@@ -8,19 +8,23 @@ namespace Game.Fields
     public class BridgeLinkPoint : MonoBehaviour
     {
         public Location Location;
+        public Direction Direction;
 
         private void Start() {
             Location = transform.GetComponentInParent<Bridge>().location;
+            Direction = transform.GetComponentInParent<Bridge>().direction;
         }
 
         private void OnTriggerEnter2D(Collider2D other) {
             if (other.transform.CompareTag("Bridge")) {
                 var bridge = other.transform.GetComponent<BridgeObject>();
-
-                if (bridge != null) {
+                
+                if (bridge != null && bridge.Direction != Direction) {
                     bridge.parentTransform = this.transform;
                     bridge.entriesCount++;
                     bridge.Location = Location;
+                    
+                    print($"{bridge.entriesCount}");
                 }
             }
         }
