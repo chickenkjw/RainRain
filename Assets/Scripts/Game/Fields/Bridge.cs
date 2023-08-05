@@ -2,6 +2,7 @@
 using Game.Items;
 using Network;
 using UnityEngine;
+using Cam = UnityEngine.Camera;
 
 namespace Game.Fields
 {
@@ -23,6 +24,10 @@ namespace Game.Fields
         private Vector3 _mousePositionOffset;
 
         private CameraController _cameraController;
+
+        private Vector3 curMousePos;
+        private Vector3 prevMousePos;
+        private Vector3 destination;
         
         private void Start() {
             var objectList = GameObject.Find("ItemManager").GetComponent<ItemManager>().bridgeObject;
@@ -30,41 +35,44 @@ namespace Game.Fields
         }
 
         private Vector3 GetMousePosition() {
-            return UnityEngine.Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            return Cam.main.ScreenToWorldPoint(Input.mousePosition);
+        }
+
+        private Vector3 ScreenCenterToWorldPoint() {
+            return Cam.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, Cam.main.nearClipPlane));
         }
 
         private void OnMouseDown() {
             _cameraController = GameObject.FindWithTag("MainCamera").GetComponent<CameraController>();
-            
-            _mousePositionOffset = transform.position - GetMousePosition();
 
             _bridgeObject.transform.localScale = new Vector3(.1f, .1f, .1f);
 
             _createdObject = Instantiate(_bridgeObject, transform.position, Quaternion.identity,
                 MapGenerator.Instance.environmentObject.transform);
 
+            _mousePositionOffset = transform.position - GetMousePosition();
+
             var createdBridgeObject = _createdObject.GetComponent<BridgeObject>();
             createdBridgeObject.parentTransform = this.transform;
             createdBridgeObject.Direction = direction;
-
-            _cameraController.imaginaryObject = transform.position;
+            
+            _cameraController.imaginaryObject = ScreenCenterToWorldPoint();
             _cameraController.followMouse = true;
         }
 
         private void OnMouseDrag() {
             Vector3 destination = GetMousePosition() + _mousePositionOffset;
-            float distance = Vector2.Distance(destination, transform.position);
-
+            float distance = Vector2.Distance(this.destination, transform.position);
             distance /= 9.8f;
-            
-            _cameraController.imaginaryObject = destination;
+
+            _cameraController.imaginaryObject = ScreenCenterToWorldPoint();
 
             _createdObject.transform.localScale = new Vector3(distance, .3f, 1f);
             
-            float angle = Mathf.Atan2(destination.y - transform.position.y,
-                        destination.x - transform.position.x)
-                    * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(destination.y - transform.position.y, destination.x - transform.position.x) * Mathf.Rad2Deg;
             _createdObject.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+            prevMousePos = curMousePos;
         }
 
         private void OnMouseUp() {

@@ -23,8 +23,6 @@ namespace Game.Fields
                     bridge.parentTransform = this.transform;
                     bridge.entriesCount++;
                     bridge.Location = Location;
-                    
-                    print($"{bridge.entriesCount}");
                 }
             }
         }

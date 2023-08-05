@@ -23,7 +23,7 @@ namespace Game.Items
             catch {
                 return;
             }
-
+            
             bool isTakeAll = true;
 
             // 만약 슬롯에 아이템이 있지 않을 경우
