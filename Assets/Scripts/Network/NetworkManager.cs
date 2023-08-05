@@ -123,6 +123,7 @@ namespace Network
         }
 
         public void JoinRoom() => PhotonNetwork.JoinRoom(RoomInput.text);
+        public void JoinRoom(string roomName) => PhotonNetwork.JoinRoom(roomName);
         public void JoinOrCreateRoom()
         {
             PhotonNetwork.JoinOrCreateRoom(RoomInput.text, new RoomOptions { MaxPlayers = 10 }, null);

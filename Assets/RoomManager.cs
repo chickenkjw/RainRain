@@ -4,11 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using Network;
 
 public class RoomManager : MonoBehaviour
 {
     public GameObject RoomContent;
     public Transform RoomPanel;
+
 
     public static RoomManager instance;
 
@@ -17,7 +19,8 @@ public class RoomManager : MonoBehaviour
         instance = this;
     }
 
-    [ContextMenu("¹æ Ãß°¡")]
+
+
     public void AddRoom (int playerCount, string roomName, string roomHost)
     {
         GameObject newRoom = Instantiate(RoomContent, Vector3.zero, Quaternion.identity);
