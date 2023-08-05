@@ -9,7 +9,8 @@ namespace Game.Fields
     public class BridgeObject : MonoBehaviour
     {
         [HideInInspector] public Transform parentTransform;
-        public int entriesCount;
+        [HideInInspector] public int entriesCount;
+        [HideInInspector] public Location Location;
 
         private void Start() {
             entriesCount = 0;

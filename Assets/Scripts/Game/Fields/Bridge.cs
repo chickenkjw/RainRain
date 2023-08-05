@@ -10,11 +10,6 @@ namespace Game.Fields
     /// </summary>
     public class Bridge : MonoBehaviour
     {
-        [HideInInspector] 
-        public GameObject player;
-        [HideInInspector]
-        public Floor[][] BuildingArray;
-
         public Direction direction;
         public Location location;
 
@@ -77,7 +72,7 @@ namespace Game.Fields
         private void OnMouseUp() {
             var bridgeObject = _createdObject.GetComponent<BridgeObject>();
             var parentTransform = bridgeObject.parentTransform;
-            if (parentTransform != null && parentTransform.position != transform.position && bridgeObject.entriesCount == 1) {
+            if (parentTransform != null && parentTransform.position != transform.position && bridgeObject.entriesCount == 2) {
                 float distance = Vector2.Distance(parentTransform.position, transform.position);
                 if (direction == Direction.Right) {
                     distance = -distance;
@@ -93,6 +88,8 @@ namespace Game.Fields
                 _createdObject.transform.localScale = new Vector3(distance, .3f, 1f);
 
                 _createdObject.GetComponent<BoxCollider2D>().isTrigger = false;
+                
+                MapGenerator.Instance.BuildBridge(location, direction, bridgeObject.Location);
             }
             else {
                 Destroy(_createdObject);

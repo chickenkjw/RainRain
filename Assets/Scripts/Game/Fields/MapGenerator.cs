@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Items;
-using Game.Player;
 using Network;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -158,11 +157,9 @@ namespace Game.Fields
                     
                     var linkPoints = floorObject.transform.GetChild(3);
                     var leftBridgePoint = linkPoints.GetChild(0).GetComponent<Bridge>();
-                    leftBridgePoint.player = NetworkManager.instance.LocalPlayer;
-                    leftBridgePoint.BuildingArray = BuildingArray;
+                    leftBridgePoint.location = new Location { X = w, Y = h };
                     var rightBridgePoint = linkPoints.GetChild(1).GetComponent<Bridge>();
-                    rightBridgePoint.player = NetworkManager.instance.LocalPlayer;
-                    rightBridgePoint.BuildingArray = BuildingArray;
+                    rightBridgePoint.location = new Location { X = w, Y = h };
                     
                     floor.Object = floorObject;
                     
@@ -294,8 +291,13 @@ namespace Game.Fields
             }
         }
 
-        public void BuildBridge() {
-            
+        public void BuildBridge(Location start, Direction startDir, Location end) {
+            var startWalls = BuildingArray[start.X][start.Y].Object.transform.GetChild(2);
+            var endWalls = BuildingArray[end.X][end.Y].Object.transform.GetChild(2);
+            int wallDir = startDir == Direction.Right ? 0 : 1;
+
+            startWalls.GetChild(wallDir).gameObject.SetActive(false);
+            endWalls.GetChild((wallDir + 1) % 2).gameObject.SetActive(false);
         }
     }
 }

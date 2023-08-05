@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Game.Fields
 {
@@ -8,6 +7,12 @@ namespace Game.Fields
     /// </summary>
     public class BridgeLinkPoint : MonoBehaviour
     {
+        public Location Location;
+
+        private void Start() {
+            Location = transform.GetComponentInParent<Bridge>().location;
+        }
+
         private void OnTriggerEnter2D(Collider2D other) {
             if (other.transform.CompareTag("Bridge")) {
                 var bridge = other.transform.GetComponent<BridgeObject>();
@@ -15,6 +20,7 @@ namespace Game.Fields
                 if (bridge != null) {
                     bridge.parentTransform = this.transform;
                     bridge.entriesCount++;
+                    bridge.Location = Location;
                 }
             }
         }
@@ -26,6 +32,7 @@ namespace Game.Fields
                 if (bridge != null) {
                     bridge.parentTransform = null;
                     bridge.entriesCount--;
+                    bridge.Location = null;
                 }
             }
         }
