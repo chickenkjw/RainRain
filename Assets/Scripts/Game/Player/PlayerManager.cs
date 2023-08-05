@@ -67,7 +67,7 @@ namespace Game.Player
         {
             SetVariables();
             
-            SetName(PhotonNetwork.LocalPlayer.NickName);
+            //SetName(PhotonNetwork.LocalPlayer.NickName);
         }
         
         void Update()
@@ -197,7 +197,7 @@ namespace Game.Player
             }
         }
 
-        private void SetName(string name)
+        public void SetName(string name)
         {
             Debug.Log(name + "으로 세팅하겠습니다!");
             PV.RPC(nameof(SetNameRPC), RpcTarget.AllBuffered, name);
