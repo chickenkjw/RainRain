@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Game;
 using Game.Player;
 using Game.Fields;
+using Photon.Pun.Demo.Cockpit;
 using UnityEngine.SceneManagement;
 
 namespace Network

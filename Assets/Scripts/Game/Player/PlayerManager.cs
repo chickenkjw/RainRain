@@ -131,6 +131,7 @@ namespace Game.Player
         /// 물에 닿았을 시 플레이어가 죽는 것으로 판정
         /// </summary>
         public void Drown() {
+            // GameManager.Instance.PlayerDie(PlayerName.text);
             GameManager.Instance.PlayerDie(PlayerName.text);
             Destroy(gameObject);
         }

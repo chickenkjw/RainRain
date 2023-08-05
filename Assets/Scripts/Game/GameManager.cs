@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Fields;
 using Network;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -45,7 +46,7 @@ namespace Game
 
         #region Variables
 
-        private int _playerCount;
+        public int playerCount;
 
         private float _waterLevelTime;
         private float _currentTime;
@@ -76,7 +77,7 @@ namespace Game
             _timeLine = new();
             
             _waterLevelTime = 0;
-            _playerCount = 1; // PhotonNetwork.CurrentRoom.PlayerCount;
+            playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
             MapGenerator.Instance.GenerateMap(1);
             NetworkManager.instance.GeneratePlayer(new Vector3 (0, 0, 0));
         }
@@ -101,12 +102,16 @@ namespace Game
                 Name = playerName,
                 Time = _currentTime + _waterLevelTime
             });
-
-            _playerCount -= 1;
-
-            if (_playerCount <= 0) {
+            
+            playerCount -= 1;
+            
+            if (playerCount <= 0) {
                 GameOver();
             }
+        }
+
+        public void AllPlayerDie() {
+            
         }
 
         private void GameOver() {
