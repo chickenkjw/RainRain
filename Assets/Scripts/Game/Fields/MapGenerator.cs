@@ -103,7 +103,9 @@ namespace Game.Fields
             else {
                 Destroy(this.gameObject);
             }
-            
+
+            NetworkManager.instance.GenerateEnvironment();
+
             floorHeight = floorObjects[0].GetComponent<SpriteRenderer>().bounds.size.y;
             floorWidth = floorObjects[0].GetComponent<SpriteRenderer>().bounds.size.x;
             
@@ -111,6 +113,8 @@ namespace Game.Fields
 
             _itemTypeCount = _items.Count;
         }
+
+        
 
         /// <summary>   
         /// 맵 생성 함수

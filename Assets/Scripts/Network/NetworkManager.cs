@@ -121,6 +121,12 @@ namespace Network
             TestGround.SetActive(true);
         }
 
+        public void GenerateEnvironment()
+        {
+            PhotonNetwork.Instantiate("Environment",
+                    new Vector3(0, 0, 0), Quaternion.identity);
+        }
+
         public void Connect() => PhotonNetwork.ConnectUsingSettings();
 
 
