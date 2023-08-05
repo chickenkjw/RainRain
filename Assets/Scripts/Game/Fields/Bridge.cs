@@ -1,8 +1,9 @@
-﻿using Game.Camera;
-using Game.Items;
-using Network;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Game.Camera;
 using UnityEngine;
 using Cam = UnityEngine.Camera;
+using PlayerManager = Game.Player.PlayerManager;
 
 namespace Game.Fields
 {
@@ -25,81 +26,61 @@ namespace Game.Fields
 
         private CameraController _cameraController;
 
-        private Vector3 curMousePos;
-        private Vector3 prevMousePos;
-        private Vector3 destination;
+        public bool connectedBrokenBridge;
+
+        [SerializeField]
+        private List<GameObject> bridges;
         
         private void Start() {
-            var objectList = GameObject.Find("ItemManager").GetComponent<ItemManager>().bridgeObject;
-           _bridgeObject = direction == Direction.Left ? objectList[1] : objectList[0];
+            _bridgeObject = direction == Direction.Left ? bridges[1] : bridges[0];
+            connectedBrokenBridge = MapGenerator.Instance.BuildingArray[location.X][location.Y].ConnectBrokenBridge;
         }
 
-        private Vector3 GetMousePosition() {
-            return Cam.main.ScreenToWorldPoint(Input.mousePosition);
-        }
-
-        private Vector3 ScreenCenterToWorldPoint() {
-            return Cam.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, Cam.main.nearClipPlane));
-        }
-
-        private void OnMouseDown() {
-            _cameraController = GameObject.FindWithTag("MainCamera").GetComponent<CameraController>();
-
-            _bridgeObject.transform.localScale = new Vector3(.1f, .1f, .1f);
-
-            _createdObject = Instantiate(_bridgeObject, transform.position, Quaternion.identity,
-                MapGenerator.Instance.environmentObject.transform);
-
-            _mousePositionOffset = transform.position - GetMousePosition();
-
-            var createdBridgeObject = _createdObject.GetComponent<BridgeObject>();
-            createdBridgeObject.parentTransform = this.transform;
-            createdBridgeObject.Direction = direction;
-            
-            _cameraController.imaginaryObject = ScreenCenterToWorldPoint();
-            _cameraController.followMouse = true;
-        }
-
-        private void OnMouseDrag() {
-            Vector3 destination = GetMousePosition() + _mousePositionOffset;
-            float distance = Vector2.Distance(this.destination, transform.position);
-            distance /= 9.8f;
-
-            _cameraController.imaginaryObject = ScreenCenterToWorldPoint();
-
-            _createdObject.transform.localScale = new Vector3(distance, .3f, 1f);
-            
-            float angle = Mathf.Atan2(destination.y - transform.position.y, destination.x - transform.position.x) * Mathf.Rad2Deg;
-            _createdObject.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-            prevMousePos = curMousePos;
-        }
-
-        private void OnMouseUp() {
-            var bridgeObject = _createdObject.GetComponent<BridgeObject>();
-            var parentTransform = bridgeObject.parentTransform;
-            if (parentTransform != null && parentTransform.position != transform.position && bridgeObject.entriesCount == 1) {
-                float distance = Vector2.Distance(parentTransform.position, transform.position);
-                
-                distance /= 9.8f;
-                
-                float angle = Mathf.Atan2(parentTransform.position.y - transform.position.y,
-                                  parentTransform.position.x - transform.position.x)
-                              * Mathf.Rad2Deg;
-                _createdObject.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-                _createdObject.transform.localScale = new Vector3(distance, .3f, 1f);
-
-                _createdObject.GetComponent<BoxCollider2D>().isTrigger = false;
-                
-                MapGenerator.Instance.BuildBridge(location, direction, bridgeObject.Location);
+        private void OnTriggerEnter2D(Collider2D other) {
+            if (other.transform.CompareTag("Player")) {
+                print("이제부터 여기로 계산됩니다");
+                var player = other.GetComponent<PlayerManager>();
+                player.canBuildBridge = true;
+                player.bridge = this;
             }
-            else {
-                Destroy(_createdObject);
+        }
+
+        private void OnTriggerExit2D(Collider2D other) {
+            if (other.transform.CompareTag("Player")) {
+                var player = other.GetComponent<PlayerManager>();
+                player.canBuildBridge = false;
+                player.bridge = null;
+            }
+        }
+
+        public bool BuildBridge() {
+            var destination = MapGenerator.Instance.GetDestinationFloor(location, direction, 2);
+
+            if (destination == null) {
+                return false;
             }
             
-            _cameraController.followMouse = false;
-            _cameraController.target = NetworkManager.instance.LocalPlayer.transform;
+            // 부서진 다리 공사
+            if (connectedBrokenBridge) {
+                var brokenBridges = GameObject.FindGameObjectsWithTag("Bridge");
+                var brokenBridge = brokenBridges
+                    .First(x => (x.GetComponent<BridgeObject>().ConnectedLoc.Equals(location) || 
+                                            x.GetComponent<BridgeObject>().inverseLoc.Equals(location)));
+                Destroy(brokenBridge);
+            }
+            
+            var createdBridge = Instantiate(_bridgeObject, transform.position, Quaternion.identity);
+
+            float distance = Vector2.Distance(transform.position, destination.position) / 9.8f;
+            
+            createdBridge.transform.localScale = new Vector3(distance, .3f, 1f);
+            
+            var loc = location;
+            loc.X += direction == Direction.Right ? -1 : 1;
+            MapGenerator.Instance.RemoveWalls(location, direction, loc);
+            MapGenerator.Instance.EnablePoints(location, direction, loc);
+            
+            return true;
         }
     }
 }

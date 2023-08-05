@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Game.Fields;
 using Game.Items;
 using Photon.Pun;
 using UnityEngine;
@@ -53,6 +54,10 @@ namespace Game.Player
         // 인벤토리 열 수 있는 지에 대한 변수
         private bool _canInteractWithBox;
         private bool _isOpeningInventory;
+        
+        // 다리를 건설할 수 있는지에 대한 변수
+        public bool canBuildBridge;
+        public Bridge bridge;
 
         #endregion
 
@@ -76,6 +81,7 @@ namespace Game.Player
                 Move();
                 MoveVertical();
                 OpenInventory();
+                BuildBridge();
             }
         }
 
@@ -90,6 +96,8 @@ namespace Game.Player
 
             _canInteractWithBox = false;
             _isOpeningInventory = false;
+
+            canBuildBridge = false;
             
             _stairDestination = Vector3.zero;
             
@@ -145,6 +153,22 @@ namespace Game.Player
                 .OpenInventory(_canInteractWithBox, 
                     _playerItems.ToArray(), 
                     _boxItems.ToArray());
+        }
+
+        private void BuildBridge() {
+            if (!canBuildBridge || bridge == null) {
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Q)) {
+                print("다리 생성 실행 전");
+                bool result = bridge.BuildBridge();
+
+                if (result) {
+                    bridge = null;
+                    canBuildBridge = false;
+                }
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D other) {
