@@ -1,5 +1,6 @@
 ﻿using Game.Items;
 using UnityEngine;
+using Photon.Pun;
 
 namespace Game.Player
 {
@@ -37,11 +38,12 @@ namespace Game.Player
         
         #endregion
 
-        private void Start() {
+        public void Set()
+        {
             _inventoryManager = InventoryManager.instance;
-            
+
             SetVariables();
-            
+
             inventoryUI.SetActive(false);
             boxContentsUI.SetActive(false);
             uiBackground.SetActive(false);

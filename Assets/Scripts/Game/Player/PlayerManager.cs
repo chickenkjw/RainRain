@@ -66,7 +66,7 @@ namespace Game.Player
         void Start()
         {
             SetVariables();
-            
+            if(IsLocalPlayer) itemUIManager.Set();
             //SetName(PhotonNetwork.LocalPlayer.NickName);
         }
         
