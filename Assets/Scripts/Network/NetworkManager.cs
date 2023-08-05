@@ -21,7 +21,7 @@ namespace Network
         public PhotonView Photonview;
         public GameObject TestGround;
 
-        public GameObject LocalPlayer;
+        public PlayerManager LocalPlayer;
         public int PlayerIndex { get; private set; }
         public bool isReady;
         #endregion
@@ -101,13 +101,12 @@ namespace Network
 
         public void GeneratePlayer(Vector3 position)
         {
-            //PlayerManager newPlayer;
-            GameObject newPlayer;
-            newPlayer = PhotonNetwork.Instantiate("Player", position, Quaternion.identity);
-
+            PlayerManager newPlayer;
+            newPlayer = PhotonNetwork.Instantiate("Player",
+                    position, Quaternion.identity).GetComponent<PlayerManager>();
+            newPlayer.SetName(PhotonNetwork.LocalPlayer.NickName);
             LocalPlayer = newPlayer;
-            //newPlayer = PhotonNetwork.Instantiate("Player",
-            //        position, Quaternion.identity).GetComponent<PlayerManager>();
+            
 
             //LocalPlayer = newPlayer;
         }
