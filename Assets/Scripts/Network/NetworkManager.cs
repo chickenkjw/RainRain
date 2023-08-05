@@ -7,6 +7,7 @@ using Game.Player;
 using Game.Fields;
 using Photon.Pun.Demo.Cockpit;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 namespace Network
 {
@@ -14,7 +15,7 @@ namespace Network
     {
         #region Public Fields
         public InputField RoomInput, NickNameInput;
-        public GameObject RoomManager;
+
         public static NetworkManager instance;
         public PhotonView Photonview;
 
@@ -73,13 +74,56 @@ namespace Network
             UIManager.instance.SetNickname(PhotonNetwork.LocalPlayer.NickName);
             UIManager.instance.TogglePanel(EGameState.LOBBY);
         }
+
+        public override void OnRoomListUpdate(List<RoomInfo> roomList)
+        {
+            string hostNickname = "Anonymous";
+            // 룸 리스트 콜백은 로비에 접속했을때 자동으로 호출된다.
+            // 로비에서만 호출할 수 있음...
+            Debug.Log($"룸 리스트 업데이트. 현재 방 갯수 : {roomList.Count}");
+            if(roomList.Count != 0)
+            {
+                foreach(RoomInfo room in roomList)
+                {
+                    
+
+                    if (room.CustomProperties.ContainsKey("HostNickname"))
+                    {
+                        hostNickname = room.CustomProperties["HostNickname"] as string;
+
+                    }
+
+                    Debug.Log($"room Name : {room.Name}, room PlayerCount : {room.PlayerCount}, room Host : {hostNickname}");
+                    RoomManager.instance.AddRoom(room.PlayerCount, room.Name, hostNickname);
+
+                }
+
+
+            }
+        }
+
         #endregion
 
         #region Public Methods
 
         //방 만들기 및 참가
-        public void CreateRoom() => PhotonNetwork.CreateRoom(RoomInput.text, new RoomOptions { MaxPlayers = 10 });
+        public void CreateRoom()
+        {
+            ExitGames.Client.Photon.Hashtable customProps = new ExitGames.Client.Photon.Hashtable();
+            customProps["HostNickname"] = PhotonNetwork.LocalPlayer.NickName; // 실제 호스트의 닉네임으로 변경
+
+            RoomOptions roomOptions = new RoomOptions
+            {
+                MaxPlayers = 4,
+                CustomRoomProperties = customProps,
+                CustomRoomPropertiesForLobby = new string[] { "HostNickname" } // 로비에서 호스트 닉네임을 보이도록 설정
+            };
+
+            PhotonNetwork.CreateRoom(RoomInput.text, roomOptions, null);
+        }
+
         public void JoinRoom() => PhotonNetwork.JoinRoom(RoomInput.text);
+        public void JoinRoom(string roomName) => PhotonNetwork.JoinRoom(roomName);
         public void JoinOrCreateRoom()
         {
             PhotonNetwork.JoinOrCreateRoom(RoomInput.text, new RoomOptions { MaxPlayers = 10 }, null);
@@ -144,13 +188,12 @@ namespace Network
         public override void OnCreatedRoom()
         {
             print("방 만들기 완료");
-            RoomManager.GetComponent<RoomManager>().AddRoom(PhotonNetwork.CurrentRoom.ToString());
+            RoomManager.instance.AddRoom(PhotonNetwork.CurrentRoom.PlayerCount, PhotonNetwork.CurrentRoom.Name, PhotonNetwork.LocalPlayer.NickName);
+            //RoomManager.GetComponent<RoomManager>().AddRoom(PhotonNetwork.CurrentRoom.ToString());
         }
             
         public override void OnJoinedRoom()
         {
-            Debug.LogFormat("방 참가 완료 : {0}", PhotonNetwork.CurrentRoom);
-            Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount);
             UIManager.instance.SetRoomInfo(PhotonNetwork.CurrentRoom.Name, PhotonNetwork.CurrentRoom.PlayerCount);
             
 

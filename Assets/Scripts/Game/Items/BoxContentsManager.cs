@@ -110,14 +110,13 @@ namespace Game.Items
             //        }
             //    }
             //}
-            PV.RPC("TakeItemRPC", RpcTarget.All, movedItem.Item1, movedItem.Item2, true);
+            PV.RPC("TakeItemRPC", RpcTarget.AllBuffered, movedItem.Item1, movedItem.Item2, true);
             return true;
         }
 
         [PunRPC]
         public void TakeItemRPC(BoxDirection direction, BoxItemIndex index, bool isFullItem)
         {
-            Debug.Log("TakeITemRPC 실행");
             if (BoxLocation != null)
             {
                 GameObject floorObj = _mapGenerator.BuildingArray[BoxLocation.X][BoxLocation.Y].Object;
@@ -128,10 +127,12 @@ namespace Game.Items
                 {
                     if (index == BoxItemIndex.Up)
                     {
+                        Debug.LogError("위에 있는거 가져갈게");
                         boxContents.item1 = null;
                     }
                     else
                     {
+                        Debug.LogError("아래에 있는거 가져갈게");
                         boxContents.item2 = null;
                     }
                 }

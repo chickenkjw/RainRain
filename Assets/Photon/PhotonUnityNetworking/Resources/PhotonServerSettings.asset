@@ -16,7 +16,7 @@ MonoBehaviour:
     AppIdRealtime: 492bad59-52bc-4c0d-a6bb-7780e3049c54
     AppIdFusion: 
     AppIdChat: 
-    AppIdVoice: 
+    AppIdVoice: ec6c04a0-b216-42a7-a9a1-579cb7727156
     AppVersion: 
     UseNameServer: 1
     FixedRegion: kr
@@ -47,6 +47,9 @@ MonoBehaviour:
   - RPC_StartGame
   - SetUsercountRPC
   - TakeItemRPC
+  - CantHearYou
+  - ChangeColour
+  - HeresWhy
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
