@@ -180,6 +180,8 @@ namespace Game.Fields
 
                 prevHeight = currentHeight + (currentHeight == minHeight ? 3 : currentHeight == maxHeight ? -3 : 0);
             }
+            
+            GameObject.Find("BoxContentsManager").GetComponent<BoxContentsManager>().SetBoxContents();
         }
 
         /// <summary>

@@ -45,24 +45,20 @@ namespace Game.Items
             }
         }
 
-        void Start() {
-            _mapGenerator = MapGenerator.Instance;
-            
-            SetBoxContents();
-        }
-
         #endregion
 
         /// <summary>
         /// 박스들을 담은 배열 만들기
         /// </summary>
-        void SetBoxContents() {
+        public void SetBoxContents() {
+            _mapGenerator = MapGenerator.Instance;
+            
             BoxContentsArray = new (BoxContents, BoxContents)[_mapGenerator.buildingCount][];
 
             for (int i = 0; i < _mapGenerator.buildingCount; i++) {
                 var height = _mapGenerator.BuildingArray[i].Length;
                 BoxContentsArray[i] = new (BoxContents, BoxContents)[height];
-
+                
                 for (int j = 0; j < height; j++) {
                     BoxContentsArray[i][j] = (
                         _mapGenerator.BuildingArray[i][j].Object.transform.GetChild(1).GetChild(0)
