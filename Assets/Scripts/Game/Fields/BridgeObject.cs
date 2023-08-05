@@ -11,6 +11,7 @@ namespace Game.Fields
         [HideInInspector] public Transform parentTransform;
         [HideInInspector] public int entriesCount;
         [HideInInspector] public Location Location;
+        [HideInInspector] public Direction Direction;
 
         private void Start() {
             entriesCount = 0;

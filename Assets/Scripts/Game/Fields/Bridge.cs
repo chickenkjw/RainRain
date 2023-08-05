@@ -43,7 +43,9 @@ namespace Game.Fields
             _createdObject = Instantiate(_bridgeObject, transform.position, Quaternion.identity,
                 MapGenerator.Instance.environmentObject.transform);
 
-            _createdObject.GetComponent<BridgeObject>().parentTransform = this.transform;
+            var createdBridgeObject = _createdObject.GetComponent<BridgeObject>();
+            createdBridgeObject.parentTransform = this.transform;
+            createdBridgeObject.Direction = direction;
 
             _cameraController.imaginaryObject = transform.position;
             _cameraController.followMouse = true;
@@ -52,10 +54,6 @@ namespace Game.Fields
         private void OnMouseDrag() {
             Vector3 destination = GetMousePosition() + _mousePositionOffset;
             float distance = Vector2.Distance(destination, transform.position);
-
-            if (direction == Direction.Right) {
-                distance = -distance;
-            }
 
             distance /= 9.8f;
             
@@ -72,12 +70,9 @@ namespace Game.Fields
         private void OnMouseUp() {
             var bridgeObject = _createdObject.GetComponent<BridgeObject>();
             var parentTransform = bridgeObject.parentTransform;
-            if (parentTransform != null && parentTransform.position != transform.position && bridgeObject.entriesCount == 2) {
+            if (parentTransform != null && parentTransform.position != transform.position && bridgeObject.entriesCount == 1) {
                 float distance = Vector2.Distance(parentTransform.position, transform.position);
-                if (direction == Direction.Right) {
-                    distance = -distance;
-                }
-
+                
                 distance /= 9.8f;
                 
                 float angle = Mathf.Atan2(parentTransform.position.y - transform.position.y,
