@@ -37,7 +37,8 @@ public class UIManager : MonoBehaviour
 
     public static UIManager instance;
 
-    
+    public Button entryButton;
+    private bool connectedToMasterServer;
 
     #endregion
     
@@ -58,9 +59,9 @@ public class UIManager : MonoBehaviour
         
     }
 
-    void Start()
-    {
-
+    void Start() {
+        entryButton.gameObject.SetActive(false);
+        connectedToMasterServer = false;
     }
     
     #endregion
@@ -70,6 +71,10 @@ public class UIManager : MonoBehaviour
     public void SetStatus(string status)
     {
         statusText.text = status;
+        if (!connectedToMasterServer) {
+            connectedToMasterServer = status.Equals("ConnectedToMasterServer");
+            entryButton.gameObject.SetActive(connectedToMasterServer);
+        }
     }
 
     public void ClearPanel()

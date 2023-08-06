@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using Game.Fields;
-using Game.Items;
 using Photon.Pun;
 using UnityEngine;
 
@@ -30,7 +26,14 @@ namespace Game.Player
 
         #region Private Fields
 
+        private float moveInput;
+        
+        // 애니메이터
+        public Animator playerAnimator;
+        public Animator clothAnimator;
 
+        public SpriteRenderer playerRenderer;
+        public SpriteRenderer clothRenderer;
 
         #endregion
 
@@ -45,6 +48,13 @@ namespace Game.Player
         {
             if(isLocalPlayer) 
                 SetName(PhotonNetwork.LocalPlayer.NickName);
+            moveInput = 0f;
+            
+            playerAnimator = GetComponent<Animator>();
+            clothAnimator = transform.GetChild(2).GetComponent<Animator>();
+
+            playerRenderer = GetComponent<SpriteRenderer>();
+            clothRenderer = transform.GetChild(2).GetComponent<SpriteRenderer>();
         }
 
         void Update()
@@ -52,7 +62,7 @@ namespace Game.Player
             if (isLocalPlayer)
             {
                 Move();
-
+                Anim();
             }
         }
 
@@ -60,9 +70,20 @@ namespace Game.Player
 
         #region Public Methods
 
-        /// <summary>
-        /// 나중에 쓸지 모르니 일단 만든 함수
-        /// </summary>
+        private void Anim() {
+            var isMove = moveInput != 0;
+            playerAnimator.SetBool("isMove", isMove);
+            clothAnimator.SetBool("isMove", isMove);
+
+            if (moveInput > 0 && isMove) {
+                playerRenderer.flipX = true;
+                clothRenderer.flipX = true;
+            }
+            else if (moveInput < 0 && isMove) {
+                playerRenderer.flipX = false;
+                clothRenderer.flipX = false;
+            }
+        }
 
 
         /// <summary>
@@ -70,7 +91,7 @@ namespace Game.Player
         /// </summary>
         private void Move()
         {
-            float moveInput = Input.GetAxis("Horizontal");
+            moveInput = Input.GetAxis("Horizontal");
             float moveAmount = moveInput * moveSpeed * Time.deltaTime;
             transform.Translate(Vector3.right * moveAmount);
         }

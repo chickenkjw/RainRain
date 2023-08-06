@@ -80,6 +80,8 @@ namespace Game
             playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
             MapGenerator.Instance.GenerateMap(1);
             NetworkManager.instance.GeneratePlayer(new Vector3 (0, 0, 0));
+            
+            print(playerCount);
         }
 
         private void Update() {

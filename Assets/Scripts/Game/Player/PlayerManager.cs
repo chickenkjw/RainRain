@@ -44,9 +44,7 @@ namespace Game.Player
         private Vector3 _stairDestination;
         
         // 플레이어의 아이템을 담는 변수
-        [SerializeField]
         public GameObject[] _playerItems;
-        [SerializeField]
         public GameObject[] _boxItems;
 
         public GameObject noneItem;
@@ -56,9 +54,21 @@ namespace Game.Player
         private bool _isOpeningInventory;
         
         // 다리를 건설할 수 있는지에 대한 변수
+        [HideInInspector]
         public bool canBuildBridge;
         public Bridge bridge;
 
+        // 애니메이터
+        public Animator playerAnimator;
+        public Animator clothAnimator;
+
+        public SpriteRenderer playerRenderer;
+        public SpriteRenderer clothRenderer;
+
+        private float moveInput;
+
+        public PlayerStatus Status;
+        
         #endregion
 
         #region MonoBehaviour CallBacks
@@ -73,6 +83,14 @@ namespace Game.Player
             SetVariables();
             if(IsLocalPlayer) itemUIManager.Set();
             //SetName(PhotonNetwork.LocalPlayer.NickName);
+
+            playerAnimator = GetComponent<Animator>();
+            clothAnimator = transform.GetChild(2).GetComponent<Animator>();
+
+            playerRenderer = GetComponent<SpriteRenderer>();
+            clothRenderer = transform.GetChild(2).GetComponent<SpriteRenderer>();
+
+            moveInput = 0f;
         }
         
         void Update()
@@ -82,6 +100,7 @@ namespace Game.Player
                 MoveVertical();
                 OpenInventory();
                 BuildBridge();
+                Anim();
             }
         }
 
@@ -104,6 +123,10 @@ namespace Game.Player
             _playerItems = new[] { noneItem, noneItem, noneItem, noneItem};
             _boxItems = new[] { noneItem, noneItem };
         }
+
+        public void StatusChange(PlayerActionState state) {
+            Status.ChangeState(state);
+        }
         
         /// <summary>
         /// Player 좌우 이동 함수
@@ -114,9 +137,24 @@ namespace Game.Player
                 return;
             }
             
-            float moveInput = Input.GetAxis("Horizontal");
+            moveInput = Input.GetAxis("Horizontal");
             float moveAmount = moveInput * moveSpeed * Time.deltaTime;
             transform.Translate(Vector3.right * moveAmount);
+        }
+
+        private void Anim() {
+            var isMove = moveInput != 0;
+            playerAnimator.SetBool("isMove", isMove);
+            clothAnimator.SetBool("isMove", isMove);
+
+            if (moveInput > 0 && isMove) {
+                playerRenderer.flipX = true;
+                clothRenderer.flipX = true;
+            }
+            else if (moveInput < 0 && isMove) {
+                playerRenderer.flipX = false;
+                clothRenderer.flipX = false;
+            }
         }
 
         /// <summary>
@@ -181,10 +219,12 @@ namespace Game.Player
                 if (obj.name.Equals("UpStair")) {
                     _canMoveUp = true;
                     _stairDestination = parentObj.GetChild(3).position;
+                    StatusChange(PlayerActionState.Up);
                 }
                 else {
                     _canMoveUp = false;
                     _stairDestination = parentObj.GetChild(2).position;
+                    StatusChange(PlayerActionState.Down);
                 }
             }
             else if (obj.CompareTag("Box")) {
@@ -196,6 +236,8 @@ namespace Game.Player
 
                 BoxContentsManager.Instance.BoxLocation = item.Location;
                 BoxContentsManager.Instance.boxDirection = item.boxDirection;
+
+                StatusChange(PlayerActionState.Open);
             }
         }
 
@@ -208,6 +250,8 @@ namespace Game.Player
                     return;
                 }
                 _canMoveVertical = false;
+                
+                StatusChange(PlayerActionState.None);
             }
             else if (obj.CompareTag("Box")) {
                 _canInteractWithBox = false;
@@ -219,6 +263,8 @@ namespace Game.Player
 
                 BoxContentsManager.Instance.BoxLocation = null;
                 BoxContentsManager.Instance.boxDirection = BoxDirection.None;
+                
+                StatusChange(PlayerActionState.None);
             }
         }
 
@@ -237,4 +283,15 @@ namespace Game.Player
         #endregion
     }
 
+
+    public enum PlayerActionState
+    {
+        Up,
+        Down,
+        Open,
+        Repair,
+        Build,
+        Broke,
+        None
+    }
 }

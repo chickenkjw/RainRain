@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Game.Camera;
+using Game.Player;
 using UnityEngine;
 using Cam = UnityEngine.Camera;
 using PlayerManager = Game.Player.PlayerManager;
@@ -40,6 +41,8 @@ namespace Game.Fields
                 var player = other.GetComponent<PlayerManager>();
                 player.canBuildBridge = true;
                 player.bridge = this;
+                
+                player.StatusChange(PlayerActionState.Build);
             }
         }
 
@@ -48,6 +51,8 @@ namespace Game.Fields
                 var player = other.GetComponent<PlayerManager>();
                 player.canBuildBridge = false;
                 player.bridge = null;
+                
+                player.StatusChange(PlayerActionState.None);
             }
         }
 
@@ -70,7 +75,7 @@ namespace Game.Fields
             print("생성");
             var createdBridge = Instantiate(_bridgeObject, transform.position, Quaternion.identity);
 
-            float distance = Vector2.Distance(transform.position, destination.Item1.position) / 9.8f;
+            float distance = Vector2.Distance(transform.position, destination.Item1.position) / 19.6f;
             
             createdBridge.transform.localScale = new Vector3(distance, .25f, 1f);
             createdBridge.GetComponent<BoxCollider2D>().offset += Vector2.right * distance;

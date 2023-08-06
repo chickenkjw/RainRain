@@ -159,6 +159,13 @@ namespace Game.Fields
                     leftBridgePoint.location = new Location { X = w, Y = h };
                     var rightBridgePoint = linkPoints.GetChild(1).GetComponent<Bridge>();
                     rightBridgePoint.location = new Location { X = w, Y = h };
+
+                    // 천장일 때 
+                    if (h == BuildingArray[w].Length - 1) {
+                        floorObject.transform.GetChild(0).gameObject.SetActive(false);
+                        floorObject.transform.GetChild(5).gameObject.SetActive(true);
+                        floorObject.transform.GetChild(3).GetChild(2).gameObject.SetActive(false);
+                    }
                     
                     floor.Object = floorObject;
                     
@@ -220,7 +227,7 @@ namespace Game.Fields
             var placedBridge = Instantiate(brokenBridge, startPoint, Quaternion.identity);
 
             placedBridge.GetComponent<BridgeObject>().ConnectedLoc = new Location { X = x, Y = y };
-            placedBridge.transform.localScale = new Vector3(distance, .25f, 1f);
+            placedBridge.transform.localScale = new Vector3(distance + 0.1f, .25f, 1f);
             placedBridge.transform.parent = environmentObject.transform.GetChild(1);
         }
 

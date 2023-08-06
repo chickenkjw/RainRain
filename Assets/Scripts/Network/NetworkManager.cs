@@ -2,10 +2,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
-using Game;
 using Game.Player;
-using Game.Fields;
-using Photon.Pun.Demo.Cockpit;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
@@ -67,9 +64,13 @@ namespace Network
             Debug.LogFormat("연결 끊김, 사유 : {0}", cause);
         }
 
-        public override void OnJoinedLobby()
-        {
-            PhotonNetwork.LocalPlayer.NickName = NickNameInput.text;
+        public override void OnJoinedLobby() {
+            string nickName = NickNameInput.text;
+            if (string.IsNullOrEmpty(nickName) || string.IsNullOrWhiteSpace(nickName)) {
+                return;
+            }
+            
+            PhotonNetwork.LocalPlayer.NickName = nickName;
             Debug.Log("로비 접속 완료");
             UIManager.instance.SetNickname(PhotonNetwork.LocalPlayer.NickName);
             UIManager.instance.TogglePanel(EGameState.LOBBY);
@@ -107,8 +108,13 @@ namespace Network
         #region Public Methods
 
         //방 만들기 및 참가
-        public void CreateRoom()
-        {
+        public void CreateRoom() {
+            string roomName = RoomInput.text;
+
+            if (string.IsNullOrEmpty(roomName) || string.IsNullOrWhiteSpace(roomName)) {
+                return;
+            }
+            
             ExitGames.Client.Photon.Hashtable customProps = new ExitGames.Client.Photon.Hashtable();
             customProps["HostNickname"] = PhotonNetwork.LocalPlayer.NickName; // 실제 호스트의 닉네임으로 변경
 
@@ -116,10 +122,10 @@ namespace Network
             {
                 MaxPlayers = 4,
                 CustomRoomProperties = customProps,
-                CustomRoomPropertiesForLobby = new string[] { "HostNickname" } // 로비에서 호스트 닉네임을 보이도록 설정
+                CustomRoomPropertiesForLobby = new[] { "HostNickname" } // 로비에서 호스트 닉네임을 보이도록 설정
             };
 
-            PhotonNetwork.CreateRoom(RoomInput.text, roomOptions, null);
+            PhotonNetwork.CreateRoom(roomName, roomOptions, null);
         }
 
         public void JoinRoom() => PhotonNetwork.JoinRoom(RoomInput.text);
@@ -168,7 +174,14 @@ namespace Network
         public void DisConnect() => PhotonNetwork.Disconnect();
         #endregion
 
-        public void JoinLobby() => PhotonNetwork.JoinLobby();
+        public void JoinLobby() {
+            string nickName = NickNameInput.text;
+            if (string.IsNullOrEmpty(nickName) || string.IsNullOrWhiteSpace(nickName)) {
+                return;
+            }
+            
+            PhotonNetwork.JoinLobby();
+        }
 
         public void SetUser()
         {
@@ -211,11 +224,11 @@ namespace Network
         }
         public override void OnCreateRoomFailed(short returnCode, string message)
         {
-            Debug.LogErrorFormat("방 만들기 실패, 사유 : {0} : {1}", returnCode, message);
+            // Debug.LogErrorFormat("방 만들기 실패, 사유 : {0} : {1}", returnCode, message);
         }
         public override void OnJoinRoomFailed(short returnCode, string message)
         {
-            Debug.LogErrorFormat("방 참가 실패, 사유 : {0} : {1}", returnCode, message);
+            // Debug.LogErrorFormat("방 참가 실패, 사유 : {0} : {1}", returnCode, message);
         }
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
@@ -231,6 +244,7 @@ namespace Network
         public void StartGame()
         {
             //MapGenerator.Instance.GenerateMap();
+            UIManager.instance.gameObject.GetComponent<UIManager>().enabled = false;
             Photonview.RPC("RPC_StartGame", RpcTarget.All);
         }
 

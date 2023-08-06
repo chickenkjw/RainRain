@@ -127,12 +127,12 @@ namespace Game.Items
                 {
                     if (index == BoxItemIndex.Up)
                     {
-                        Debug.LogError("위에 있는거 가져갈게");
+                        // Debug.LogError("위에 있는거 가져갈게");
                         boxContents.item1 = null;
                     }
                     else
                     {
-                        Debug.LogError("아래에 있는거 가져갈게");
+                        // Debug.LogError("아래에 있는거 가져갈게");
                         boxContents.item2 = null;
                     }
                 }
