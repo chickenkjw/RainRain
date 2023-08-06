@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Items;
-using Network;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = System.Random;
@@ -151,7 +149,6 @@ namespace Game.Fields
                         Object = floorObjects[randomType],
                         BuildPoint = buildPoint,
                         Location = new Location{ X = w, Y = h },
-                        ConnectBrokenBridge = false
                     };
 
                     var floorObject = Instantiate(floor.Object, buildPoint, Quaternion.identity);
@@ -209,8 +206,8 @@ namespace Game.Fields
             startFloor.transform.GetChild(2).GetChild(0).gameObject.SetActive(false);
             endFloor.transform.GetChild(2).GetChild(1).gameObject.SetActive(false);
 
-            BuildingArray[x][y].ConnectBrokenBridge = true;
-            BuildingArray[x - 1][y].ConnectBrokenBridge = true;
+            BuildingArray[x][y].Nodes[Direction.Right] = true;
+            BuildingArray[x - 1][y].Nodes[Direction.Left] = true;
             
             // 다리 생성
             Vector3 startPoint = startFloor.transform.position;
@@ -301,38 +298,35 @@ namespace Game.Fields
         public void RemoveWalls(Location start, Direction startDir, Location end) {
             var startWalls = BuildingArray[start.X][start.Y].Object.transform.GetChild(2);
             var endWalls = BuildingArray[end.X][end.Y].Object.transform.GetChild(2);
-            int wallDir = startDir == Direction.Right ? 1 : 0;
+            int wallDir = startDir == Direction.Left ? 1 : 0;
 
             startWalls.GetChild(wallDir).gameObject.SetActive(false);
             endWalls.GetChild((wallDir + 1) % 2).gameObject.SetActive(false);
-            
-            print($"{start.X} {start.Y} {end.X} {end.Y} {wallDir}");
         }
 
         public void EnablePoints(Location start, Direction dir, Location end) {
-            int startIndex = dir == Direction.Right ? 1 : 0;
+            int startIndex = dir == Direction.Left ? 1 : 0;
             var startPoint = BuildingArray[start.X][start.Y].Object.transform.GetChild(3).GetChild(startIndex);
-            var endPoint = BuildingArray[end.X][end.Y].Object.transform.GetChild(3).GetChild(startIndex);
+            var endPoint = BuildingArray[end.X][end.Y].Object.transform.GetChild(3).GetChild((startIndex + 1) % 2);
             startPoint.gameObject.SetActive(false);
-            startPoint.gameObject.SetActive(false);
-            
-            print($"{start.X} {start.Y} {end.X} {end.Y} {startIndex}");
+            endPoint.gameObject.SetActive(false);
         }
 
-        public Transform GetDestinationFloor(Location startPoint, Direction direction, int limit) {
+        public (Transform, Location) GetDestinationFloor(Location startPoint, Direction direction, int limit) {
             int i = 1;
             while (i <= limit) {
                 try {
                     int ii = i * (direction == Direction.Left ? 1 : -1);
+                    var loc = BuildingArray[startPoint.X + ii][startPoint.Y].Location;
                     var floor = BuildingArray[startPoint.X + ii][startPoint.Y].Object.transform;
-                    return floor;
+                    return (floor, loc);
                 }
                 catch {
                    i++; 
                 }
             }
 
-            return null;
+            return (null, null);
         }
     }
 }

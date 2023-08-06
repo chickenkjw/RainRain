@@ -7,9 +7,7 @@ namespace Game.Fields
     {
         public GameObject Object { get; set; }
         public Vector3 BuildPoint { get; set; }
-        
-        public bool ConnectBrokenBridge { get; set; }
-        
+
         // 층의 좌표. x가 가로, y가 세로. 모두 0부터 시작.
         public Location Location { get; set; }
         
