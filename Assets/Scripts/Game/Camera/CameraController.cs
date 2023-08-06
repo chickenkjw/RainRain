@@ -19,11 +19,14 @@ namespace Game.Camera
         public bool followMouse;
         public Vector3 imaginaryObject;
 
+        private bool firstFollow;
+
         private void Start() {
             followMouse = false;
+            firstFollow = true;
         }
 
-        private void LateUpdate() {
+        private void LateUpdate() { 
             // 플레이어가 죽었을 경우, playerObject를 찾지 못해 null error가 나는 경우를 방지
             if (target == null) {
                 try {
@@ -33,6 +36,12 @@ namespace Game.Camera
                     return;
                 }
                 
+                return;
+            }
+
+            if (firstFollow) {
+                transform.position = new Vector3(target.position.x, target.position.y, transform.position.z);
+                firstFollow = false;
                 return;
             }
 

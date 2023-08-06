@@ -77,12 +77,12 @@ namespace Game
             _timeLine = new();
             
             _waterLevelTime = 0;
+            int seed = Random.Range(1, 10000);
             playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
-            MapGenerator.Instance.GenerateMap(Random.Range(1, 1000));
+            MapGenerator.Instance.GenerateMap(seed);
+            MapGenerator.Instance.SetStoneStatue(60, seed);
             var spawnPoint = MapGenerator.Instance.BuildingArray[Random.Range(1, 30)][Random.Range(1, 4)].Object;
             NetworkManager.instance.GeneratePlayer(spawnPoint.transform.position);
-            
-            print(playerCount);
         }
 
         private void Update() {

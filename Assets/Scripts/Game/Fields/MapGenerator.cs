@@ -249,6 +249,21 @@ namespace Game.Fields
             return sum;
         }
 
+        public void SetStoneStatue(int _count, int seed) {
+            int count = _count;
+
+            Random random = new Random(seed);
+
+            while (count > 0) {
+                int x = random.Next(0, BuildingArray.Length);
+                int y = random.Next(0, BuildingArray[x].Length);
+                GameObject floorObj = BuildingArray[x][y].Object;
+                floorObj.transform.GetChild(4).gameObject.SetActive(true);
+
+                count--;
+            }
+        }
+
         /// <summary>
         /// floor object 안의 box 아이템 세팅
         /// </summary>
